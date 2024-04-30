@@ -47,56 +47,55 @@ CREATE TABLE `Employees` (
 );
 
 -- Creates Sales table that stores information on an alcohol sale event.
+-- Removed alcoholSalesID as it does not seem to be needed  if we can reference with Alcohols and Sales
+-- Removed totalPrice becuase it was already in AlcoholSales(linePrice)
+-- TotalCost: can be null for now, add all of the AlcoholSale(lineCost) together for the specific sale
 CREATE TABLE `Sales` (
     `saleID` int(11) AUTO_INCREMENT,
-    -- Removed alcoholSalesID as it does not seem to be needed  if we can reference with Alcohols and Sales
 	`employeeID` int(11) NOT NULL,
-    -- Removed totalPrice becuase it was already in AlcoholSales(linePrice)
     `saleDate` date NOT NULL,
     `saleTime` time NOT NULL,
-    -- can be null for now
-    -- add all of the AlcoholSale(lineCost) together for the specific sale
     `totalCost` decimal(19,4),
     FOREIGN KEY `employeeID` REFERENCES `Employees`(`employeeID`),
     PRIMARY KEY (`saleID`)
 );
 
 -- Creates Purchases table that stores information on an alcohol purchasing event.
+-- Moved totalCost to AlcoholPurchases
+-- TotalPrice: can be null for now add all of the AlcoholPurchases(linePrice) together for the specific purchase.
 CREATE TABLE `Purchases` (
     `purchaseID` int(11) AUTO_INCREMENT,
     `wholesalerID` int(11) NOT NULL,
-    -- Moved totalCost to AlcoholPurchases
 	`paid` tinyint(1) NOT NULL,
     `deliveryDate` date NOT NULL,
     `delivered` tinyint(1) NOT NULL,
-    -- can be null for now
-    -- add all of the AlcoholPurchases(linePrice) together for the specific purchase.
     `totalPrice` decimal(19,4),
     FOREIGN KEY (`wholesalerID`) REFERENCES `Wholesalers`(`wholesalerID`),
     PRIMARY KEY (`purchaseID`)
 );
 
 -- Creates AlcoholSales intersection table that stores information on the Sales of the Alcohols. 
-CREATE TABLE `AlcoholSales` (
-    -- Removed AlcoholSalesID is it necissary?? 
+-- Removed AlcoholSalesID is it necissary??
+-- LinePrice: need to figure out how to make this based on AlcoholSales(quantitySold) * Alcohol(retailPrice)
+-- renamed for consistency, for now it can be null until we figure it out
+CREATE TABLE `AlcoholSales` ( 
     `saleID` int(11) NOT NULL,
 	`alcoholID` int(11) NOT NULL,
     `quantitySold` int(11) NOT NULL,
-    -- need to figure out how to make this based on AlcoholSales(quantitySold) * Alcohol(retailPrice)
-    -- renamed for consistency, for now it can be null until we figure it out
     `linePrice` decimal(19,4) ,
     FOREIGN KEY (`alcoholID`) REFERENCES `Alcohols`(`alcoholID`),
     FOREIGN KEY (`saleID`) REFERENCES `Sales`(`saleID`),
     PRIMARY KEY (`saleID`, `alcoholID`)
 );
 
+-- Creates AlcoholPurchases intersection table that stores information on the Purchases of the Alcohols.
+-- Removed AlcoholPurchaseID is it necissary?? 
+-- QuantityPurchased: updated name for consistency
+-- LineCost: need to figure out how to make this based on AlcoholPurchases(amount) * Alcohol(wholesalePrice)
 CREATE TABLE `AlcoholPurchases` (
-    -- Removed AlcoholPurchaseID is it necissary?? 
     `purchaseID` int(11) NOT NULL,
 	`alcoholID` int(11) NOT NULL,
-    -- updated name for consistency
     `quantityPurchased` int(11) NOT NULL,
-    -- need to figure out how to make this based on AlcoholPurchases(amount) * Alcohol(wholesalePrice)
     `lineCost` decimal(19,4) NOT NULL,
     FOREIGN KEY (`alcoholID`) REFERENCES `Alcohols`(`alcoholID`),
     FOREIGN KEY (`purchaseID`) REFERENCES `Purchases`(`purchaseID`),
