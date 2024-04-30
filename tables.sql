@@ -56,7 +56,7 @@ CREATE TABLE `Sales` (
     `saleDate` date NOT NULL,
     `saleTime` time NOT NULL,
     `totalCost` decimal(19,4),
-    FOREIGN KEY `employeeID` REFERENCES `Employees`(`employeeID`),
+    FOREIGN KEY (`employeeID`) REFERENCES `Employees`(`employeeID`),
     PRIMARY KEY (`saleID`)
 );
 
