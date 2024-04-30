@@ -24,6 +24,7 @@ CREATE TABLE `Wholesalers` (
 );
 
 -- Creates Alcohols table that stores information different types of alcohol.
+-- inventory: has to be updated with every sale and purchase, but unsure how to do that atm
 CREATE TABLE `Alcohols` (
     `alcoholID` int(11) AUTO_INCREMENT,
 	`alcoholName` varchar(255) NOT NULL,
@@ -32,7 +33,6 @@ CREATE TABLE `Alcohols` (
     `wholesalePrice` decimal(19,4) NOT NULL,
     `alcoholVolume` int(11) NOT NULL,
     `retailPrice` decimal(19,4) NOT NULL,
-    -- has to be updated with every sale and purchase, but unsure how to do that atm
     `inventory` int(11),
     PRIMARY KEY (`alcoholID`)
 );
