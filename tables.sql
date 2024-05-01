@@ -42,7 +42,7 @@ CREATE TABLE `Employees` (
     `employeeID` int(11) AUTO_INCREMENT,
 	`employeeName` varchar(255) NOT NULL,
     `startDate` date NOT NULL,
-    `role` varchar(255) NOT NULL,
+    `employeeRole` varchar(255) NOT NULL,
     PRIMARY KEY (`employeeID`)
 );
 
@@ -66,9 +66,9 @@ CREATE TABLE `Sales` (
 CREATE TABLE `Purchases` (
     `purchaseID` int(11) AUTO_INCREMENT,
     `wholesalerID` int(11) NOT NULL,
-	`paid` tinyint(1) NOT NULL,
+	`paid` tinyint(1) NOT NULL DEFAULT 0,
     `deliveryDate` date NOT NULL,
-    `delivered` tinyint(1) NOT NULL,
+    `delivered` tinyint(1) NOT NULL DEFAULT 0,
     `totalPrice` decimal(19,4),
     FOREIGN KEY (`wholesalerID`) REFERENCES `Wholesalers`(`wholesalerID`),
     PRIMARY KEY (`purchaseID`)
@@ -79,13 +79,15 @@ CREATE TABLE `Purchases` (
 -- LinePrice: need to figure out how to make this based on AlcoholSales(quantitySold) * Alcohol(retailPrice)
 -- renamed for consistency, for now it can be null until we figure it out
 CREATE TABLE `AlcoholSales` ( 
+	`alcoholSaleID` int(11) AUTO_INCREMENT,
     `saleID` int(11) NOT NULL,
 	`alcoholID` int(11) NOT NULL,
     `quantitySold` int(11) NOT NULL,
     `linePrice` decimal(19,4) ,
     FOREIGN KEY (`alcoholID`) REFERENCES `Alcohols`(`alcoholID`),
     FOREIGN KEY (`saleID`) REFERENCES `Sales`(`saleID`),
-    PRIMARY KEY (`saleID`, `alcoholID`)
+	PRIMARY KEY (`alcoholSaleID`)
+    
 );
 
 -- Creates AlcoholPurchases intersection table that stores information on the Purchases of the Alcohols.
@@ -93,11 +95,12 @@ CREATE TABLE `AlcoholSales` (
 -- QuantityPurchased: updated name for consistency
 -- LineCost: need to figure out how to make this based on AlcoholPurchases(amount) * Alcohol(wholesalePrice)
 CREATE TABLE `AlcoholPurchases` (
+	`alcoholPurchaseID` int(11) AUTO_INCREMENT,
     `purchaseID` int(11) NOT NULL,
 	`alcoholID` int(11) NOT NULL,
     `quantityPurchased` int(11) NOT NULL,
     `lineCost` decimal(19,4) NOT NULL,
     FOREIGN KEY (`alcoholID`) REFERENCES `Alcohols`(`alcoholID`),
     FOREIGN KEY (`purchaseID`) REFERENCES `Purchases`(`purchaseID`),
-    PRIMARY KEY (`purchaseID`, `alcoholID`)
+    PRIMARY KEY (`alcoholPurchaseID`)
 );
