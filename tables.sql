@@ -16,7 +16,7 @@ CREATE TABLE `Wholesalers` (
     `email` varchar(255) NOT NULL,
     `phone` varchar(255) NOT NULL,
     `contactName` varchar(255),
-    UNIQUE(name),
+    UNIQUE(`name`),
     PRIMARY KEY (`wholesalerID`)
 );
 
@@ -84,7 +84,6 @@ CREATE TABLE `AlcoholSales` (
     FOREIGN KEY (`alcoholID`) REFERENCES `Alcohols`(`alcoholID`),
     FOREIGN KEY (`saleID`) REFERENCES `Sales`(`saleID`),
 	PRIMARY KEY (`alcoholSaleID`)
-    
 );
 
 -- Creates AlcoholPurchases intersection table that stores information on the Purchases of the Alcohols.
