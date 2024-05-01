@@ -31,7 +31,7 @@ CREATE TABLE `Alcohols` (
     `alcoholType` varchar(255) NOT NULL,
     `alcoholPercentage` decimal(19,4) NOT NULL,
     `wholesalePrice` decimal(19,4) NOT NULL,
-    `alcoholVolume` int(11) NOT NULL,
+    `alcoholVolume` decimal(19,4) NOT NULL,
     `retailPrice` decimal(19,4) NOT NULL,
     `inventory` int(11),
     PRIMARY KEY (`alcoholID`)
