@@ -26,8 +26,8 @@ CREATE TABLE `Wholesalers` (
 -- Creates Alcohols table that stores information different types of alcohol.
 -- inventory: has to be updated with every sale and purchase, but unsure how to do that atm
 CREATE TABLE `Alcohols` (
-    `alcoholID` int(11) AUTO_INCREMENT,
-	`alcoholName` varchar(255) NOT NULL,
+    `alcoholID` int(11) AUTO_INCREMENT NOT NULL,
+    `alcoholName` varchar(255) NOT NULL,
     `alcoholType` varchar(255) NOT NULL,
     `alcoholPercentage` decimal(19,4) NOT NULL,
     `wholesalePrice` decimal(19,4) NOT NULL,
@@ -52,9 +52,9 @@ CREATE TABLE `Employees` (
 -- TotalCost: can be null for now, add all of the AlcoholSale(lineCost) together for the specific sale
 CREATE TABLE `Sales` (
     `saleID` int(11) AUTO_INCREMENT,
-	`employeeID` int(11) NOT NULL,
-    `saleDate` date NOT NULL,
-    `saleTime` time NOT NULL,
+    `employeeID` int(11) NOT NULL,
+    `saleDate` date NOT NULL, -- Maybe do something like 'DEFAULT GETDATE()'
+    `saleTime` time NOT NULL, -- Same as above but w/GETTIME()
     `totalCost` decimal(19,4),
     FOREIGN KEY (`employeeID`) REFERENCES `Employees`(`employeeID`),
     PRIMARY KEY (`saleID`)
@@ -66,9 +66,9 @@ CREATE TABLE `Sales` (
 CREATE TABLE `Purchases` (
     `purchaseID` int(11) AUTO_INCREMENT,
     `wholesalerID` int(11) NOT NULL,
-	`paid` tinyint(1) NOT NULL,
+    `paid` tinyint(1) NOT NULL DEFAULT 0,
     `deliveryDate` date NOT NULL,
-    `delivered` tinyint(1) NOT NULL,
+    `delivered` tinyint(1) NOT NULL DEFAULT 0,
     `totalPrice` decimal(19,4),
     FOREIGN KEY (`wholesalerID`) REFERENCES `Wholesalers`(`wholesalerID`),
     PRIMARY KEY (`purchaseID`)
@@ -80,7 +80,7 @@ CREATE TABLE `Purchases` (
 -- renamed for consistency, for now it can be null until we figure it out
 CREATE TABLE `AlcoholSales` ( 
     `saleID` int(11) NOT NULL,
-	`alcoholID` int(11) NOT NULL,
+    `alcoholID` int(11) NOT NULL,
     `quantitySold` int(11) NOT NULL,
     `linePrice` decimal(19,4) ,
     FOREIGN KEY (`alcoholID`) REFERENCES `Alcohols`(`alcoholID`),
