@@ -1,10 +1,7 @@
 --
 -- Group 80 “Worth A Shot”: Nicole Boose and Elsa Luthi
 -- CS 340, Spring 2024
---
-
---
--- Description:
+-- Description: This file is the creation of our database tables for a company that sells alcohol. 
 --
 
 -- 
@@ -33,7 +30,7 @@ CREATE TABLE `Alcohols` (
     `wholesalePrice` decimal(19,4) NOT NULL,
     `alcoholVolume` decimal(19,4) NOT NULL,
     `retailPrice` decimal(19,4) NOT NULL,
-    `inventory` int(11),
+    `inventory` int(11) NOT NULL DEFAULT 0,
     PRIMARY KEY (`alcoholID`)
 );
 
@@ -46,7 +43,7 @@ CREATE TABLE `Employees` (
     PRIMARY KEY (`employeeID`)
 );
 
--- Creates Sales table that stores information on an alcohol sale event.
+-- Creates Sales table that stores information on an alcohol sale transaction.
 -- Removed alcoholSalesID as it does not seem to be needed  if we can reference with Alcohols and Sales
 -- Removed totalPrice becuase it was already in AlcoholSales(linePrice)
 -- TotalCost: can be null for now, add all of the AlcoholSale(lineCost) together for the specific sale
@@ -55,12 +52,12 @@ CREATE TABLE `Sales` (
 	`employeeID` int(11) NOT NULL,
     `saleDate` date NOT NULL,
     `saleTime` time NOT NULL,
-    `totalCost` decimal(19,4),
+    `totalCost` decimal(19,4) NOT NULL DEFAULT 0.00,
     FOREIGN KEY (`employeeID`) REFERENCES `Employees`(`employeeID`),
     PRIMARY KEY (`saleID`)
 );
 
--- Creates Purchases table that stores information on an alcohol purchasing event.
+-- Creates Purchases table that stores information on an alcohol purchasing transaction.
 -- Moved totalCost to AlcoholPurchases
 -- TotalPrice: can be null for now add all of the AlcoholPurchases(linePrice) together for the specific purchase.
 CREATE TABLE `Purchases` (
@@ -69,7 +66,7 @@ CREATE TABLE `Purchases` (
 	`paid` tinyint(1) NOT NULL DEFAULT 0,
     `deliveryDate` date NOT NULL,
     `delivered` tinyint(1) NOT NULL DEFAULT 0,
-    `totalPrice` decimal(19,4),
+    `totalPrice` decimal(19,4) NOT NULL DEFAULT 0.00,
     FOREIGN KEY (`wholesalerID`) REFERENCES `Wholesalers`(`wholesalerID`),
     PRIMARY KEY (`purchaseID`)
 );
@@ -83,7 +80,7 @@ CREATE TABLE `AlcoholSales` (
     `saleID` int(11) NOT NULL,
 	`alcoholID` int(11) NOT NULL,
     `quantitySold` int(11) NOT NULL,
-    `linePrice` decimal(19,4) ,
+    `linePrice` decimal(19,4) NOT NULL,
     FOREIGN KEY (`alcoholID`) REFERENCES `Alcohols`(`alcoholID`),
     FOREIGN KEY (`saleID`) REFERENCES `Sales`(`saleID`),
 	PRIMARY KEY (`alcoholSaleID`)
