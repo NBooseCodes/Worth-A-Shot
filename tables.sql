@@ -50,20 +50,20 @@ CREATE TABLE `Sales` (
 	`employeeID` int(11) NOT NULL,
     `saleDate` date NOT NULL,
     `saleTime` time NOT NULL,
-    `totalCost` decimal(19,4) NOT NULL DEFAULT 0.00,
+    `totalPrice` decimal(19,4) NOT NULL DEFAULT 0.00,
     FOREIGN KEY (`employeeID`) REFERENCES `Employees`(`employeeID`),
     PRIMARY KEY (`saleID`)
 );
 
 -- Creates Purchases table that stores information on an alcohol purchasing transaction.
--- TotalPrice: add all of the AlcoholPurchases(lineCrice) together for the specific purchase.
+-- TotalPrice: add all of the AlcoholPurchases(lineCost) together for the specific purchase.
 CREATE TABLE `Purchases` (
     `purchaseID` int(11) AUTO_INCREMENT,
     `wholesalerID` int(11) NOT NULL,
 	`paid` tinyint(1) NOT NULL DEFAULT 0,
     `deliveryDate` date NOT NULL,
     `delivered` tinyint(1) NOT NULL DEFAULT 0,
-    `totalPrice` decimal(19,4) NOT NULL DEFAULT 0.00,
+    `totalCost` decimal(19,4) NOT NULL DEFAULT 0.00,
     FOREIGN KEY (`wholesalerID`) REFERENCES `Wholesalers`(`wholesalerID`),
     PRIMARY KEY (`purchaseID`)
 );
@@ -127,17 +127,17 @@ INSERT INTO `Employees` (`employeeName`, `startDate`, `role`)
 VALUES ('Pierogi', '2024-02-24', 'Sales Clerk');
 
 -- Insertion of Purchases
-INSERT INTO `Purchases` (`wholesalerID`, `paid`, `deliveryDate`, `delivered`, `totalPrice`)
+INSERT INTO `Purchases` (`wholesalerID`, `paid`, `deliveryDate`, `delivered`, `totalCost`)
 VALUES (
   (SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Diageo'), '1', '2024-04-03', '1', 
   (SELECT SUM(`lineCost`) FROM `AlcoholPurchases` WHERE `wholesalerID` = (SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Diageo'))
   );
-INSERT INTO `Purchases` (`wholesalerID`, `paid`, `deliveryDate`, `delivered`, `totalPrice`)
+INSERT INTO `Purchases` (`wholesalerID`, `paid`, `deliveryDate`, `delivered`, `totalCost`)
 VALUES (
   (SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Pernod Ricard'), '0', '2024-05-05', '1', 
   (SELECT SUM(`lineCost`) FROM `AlcoholPurchases` WHERE `wholesalerID` = (SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Pernod Ricard'))
   );
-INSERT INTO `Purchases` (`wholesalerID`, `paid`, `deliveryDate`, `delivered`, `totalPrice`)
+INSERT INTO `Purchases` (`wholesalerID`, `paid`, `deliveryDate`, `delivered`, `totalCost`)
 VALUES (
   (SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Beam Suntory'), '0', '2024-05-28', '0', 
   (SELECT SUM(`lineCost`) FROM `AlcoholPurchases` WHERE `wholesalerID` = (SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Beam Suntory'))
@@ -146,15 +146,15 @@ VALUES (
 -- Insertion of Sales
 -- totalCost: needs to be ironed out more; using the number feels like hardcoding
 -- We will have to update Alcohols after each event to update Alcohols(inventory)
-INSERT INTO `Sales` (`employeeID`, `saleDate`, `saleTime`)
+INSERT INTO `Sales` (`employeeID`, `saleDate`, `saleTime`, `totalPrice`)
 VALUES ((SELECT `employeeID` FROM `Employees` WHERE `employeeName` = 'Taquito'), '2024-04-30', '14:23:19',
 	(SELECT SUM(`linePrice`) FROM `AlcoholSales` WHERE `saleID` = 1)
 	);
-INSERT INTO `Sales` (`employeeID`, `saleDate`, `saleTime`)
+INSERT INTO `Sales` (`employeeID`, `saleDate`, `saleTime`, `totalPrice`)
 VALUES ((SELECT `employeeID` FROM `Employees` WHERE `employeeName` = 'Tom'), '1999-12-31', '09:01:02',
 	(SELECT SUM(`linePrice`) FROM `AlcoholSales` WHERE `saleID` = 2)
 	);
-INSERT INTO `Sales` (`employeeID`, `saleDate`, `saleTime`)
+INSERT INTO `Sales` (`employeeID`, `saleDate`, `saleTime`, `totalPrice`)
 VALUES ((SELECT `employeeID` FROM `Employees` WHERE `employeeName` = 'Pierogi'), '2024-04-29', '17:54:55',
 	(SELECT SUM(`linePrice`) FROM `AlcoholSales` WHERE `saleID` = 3)
 	);
