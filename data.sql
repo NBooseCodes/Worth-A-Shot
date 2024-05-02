@@ -36,7 +36,6 @@ INSERT INTO `Employees` (`employeeName`, `startDate`, `role`)
 VALUES ('Pierogi', '2024-02-24', 'Sales Clerk');
 
 -- Insertion of Purchases
--- totalPrice still not working fully; currently sums ALL lineCost
 INSERT INTO `Purchases` (`wholesalerID`, `paid`, `deliveryDate`, `delivered`, `totalPrice`)
 VALUES (
   (SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Diageo'), '1', '2024-04-03', '1', 
