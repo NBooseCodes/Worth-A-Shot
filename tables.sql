@@ -119,45 +119,30 @@ INSERT INTO `Alcohols` (`alcoholName`, `alcoholType`, `alcoholPercentage`, `whol
 VALUES ('Jim Beam', 'Whiskey', '0.40', '16.00', '1.75', '21.00', '104');
 
 -- Insertion of Employees
-INSERT INTO `Employees` (`employeeName`, `startDate`, `role`)
+INSERT INTO `Employees` (`employeeName`, `startDate`, `employeeRole`)
 VALUES ('Taquito', '2021-01-01', 'Manager');
-INSERT INTO `Employees` (`employeeName`, `startDate`, `role`)
+INSERT INTO `Employees` (`employeeName`, `startDate`, `employeeRole`)
 VALUES ('Tom', '1993-07-04', 'Sales Clerk');
-INSERT INTO `Employees` (`employeeName`, `startDate`, `role`)
+INSERT INTO `Employees` (`employeeName`, `startDate`, `employeeRole`)
 VALUES ('Pierogi', '2024-02-24', 'Sales Clerk');
 
 -- Insertion of Purchases
 INSERT INTO `Purchases` (`wholesalerID`, `paid`, `deliveryDate`, `delivered`, `totalCost`)
-VALUES (
-  (SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Diageo'), '1', '2024-04-03', '1', 
-  (SELECT SUM(`lineCost`) FROM `AlcoholPurchases` WHERE `wholesalerID` = (SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Diageo'))
-  );
+VALUES ((SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Diageo'), '1', '2024-04-03', '1', '1101.50');
 INSERT INTO `Purchases` (`wholesalerID`, `paid`, `deliveryDate`, `delivered`, `totalCost`)
-VALUES (
-  (SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Pernod Ricard'), '0', '2024-05-05', '1', 
-  (SELECT SUM(`lineCost`) FROM `AlcoholPurchases` WHERE `wholesalerID` = (SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Pernod Ricard'))
-  );
+VALUES ((SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Pernod Ricard'), '0', '2024-05-05', '1', '2032.00');
 INSERT INTO `Purchases` (`wholesalerID`, `paid`, `deliveryDate`, `delivered`, `totalCost`)
-VALUES (
-  (SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Beam Suntory'), '0', '2024-05-28', '0', 
-  (SELECT SUM(`lineCost`) FROM `AlcoholPurchases` WHERE `wholesalerID` = (SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Beam Suntory'))
-  );
+VALUES ((SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Beam Suntory'), '0', '2024-05-28', '0', '103.04');
 
 -- Insertion of Sales
 -- totalCost: needs to be ironed out more; using the number feels like hardcoding
 -- We will have to update Alcohols after each event to update Alcohols(inventory)
 INSERT INTO `Sales` (`employeeID`, `saleDate`, `saleTime`, `totalPrice`)
-VALUES ((SELECT `employeeID` FROM `Employees` WHERE `employeeName` = 'Taquito'), '2024-04-30', '14:23:19',
-	(SELECT SUM(`linePrice`) FROM `AlcoholSales` WHERE `saleID` = 1)
-	);
+VALUES ((SELECT `employeeID` FROM `Employees` WHERE `employeeName` = 'Taquito'), '2024-04-30', '14:23:19', '60.00');
 INSERT INTO `Sales` (`employeeID`, `saleDate`, `saleTime`, `totalPrice`)
-VALUES ((SELECT `employeeID` FROM `Employees` WHERE `employeeName` = 'Tom'), '1999-12-31', '09:01:02',
-	(SELECT SUM(`linePrice`) FROM `AlcoholSales` WHERE `saleID` = 2)
-	);
+VALUES ((SELECT `employeeID` FROM `Employees` WHERE `employeeName` = 'Tom'), '1999-12-31', '09:01:02','40.30');
 INSERT INTO `Sales` (`employeeID`, `saleDate`, `saleTime`, `totalPrice`)
-VALUES ((SELECT `employeeID` FROM `Employees` WHERE `employeeName` = 'Pierogi'), '2024-04-29', '17:54:55',
-	(SELECT SUM(`linePrice`) FROM `AlcoholSales` WHERE `saleID` = 3)
-	);
+VALUES ((SELECT `employeeID` FROM `Employees` WHERE `employeeName` = 'Pierogi'), '2024-04-29', '17:54:55', '104.32');
 
 -- Insertion of AlcoholPurchases
 -- We will have to update Alcohols after each event to update Alcohols(inventory)
