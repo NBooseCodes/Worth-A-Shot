@@ -1,10 +1,8 @@
 --
 -- Group 80 “Worth A Shot”: Nicole Boose and Elsa Luthi
 -- CS 340, Spring 2024
---
--- Description:
+-- Description: This file is all of our insertions for our tables. 
 -- 
-
 --
 -- DATA INSERTION BELOW
 -- 
@@ -30,26 +28,90 @@ INSERT INTO `Alcohols` (`alcoholName`, `alcoholType`, `alcoholPercentage`, `whol
 VALUES ('Jim Beam', 'Whiskey', '0.40', '16.00', '1.75', '21.00', '104');
 
 -- Insertion of Employees
-INSERT INTO `Employees` (`employeeName`, `startDate`, `role`)
+INSERT INTO `Employees` (`employeeName`, `startDate`, `employeeRole`)
 VALUES ('Taquito', '2021-01-01', 'Manager');
-INSERT INTO `Employees` (`employeeName`, `startDate`, `role`)
+INSERT INTO `Employees` (`employeeName`, `startDate`, `employeeRole`)
 VALUES ('Tom', '1993-07-04', 'Sales Clerk');
-INSERT INTO `Employees` (`employeeName`, `startDate`, `role`)
+INSERT INTO `Employees` (`employeeName`, `startDate`, `employeeRole`)
 VALUES ('Pierogi', '2024-02-24', 'Sales Clerk');
 
--- Insertion of Purchases (does not work yet)
--- totalPrice 0.00 since i do not know how to create yet 
-INSERT INTO `Purchases` (`wholesalerID`, `paid`, `deliveryDate`, 'delivered', 'totalPrice')
-VALUES ((SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Diageo'), '1', '2024-04-03', '1', '0.00');
+-- Insertion of Purchases
+INSERT INTO `Purchases` (`wholesalerID`, `paid`, `deliveryDate`, `delivered`, `totalCost`)
+VALUES ((SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Diageo'), '1', '2024-04-03', '1', '1101.50');
+INSERT INTO `Purchases` (`wholesalerID`, `paid`, `deliveryDate`, `delivered`, `totalCost`)
+VALUES ((SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Pernod Ricard'), '0', '2024-05-05', '1', '2032.00');
+INSERT INTO `Purchases` (`wholesalerID`, `paid`, `deliveryDate`, `delivered`, `totalCost`)
+VALUES ((SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Beam Suntory'), '0', '2024-05-28', '0', '103.04');
 
--- Insertion of Sales (does not work yet)
--- totalCost 0.00 as of rn
-INSERT INTO `Sales` (`employeeID`, `saleDate`, `saleTime`, 'totalCost')
-VALUES ((SELECT `employeeID` FROM `Employees` WHERE `employeeName` = 'Taquito'), '2024-04-30', '14:23:19', '0.00');
+-- Insertion of Sales
+-- totalCost: needs to be ironed out more; using the number feels like hardcoding
+-- We will have to update Alcohols after each event to update Alcohols(inventory)
+INSERT INTO `Sales` (`employeeID`, `saleDate`, `saleTime`, `totalPrice`)
+VALUES ((SELECT `employeeID` FROM `Employees` WHERE `employeeName` = 'Taquito'), '2024-04-30', '14:23:19', '60.00');
+INSERT INTO `Sales` (`employeeID`, `saleDate`, `saleTime`, `totalPrice`)
+VALUES ((SELECT `employeeID` FROM `Employees` WHERE `employeeName` = 'Tom'), '1999-12-31', '09:01:02','40.30');
+INSERT INTO `Sales` (`employeeID`, `saleDate`, `saleTime`, `totalPrice`)
+VALUES ((SELECT `employeeID` FROM `Employees` WHERE `employeeName` = 'Pierogi'), '2024-04-29', '17:54:55', '104.32');
 
 -- Insertion of AlcoholPurchases
-INSERT INTO `AlcoholPurchases` (`purchaseID`, `alcoholID`, `quanitityPurchased`, `lineCost`)
-VALUES ();
+-- We will have to update Alcohols after each event to update Alcohols(inventory)
+INSERT INTO `AlcoholPurchases` (`purchaseID`, `alcoholID`, `quantityPurchased`, `lineCost`)
+VALUES (
+  (SELECT `purchaseID` FROM `Purchases` WHERE `wholesalerID` = (SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Diageo')), 
+  (SELECT `alcoholID` FROM `Alcohols` WHERE `alcoholName` = 'Captain Morgan'), '10', 
+  (SELECT SUM(`wholesalePrice` * 10) FROM `Alcohols` WHERE `alcoholName` = 'Captain Morgan'));
+INSERT INTO `AlcoholPurchases` (`purchaseID`, `alcoholID`, `quantityPurchased`, `lineCost`)
+VALUES (
+  (SELECT `purchaseID` FROM `Purchases` WHERE `wholesalerID` = (SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Diageo')), 
+  (SELECT `alcoholID` FROM `Alcohols` WHERE `alcoholName` = 'Don Julio'), '20', 
+  (SELECT SUM(`wholesalePrice` * 20) FROM `Alcohols` WHERE `alcoholName` = 'Don Julio'));
+INSERT INTO `AlcoholPurchases` (`purchaseID`, `alcoholID`, `quantityPurchased`, `lineCost`)
+VALUES (
+  (SELECT `purchaseID` FROM `Purchases` WHERE `wholesalerID` = (SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Pernod Ricard')), 
+  (SELECT `alcoholID` FROM `Alcohols` WHERE `alcoholName` = 'Malibu'), '10', 
+  (SELECT SUM(`wholesalePrice` * 10) FROM `Alcohols` WHERE `alcoholName` = 'Malibu'));
+INSERT INTO `AlcoholPurchases` (`purchaseID`, `alcoholID`, `quantityPurchased`, `lineCost`)
+VALUES (
+  (SELECT `purchaseID` FROM `Purchases` WHERE `wholesalerID` = (SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Pernod Ricard')), 
+  (SELECT `alcoholID` FROM `Alcohols` WHERE `alcoholName` = 'Jameson'), '40', 
+  (SELECT SUM(`wholesalePrice` * 40) FROM `Alcohols` WHERE `alcoholName` = 'Jameson'));
+INSERT INTO `AlcoholPurchases` (`purchaseID`, `alcoholID`, `quantityPurchased`, `lineCost`)
+VALUES (
+  (SELECT `purchaseID` FROM `Purchases` WHERE `wholesalerID` = (SELECT `wholesalerID` FROM `Wholesalers` WHERE `name` = 'Beam Suntory')), 
+  (SELECT `alcoholID` FROM `Alcohols` WHERE `alcoholName` = 'Jim Beam'), '30', 
+  (SELECT SUM(`wholesalePrice` * 30) FROM `Alcohols` WHERE `alcoholName` = 'Jim Beam'));
+
+
 -- Insertion of AlcoholSales
-INSERT INTO `AlcoholSales` (`employeeName`, `startDate`, `role`)
-VALUES ();
+-- May need to update how we plan to grab the sale maybe need unique sale identifier?; using the number feels like hardcoding
+INSERT INTO `AlcoholSales` (`saleID`, `alcoholID`, `quantitySold`, `linePrice`)
+VALUES (
+  (SELECT `saleID` FROM `Sales` WHERE `saleID` = 1),
+  (SELECT `alcoholID` FROM `Alcohols` WHERE `alcoholName` = 'Captain Morgan'), '1',
+  (SELECT SUM(`retailPrice` * 1) FROM `Alcohols` WHERE `alcoholName` = 'Captain Morgan')
+);
+INSERT INTO `AlcoholSales` (`saleID`, `alcoholID`, `quantitySold`, `linePrice`)
+VALUES (
+  (SELECT `saleID` FROM `Sales` WHERE `saleID` = 2),
+  (SELECT `alcoholID` FROM `Alcohols` WHERE `alcoholName` = 'Don Julio'), '1',
+  (SELECT SUM(`retailPrice` * 1) FROM `Alcohols` WHERE `alcoholName` = 'Don Julio')
+);
+INSERT INTO `AlcoholSales` (`saleID`, `alcoholID`, `quantitySold`, `linePrice`)
+VALUES (
+  (SELECT `saleID` FROM `Sales` WHERE `saleID` = 2),
+  (SELECT `alcoholID` FROM `Alcohols` WHERE `alcoholName` = 'Malibu'), '1',
+  (SELECT SUM(`retailPrice` * 1) FROM `Alcohols` WHERE `alcoholName` = 'Malibu')
+);
+INSERT INTO `AlcoholSales` (`saleID`, `alcoholID`, `quantitySold`, `linePrice`)
+VALUES (
+  (SELECT `saleID` FROM `Sales` WHERE `saleID` = 3),
+  (SELECT `alcoholID` FROM `Alcohols` WHERE `alcoholName` = 'Jim Beam'), '1',
+  (SELECT SUM(`retailPrice` * 1) FROM `Alcohols` WHERE `alcoholName` = 'Jim Beam')
+);
+INSERT INTO `AlcoholSales` (`saleID`, `alcoholID`, `quantitySold`, `linePrice`)
+VALUES (
+  (SELECT `saleID` FROM `Sales` WHERE `saleID` = 3),
+  (SELECT `alcoholID` FROM `Alcohols` WHERE `alcoholName` = 'Jameson'), '2',
+  (SELECT SUM(`retailPrice` * 2) FROM `Alcohols` WHERE `alcoholName` = 'Jameson')
+);
+
