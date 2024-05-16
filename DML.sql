@@ -45,11 +45,11 @@ SELECT `purchaseID` FROM `Purchases`;
 
 SELECT `alcoholID`, `alcoholName` FROM `Alcohols`;
 
-SELECT `wholesalerID`, `name` FROM `Wholesalers`;
+SELECT `wholesalerID`, `name` FROM `Wholesalers` ORDER BY `wholesalerID` ASC;
 
 -- Get employees for dropdown for RUD Ops (Creation has its own thing)
 
-SELECT `employeeID`, `firstName` and `lastname` FROM `Employees`;
+SELECT `employeeID`, `firstName`, `lastName` FROM `Employees`;
 
 -- The following are INSERT STATEMENTS
 
