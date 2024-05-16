@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group 80: Worth a Shot</title>
+</head>
+<body>
+<header>
+    <h1>Group 80: Worth a Shot Database</h1>
+</header>
+<!-- Navigation bar to get between pages -->
+<nav>
+    <a href="index.html">Home</a>
+    <a href="alcohols.html">Alcohols</a>
+    <a href="employees.html">Employees</a>
+    <a href="wholesalers.html">Wholesalers</a>
+    <a href="purchases.html">Purchases</a>
+    <a href="alcohol_purchases.html">Alcohol Purchases</a>
+</nav>
+<main>
+    <!-- Page Title -->
+    <section>
+        <h2>Alcohol Purchases in Database</h2>
+        <article></article>
+    </section>
+    <section>
+        <!-- Table showing data -->
+        <h3>Browse Alcohol Purchases</h3>
+            <table border="1" cellpadding="5">
+                <tr>
+                    <th>ID</th>
+                    <th>Purchase ID</th>
+                    <th>Alcohol ID</th>
+                    <th>Quantity Purchased</th>
+                    <th>Line Price</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>3</td>
+                    <td>5</td>
+                    <td>$59.99</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>3</td>
+                    <td>5</td>
+                    <td>$59.99</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>5</td>
+                    <td>$59.99</td>
+                </tr>
+              </table>
+              <p>&nbsp</p>
+              <button href="#" onClick="showform('insert')">New Alcohol Purchase</button>
+        <!-- Add Alcohol Purchase -->
+        <div id="insert">
+            <h3>Add Alcohol Purchase</h3>
+            <form method="POST" id="addAlcoholPurchase">
+                <fieldset class="fields">
+                    <p>
+                        <label>Purchase ID: </label> <select name="purchID"> 
+                            <option value="0">&nbsp;</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </p>
+                    <p>
+                        <label>Alcohol ID: </label> <select name="alcID">
+                            <option value="0">&nbsp;</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </p>
+                    <p>
+                        <label>Quanitity: </label> <input type="int" name="quanitity">
+                    </p> 
+                    <button>Add</button>
+                    <button>Cancel</button> 
+                </fieldset>
+            </form>     
+        </div>
+    </section>
+</main>
+<!-- Footer -->
+<footer>
+    <p>&copy; 2024 Elsa Luthi & Nicole Boose; Group 80; Worth a Shot</p>
+</footer>
+</body>
+</html>
