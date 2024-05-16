@@ -16,7 +16,7 @@ CREATE OR REPLACE TABLE `Wholesalers` (
     `name` varchar(255) NOT NULL,
     `address` varchar(255) NOT NULL,
     `email` varchar(255) NOT NULL,
-    `phone` varchar(255) NOT NULL,
+    `phone` varchar(12) NOT NULL,
     `contactName` varchar(255),
     UNIQUE(`name`),
     PRIMARY KEY (`wholesalerID`)
