@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group 80: Worth a Shot</title>
+</head>
+<body>
+<header>
+    <h1>Group 80: Worth a Shot Database</h1>
+</header>
+<!-- Navigation bar to get between pages -->
+<nav>
+    <a href="index.html">Home</a>
+    <a href="alcohols.html">Alcohols</a>
+    <a href="employees.html">Employees</a>
+    <a href="wholesalers.html">Wholesalers</a>
+    <a href="purchases.html">Purchases</a>
+    <a href="alcohol_purchases.html">Alcohol Purchases</a>
+</nav>
+<main>
+    <!-- Page Title -->
+    <section>
+        <h2>Wholesalers in Database</h2>
+        <article></article>
+    </section>
+    <section>
+        <!-- Table showing data -->
+    <article>
+        <h3>Browse Wholesalers</h3>
+        <table border="1" cellpadding="5">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Contact Name</th>
+                <th> </th>
+                <th> 
+                    <a href="#" onClick="showform('insert')">New</a>
+                </th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Diageo</td>
+                <td>1111 NW 11th St New York, NY 10001</td>
+                <td>diageo@alcohols.com</td>
+                <td>111-111-1111</td>
+                <td>Diego Montoya</td>
+                <td>200</td>
+                <td>
+                    <a href="#" onClick="updateWholesaler('this.wholesalerID')">Edit</a>
+                </td>
+                <td>
+                    <a href="#" onClick="deleteWholesaler('this.wholesalerID')">Delete</a>
+                </td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Diageo</td>
+                <td>1111 NW 11th St New York, NY 10001</td>
+                <td>diageo@alcohols.com</td>
+                <td>111-111-1111</td>
+                <td>Diego Montoya</td>
+                <td>200</td>
+                <td>
+                    <a href="#" onClick="updateWholesaler('this.wholesalerID')">Edit</a>
+                </td>
+                <td>
+                    <a href="#" onClick="deleteWholesaler('this.wholesalerID')">Delete</a>
+                </td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Diageo</td>
+                <td>1111 NW 11th St New York, NY 10001</td>
+                <td>diageo@alcohols.com</td>
+                <td>111-111-1111</td>
+                <td>Diego Montoya</td>
+                <td>200</td>
+                <td>
+                    <a href="#" onClick="updateWholesaler('this.wholesalerID')">Edit</a>
+                </td>
+                <td>
+                    <a href="#" onClick="deleteWholesaler('this.wholesalerID')">Delete</a>
+                </td>
+            </tr>
+          </table>
+    </article>
+    <!-- Add Wholesaler -->
+    <div id="insert">
+        <h3>Add Wholesaler</h3>
+        <form method="POST" id="addWholesaler">
+            <fieldset class="fields">
+                <p>
+                    <label>Name: </label> <input type="text" name="name">
+                </p>
+                <p>
+                    <label>Address: </label> <input type="text" name="address">
+                </p>
+                <p>
+                    <label>Email: </label> <input type="text" name="email">
+                </p>
+                <p>
+                    <label>Phone Number: </label> <input type="text" name="phone_number">
+                </p>
+                <p>
+                    <label>Contact Name: </label> <input type="text" name="contact_name">
+                </p>
+                <button>Add</button>
+                <button>Cancel</button>  
+            </fieldset>
+        </form>    
+    </div>
+    <!-- Update Wholesaler -->
+    <div id="insert">
+        <h3>Edit Wholesaler</h3>
+        <form method="POST" id="addWholesaler">
+            <fieldset class="fields">
+                <input type="hidden" name="wholesalerID" id="updateWholesalerID">
+                <strong><label>ID: </label> 1</strong>
+                <p>
+                    <label>Name: </label> <input type="text" name="name">
+                </p>
+                <p>
+                    <label>Address: </label> <input type="text" name="address">
+                </p>
+                <p>
+                    <label>Email: </label> <input type="text" name="email">
+                </p>
+                <p>
+                    <label>Phone Number: </label> <input type="text" name="phone_number">
+                </p>
+                <p>
+                    <label>Contact Name: </label> <input type="text" name="contact_name">
+                </p>
+                <button>Add</button>
+                <button>Cancel</button>  
+            </fieldset>
+        </form>    
+    </div>
+     <!-- Delete Wholesaler -->
+     <div id="insert">
+        <h3>Delete Wholesaler</h3>
+        <form method="POST" id="addWholesaler">
+            <fieldset class="fields">
+                <input type="hidden" name="wholesalerID" id="updateWholesalerID">
+                <p>
+                    <strong>Confirmation:</strong> Proceed in the deletion of Wholesaler
+                    <label>ID: </label> 1
+                </p>
+                <button>Delete</button>
+                <button>Cancel</button>
+            </fieldset>
+        </form>
+    </div>
+    </section>
+</main>
+<!-- Footer -->
+<footer>
+    <p>&copy; 2024 Elsa Luthi & Nicole Boose; Group 80; Worth a Shot</p>
+</footer>
+</body>
+</html>
