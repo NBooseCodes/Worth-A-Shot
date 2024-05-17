@@ -92,7 +92,6 @@ SET `firstName` = :firstNameInput, lastName = :lastNameInput, startDate = :start
 WHERE `employeeID` = :employee_ID_from_update_form;
 
 -- Delete an alcohol entry
-
 DELETE FROM `Alcohols` WHERE `alcoholID` = :alcoholID_selected_from_browse_alcohol_page;
 
 -- DELETE A WHOLESALER
@@ -103,3 +102,6 @@ DELETE FROM `Employees` WHERE `employeeID` = :employeeID_selected_from_browse_wh
 
 -- DELETE A PURCHASE ORDER
 DELETE FROM `Purchases` WHERE `purchaseID` = :purchaseID_selected_from_browse_purchases_page;
+
+-- DELETE A AlcoholPurchase When Purchase is deleted
+DELETE FROM `AlcoholPurchases` WHERE `purchaseID` = :purchaseID_selected_from_browse_purchases_page;
