@@ -45,11 +45,11 @@ SELECT `purchaseID` FROM `Purchases`;
 
 SELECT `alcoholID`, `alcoholName` FROM `Alcohols`;
 
-SELECT `wholesalerID`, `name` FROM `Wholesalers` ORDER BY `wholesalerID` ASC;
+SELECT `wholesalerID`, `name` FROM `Wholesalers`;
 
 -- Get employees for dropdown for RUD Ops (Creation has its own thing)
 
-SELECT `employeeID`, `firstName`, `lastName` FROM `Employees`;
+SELECT `employeeID`, `firstName` and `lastname` FROM `Employees`;
 
 -- The following are INSERT STATEMENTS
 
@@ -92,6 +92,7 @@ SET `firstName` = :firstNameInput, lastName = :lastNameInput, startDate = :start
 WHERE `employeeID` = :employee_ID_from_update_form;
 
 -- Delete an alcohol entry
+
 DELETE FROM `Alcohols` WHERE `alcoholID` = :alcoholID_selected_from_browse_alcohol_page;
 
 -- DELETE A WHOLESALER
@@ -103,5 +104,5 @@ DELETE FROM `Employees` WHERE `employeeID` = :employeeID_selected_from_browse_wh
 -- DELETE A PURCHASE ORDER
 DELETE FROM `Purchases` WHERE `purchaseID` = :purchaseID_selected_from_browse_purchases_page;
 
--- DELETE A AlcoholPurchase When Purchase is deleted
-DELETE FROM `AlcoholPurchases` WHERE `purchaseID` = :purchaseID_selected_from_browse_purchases_page;
+-- Delete from AlcoholPurchases
+DELETE FROM `AlcoholPurchases` WHERE `alcoholPurchaseID` = :alcoholPurchaseID_selected_from_browse_purchases_page;
