@@ -103,3 +103,6 @@ DELETE FROM `Employees` WHERE `employeeID` = :employeeID_selected_from_browse_wh
 
 -- DELETE A PURCHASE ORDER
 DELETE FROM `Purchases` WHERE `purchaseID` = :purchaseID_selected_from_browse_purchases_page;
+
+-- Delete from AlcoholPurchases
+DELETE FROM `AlcoholPurchases` WHERE `alcoholPurchaseID` = :alcoholPurchaseID_selected_from_browse_purchases_page;
