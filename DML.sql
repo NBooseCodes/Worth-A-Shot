@@ -45,11 +45,11 @@ SELECT `purchaseID` FROM `Purchases`;
 
 SELECT `alcoholID`, `alcoholName` FROM `Alcohols`;
 
-SELECT `wholesalerID`, name FROM `Wholesalers`;
+SELECT `wholesalerID`, `name` FROM `Wholesalers`;
 
 -- Get employees for dropdown for RUD Ops (Creation has its own thing)
 
-SELECT `employeeID`, `employeeName` FROM `Employees`;
+SELECT `employeeID`, `firstName` and `lastname` FROM `Employees`;
 
 -- The following are INSERT STATEMENTS
 
@@ -103,3 +103,6 @@ DELETE FROM `Employees` WHERE `employeeID` = :employeeID_selected_from_browse_wh
 
 -- DELETE A PURCHASE ORDER
 DELETE FROM `Purchases` WHERE `purchaseID` = :purchaseID_selected_from_browse_purchases_page;
+
+-- Delete from AlcoholPurchases
+DELETE FROM `AlcoholPurchases` WHERE `alcoholPurchaseID` = :alcoholPurchaseID_selected_from_browse_purchases_page;
