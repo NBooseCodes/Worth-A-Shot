@@ -1,0 +1,69 @@
+<!-- index.hbs -->
+<h1>The server is running!</h1>
+<p>If you see this text, the server is <strong>definitely</strong> working!</p>
+
+{{!-- Create a table --}}
+<table id="alcohol-table">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            {{#each data.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the id, alcohol name, type, percentage, wholesale price, volume, and inventory count in order --}}
+        {{#each data}}
+        <tr>
+            <td>{{this.alcoholID}}</td>
+            <td>{{this.alcoholName}}</td>
+            <td>{{this.alcoholType}}</td>
+            <td>{{this.alcoholPercentage}}</td>
+            <td>{{this.wholesalePrice}}</td>
+            <td>{{this.alcoholVolume}}</td>
+            <td>{{this.inventory}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<!-- /views/index.hbs -->
+
+{{!-- Form to add a record to the table  --}}
+<h2>Add an alcohol</h2>
+<p>Input data for your desired alcohol here.</p>
+<form id="add-alcohol-form">
+    <label for="input-alcoholName">Alcohol Name: </label>
+    <input type="text" name="input-alcoholName" id="input-alcoholName">
+    
+    <label for="input-alcoholType">Alcohol Type: </label>
+    <input type="text" name="input-alcoholType" id="input-alcoholType">
+
+    <label for="input-alcoholPercentage">Alcohol Percentage: </label>
+    <input type="number" name="input-alcoholPercentage" id="input-alcoholPercentage">
+
+    <label for="input-wholesalePrice">Wholesale Price: </label>
+    <input type="number" name="input-wholesalePrice" id="input-wholesalePrice">
+
+    <label for="input-alcoholVolume">Alcohol Volume (liters): </label>
+    <input type="number" name="input-alcoholVolume" id="input-alcoholVolume">
+
+    <label for="input-inventory">Inventory: </label>
+    <input type="number" name="input-inventory" id="input-inventory">
+    
+
+    <input type="submit" value="Submit">
+</form>
+
+{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+<script src="./js/add_alcohol.js"></script>
