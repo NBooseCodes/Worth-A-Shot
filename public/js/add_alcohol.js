@@ -88,6 +88,8 @@ addRowToTable = (data) => {
     let alcoholVolumeCell = document.createElement("TD");
     let inventoryCell = document.createElement("TD");
 
+    let deleteCell = document.createElement("TD");
+
     // Fill the cells with correct data
     idCell.innerText = newRow.alcoholID;
     alcoholNameCell.innerText = newRow.alcoholName;
@@ -112,7 +114,7 @@ addRowToTable = (data) => {
     row.appendChild(alcoholVolumeCell);
     row.appendChild(inventoryCell);
     
-    row.setAttribute('data-value', newRow.alcoholID);
+    row.setAttribute('data-value', newRow.id);
     // Add the row to the table
     currentTable.appendChild(row);
 }
