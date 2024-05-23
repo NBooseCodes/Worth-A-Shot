@@ -35,7 +35,7 @@ addAlcoholForm.addEventListener("submit", function (e) {
     
     // Setup our AJAX request
     var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "/add-alcohol", true);
+    xhttp.open("POST", "/add-alcohol-ajax", true);
     xhttp.setRequestHeader("Content-type", "application/json");
 
     // Tell our AJAX request how to resolve
@@ -89,13 +89,19 @@ addRowToTable = (data) => {
     let inventoryCell = document.createElement("TD");
 
     // Fill the cells with correct data
-    idCell.innerText = newRow.id;
+    idCell.innerText = newRow.alcoholID;
     alcoholNameCell.innerText = newRow.alcoholName;
     alcoholTypeCell.innerText = newRow.alcoholType;
     alcoholPercentageCell.innerText = newRow.alcoholPercentage;
     wholesalePriceCell.innerText = newRow.wholesalePrice;
     alcoholVolumeCell.innerText = newRow.alcoholVolume;
     inventoryCell.innerText = newRow.inventory;
+
+    deleteCell = document.createElement("button");
+    deleteCell.innerHTML = "Delete";
+    deleteCell.onclick = function(){
+        deleteAlcohol(newRow.alcoholID);
+    };
 
     // Add the cells to the row 
     row.appendChild(idCell);
@@ -106,6 +112,7 @@ addRowToTable = (data) => {
     row.appendChild(alcoholVolumeCell);
     row.appendChild(inventoryCell);
     
+    row.setAttribute('data-value', newRow.alcoholID);
     // Add the row to the table
     currentTable.appendChild(row);
 }

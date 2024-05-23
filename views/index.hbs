@@ -1,7 +1,7 @@
 <!-- index.hbs -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <h1>The server is running!</h1>
 <p>If you see this text, the server is <strong>definitely</strong> working!</p>
-
 {{!-- Create a table --}}
 <table id="alcohol-table">
 
@@ -32,11 +32,16 @@
             <td>{{this.wholesalePrice}}</td>
             <td>{{this.alcoholVolume}}</td>
             <td>{{this.inventory}}</td>
+            <td><button onclick="deleteAlcohol({{this.alcoholID}})">Delete</button></td>
         </tr>
         {{/each}}
     </tbody>
 </table>
+<script src="/js/delete_alcohol.js"></script>
 
+{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+
+{{!--  When using express.static('public'), you should reference static files in the HTML as if the public folder is the root --}}
 <!-- /views/index.hbs -->
 
 {{!-- Form to add a record to the table  --}}
@@ -65,5 +70,14 @@
     <input type="submit" value="Submit">
 </form>
 
-{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
-<script src="./js/add_alcohol.js"></script>
+<h2>Search Using an HTML Form</h2>
+<p>Search for an alcohol by name using the search bar below!</p>
+<form id="search-alcohol" method='GET' action='/'>
+    <label for="input-alcoholName">Search by name: </label>
+    <input type="text" name="alcoholName" id="input-alcoholName-search">
+    
+    <input type="submit">
+    <a href='/'><button>Reset</button></a>
+</form>
+
+<script src="/js/add_alcohol.js"></script> 
