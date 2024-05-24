@@ -1,8 +1,13 @@
 <!-- index.hbs -->
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<h1>The server is running!</h1>
-<p>If you see this text, the server is <strong>definitely</strong> working!</p>
+
+<!-- Page Title -->
+    <section>
+        <h2>Alcohols in Database</h2>
+        <article></article>
+    </section>
+
 {{!-- Create a table --}}
 <table id="alcohol-table" border="1" cellpadding="5">
 
@@ -46,27 +51,40 @@
 <!-- /views/index.hbs -->
 
 {{!-- Form to add a record to the table  --}}
-<h2>Add an alcohol</h2>
+<h2>Add an Alcohol</h2>
 <p>Input data for your desired alcohol here.</p>
 <form id="add-alcohol-form">
-    <label for="input-alcoholName">Alcohol Name: </label>
-    <input type="text" name="input-alcoholName" id="input-alcoholName">
-    
-    <label for="input-alcoholType">Alcohol Type: </label>
-    <input type="text" name="input-alcoholType" id="input-alcoholType">
-
-    <label for="input-alcoholPercentage">Alcohol Percentage: </label>
-    <input type="number" name="input-alcoholPercentage" id="input-alcoholPercentage">
-
-    <label for="input-wholesalePrice">Wholesale Price: </label>
-    <input type="number" name="input-wholesalePrice" id="input-wholesalePrice">
-
-    <label for="input-alcoholVolume">Alcohol Volume (liters): </label>
-    <input type="number" name="input-alcoholVolume" id="input-alcoholVolume">
-
-    <label for="input-inventory">Inventory: </label>
-    <input type="number" name="input-inventory" id="input-inventory">
-    
+    <p>
+        <label for="input-alcoholName">Alcohol Name: </label>
+        <input type="text" name="input-alcoholName" id="input-alcoholName">
+    </p>
+    <p>
+        <label for="input-alcoholType">Alcohol Type: </label>
+        <select name="input-alcoholType" id="input-alcoholType">
+            <option>Select Type</option>
+            <option value="Rum">Rum</option>
+            <option value="Tequila">Tequila</option>
+            <option value="Vodka">Vodka</option>
+            <option value="Whisk(e)y">Whisk(e)y</option>
+            <option value="Other">Other</option>
+        </select>
+    </p>
+    <p>
+        <label for="input-alcoholPercentage">Alcohol Percentage: </label>
+        <input type="number" step="0.01" name="input-alcoholPercentage" id="input-alcoholPercentage">
+    </p>
+    <p>
+        <label for="input-wholesalePrice">Wholesale Price: </label>
+        <input type="number" step="0.01" name="input-wholesalePrice" id="input-wholesalePrice">
+    </p>
+    <p>
+        <label for="input-alcoholVolume">Alcohol Volume (liters): </label>
+        <input type="number" step="0.01" name="input-alcoholVolume" id="input-alcoholVolume">
+    </p>
+    <p>
+        <label for="input-inventory">Inventory: </label>
+        <input type="number" name="input-inventory" id="input-inventory">
+    </p>
 
     <input type="submit" value="Submit">
 </form>

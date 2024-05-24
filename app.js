@@ -24,6 +24,9 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public'))); // The express.static middleware serves static files from the specified directory
 
+/*
+    ROUTES
+*/
 
 app.get('/', function(req, res) {
     let query1;
@@ -36,32 +39,30 @@ app.get('/', function(req, res) {
         query1 = `SELECT * FROM Alcohols WHERE alcoholName LIKE "%${req.query.alcoholName}%"`
     }
 
-    let query2 = "SELECT * FROM AlcoholPurchases;";
+    // run query
     db.pool.query(query1, function(error, rows, fields) {
         let alcohols = rows;
-
-        
         return res.render('index', {data: alcohols});
     })
 })
-// app.js - ROUTES section
 
+// ALCOHOL ADDITION
 app.post('/add-alcohol-ajax', function (req, res) {
     // Capture the incoming data and parse it back to a JS object
     let data = req.body;
 
-    // Capture NULL values
-    let alcoholPercentage = parseInt(data.alcoholPercentage);
+    // Capture NULL values & parse data correctly
+    let alcoholPercentage = parseFloat(data.alcoholPercentage);
     if (isNaN(alcoholPercentage)) {
         alcoholPercentage = 'NULL'
     }
 
-    let wholesalePrice = parseInt(data.wholesalePrice);
+    let wholesalePrice = parseFloat(data.wholesalePrice);
     if (isNaN(wholesalePrice)) {
         wholesalePrice = 'NULL'
     }
 
-    let alcoholVolume = parseInt(data.alcoholVolume);
+    let alcoholVolume = parseFloat(data.alcoholVolume);
     if (isNaN(alcoholVolume)) {
         alcoholVolume = 'NULL'
     }
@@ -103,22 +104,22 @@ app.post('/add-alcohol-ajax', function (req, res) {
     })
 });
 
-app.delete("/delete-alcohol/", function(req, res, next){
+// ALCOHOL DELETION 
+app.delete('/delete-alcohol-ajax/', function(req,res,next){
     let data = req.body;
-    let alcoholID = parseInt(data.alcoholID);
-    let delete_alcohol = `DELETE FROM Alcohols WHERE alcoholID = ?`;
-    
-  
-  
-          // Run the 1st query
-          db.pool.query(delete_alcohol, [alcoholID], function(error, rows, fields){
-              if (error) {
-  
-              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-              console.log(error);
-              res.sendStatus(400);
-              }
-  })});
+    let alcoholID = parseInt(data.id)
+    let delete_Alcohol = 'DELETE FROM Alcohols WHERE alcoholId = ?' ;
+    // run query
+    db.pool.query(delete_Alcohol, [alcoholID], function(error, rows, fields) {
+        if (error) {
+            console.log(error);
+            res.sendStatus(400);
+        }
+        else {
+            res.sendStatus(204);
+        }
+    })
+});
 
 /*
     LISTENER
