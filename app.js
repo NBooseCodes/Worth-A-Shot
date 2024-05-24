@@ -103,9 +103,9 @@ app.post('/add-alcohol-ajax', function (req, res) {
     })
 });
 
-app.delete('/delete-alcohol/', function(req,res,next){
+app.delete("/delete-alcohol/", function(req, res, next){
     let data = req.body;
-    let personID = parseInt(data.id);
+    let alcoholID = parseInt(data.alcoholID);
     let delete_alcohol = `DELETE FROM Alcohols WHERE alcoholID = ?`;
     
   

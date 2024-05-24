@@ -1,7 +1,7 @@
-function deletePerson(personID) {
+function deleteAcohol(alcoholID) {
     // Put our data we want to send in a javascript object
     let data = {
-        id: alcoholID
+        alcoholID: alcoholID
     };
 
     // Setup our AJAX request

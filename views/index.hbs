@@ -1,8 +1,10 @@
 <!-- index.hbs -->
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <h1>The server is running!</h1>
 <p>If you see this text, the server is <strong>definitely</strong> working!</p>
 {{!-- Create a table --}}
-<table id="alcohol-table">
+<table id="alcohol-table" border="1" cellpadding="5">
 
     {{!-- Header section --}}
     <thead>
@@ -81,19 +83,27 @@
 
 <script src="/js/add_alcohol.js"></script> 
 
-<h2>Updating an Alcohol Form</h2>
-<p>To update a specific alcohol, select their name from the drop-down menu on the left </p>
+<h2>Updating Alcohol Form</h2>
+<p>To update a specific Alcohol's type, select their name from the dropdown on the left.</p>
 <form id="update-alcohol-form">
 
     <label for="input-alcoholName">Alcohol name: </label>
     <select name="input-alcoholName" id="mySelect">
-        <option value="test">Select an alcohol</option>
+        <option value="test">Select an Alcohol</option>
         {{#each data}}
         <option value="{{this.alcoholID}}">{{this.alcoholName}}</option>
+        {{/each}}
+    </select>
+
+    <label for="input-alcohol-type">Type: </label>
+    <select name="input-alcohol-type" id="input-alcohol-type-update">
+        <option>Select a type of liquor: </option>
+        {{#each data}}
+        <option value="{{this.alcoholID}}">{{this.alcoholType}}</option>
         {{/each}}
     </select>
     <input type="submit">
 
 </form>
-<script src="./js/update_person.js"></script>
+
 <script src="./js/update_person.js"></script>

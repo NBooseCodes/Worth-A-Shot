@@ -114,7 +114,7 @@ addRowToTable = (data) => {
     row.appendChild(alcoholVolumeCell);
     row.appendChild(inventoryCell);
     
-    row.setAttribute('data-value', newRow.id);
+    row.setAttribute('data-value', newRow.alcoholID);
     // Add the row to the table
     currentTable.appendChild(row);
 }
