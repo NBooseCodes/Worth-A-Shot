@@ -1,8 +1,11 @@
-let updateAlcoholForm = document.getElementById('update-alcohol-form');
+// get obejcts to modify
+let updateAlcoholForm = document.getElementById('update-alcohol-form-ajax');
 
+// modify objects
 updateAlcoholForm.addEventListener("submit", function(e) {
+    // stops form from submitting
     e.preventDefault();
-
+    // gets fields we need data from
     let inputAlcoholName = document.getElementById("mySelect");
     let inputAlcoholType = document.getElementById("input-alcohol-type-update");
 
@@ -14,11 +17,11 @@ updateAlcoholForm.addEventListener("submit", function(e) {
         alcoholType: alcoholTypeValue
     }
 
+    // ajax request
     var xhttp = new XMLHttpRequest();
-
-    xhttp.open("PUT", "/put-alcohol", true);
+    xhttp.open("PUT", "/put-alcohol-ajax", true);
     xhttp.setRequestHeader("Content-type", "application/json");
-
+    // resolution
     xhttp.onreadystatechange = () => {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
             updateRow(xhttp.response, alcoholNameValue);
@@ -27,6 +30,7 @@ updateAlcoholForm.addEventListener("submit", function(e) {
             console.log("There was an error with the input.")
         }
     }
+    // send request
     xhttp.send(JSON.stringify(data));
 })
 
@@ -39,7 +43,7 @@ function updateRow(data, alcoholID) {
             let updateRowIndex = table.getElementsByTagName("tr")[i];
             let td = updateRowIndex.getElementsByTagName("td")[2];
 
-            td.innerHTML = parsedData[0].name;
+            td.innerHTML = parsedData[0].alcoholName;
         }
     }
 }

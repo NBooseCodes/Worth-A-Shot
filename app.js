@@ -120,6 +120,41 @@ app.delete('/delete-alcohol-ajax/', function(req,res,next){
         }
     })
 });
+// ALCOHOL UPDATE
+app.put('/put-alcohol-ajax', function(req,res,next){                                   
+    let data = req.body;
+  
+    let alcoholType = parseInt(data.alcoholType);
+    let alcoholName = parseInt(data.alcoholName);
+  
+    queryUpdateAlcohol = `UPDATE Alcohols SET alcoholType = ? WHERE Alcohols.alcoholID = ?`;
+    selectAlcohol = `SELECT * FROM Alcohols WHERE alcoholID = ?`
+  
+          // Run the 1st query
+          db.pool.query(queryUpdateAlcohol, [alcoholType, alcoholName], function(error, rows, fields){
+              if (error) {
+  
+              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+              console.log(error);
+              res.sendStatus(400);
+              }
+  
+              // If there was no error, we run our second query and return that data so we can use it to update the people's
+              // table on the front-end
+              else
+              {
+                  // Run the second query
+                  db.pool.query(selectAlcohol, [alcoholName], function(error, rows, fields) {
+          
+                      if (error) {
+                          console.log(error);
+                          res.sendStatus(400);
+                      } else {
+                          res.send(rows);
+                      }
+                  })
+              }
+  })});
 
 /*
     LISTENER
