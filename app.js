@@ -5,7 +5,7 @@
 */
 var express = require('express');   // We are using the express library for the web server
 var app = express();            // We need to instantiate an express object to interact with the server in our code
-const PORT = 29096;
+const PORT = 29094;
 
 const { engine } = require('express-handlebars');
 var exphbs = require('express-handlebars');     // Import express-handlebars
@@ -120,6 +120,43 @@ app.delete('/delete-alcohol-ajax/', function(req,res,next){
         }
     })
 });
+
+// ALCOHOL UPDATE
+app.put('/put-alcohol-ajax', function(req,res,next){  
+    console.log("Hit the route");                                 
+    let data = req.body;
+  
+    let alcoholType = data.alcoholType;
+    let alcoholName = data.alcoholName;
+  
+    queryUpdateAlcohol = `UPDATE Alcohols SET alcoholType = ? WHERE Alcohols.alcoholID = ?`;
+    selectAlcohol = `SELECT * FROM Alcohols WHERE alcoholID = ?`
+  
+          // Run the 1st query
+          db.pool.query(queryUpdateAlcohol, [alcoholType, alcoholName], function(error, rows, fields){
+              if (error) {
+  
+              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+              console.log(error);
+              res.sendStatus(400);
+              }
+  
+              // If there was no error, we run our second query and return that data so we can use it to update the people's
+              // table on the front-end
+              else
+              {
+                  // Run the second query
+                  db.pool.query(selectAlcohol, [alcoholType], function(error, rows, fields) {
+          
+                      if (error) {
+                          console.log(error);
+                          res.sendStatus(400);
+                      } else {
+                          res.send(rows);
+                      }
+                  })
+              }
+  })});
 
 /*
     LISTENER

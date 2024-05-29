@@ -16,7 +16,7 @@ CREATE OR REPLACE TABLE `Wholesalers` (
     `name` varchar(255) NOT NULL,
     `address` varchar(255) NOT NULL,
     `email` varchar(255) NOT NULL,
-    `phone` varchar(255) NOT NULL,
+    `phone` varchar(12) NOT NULL,
     `contactName` varchar(255),
     UNIQUE(`name`),
     PRIMARY KEY (`wholesalerID`)
@@ -45,12 +45,12 @@ CREATE OR REPLACE TABLE `Employees` (
 );
 
 
--- Creates Purchases table that stores information on an alcohol purchasing event.
+-- Creates Purchases table that stores information on an alcohol purchasing event. EmployeeID CAN BE NULL WHEN UPDATED
 CREATE OR REPLACE TABLE `Purchases` (
     `purchaseID` int(11) AUTO_INCREMENT,
     `wholesalerID` int(11) NOT NULL,
-    `employeeID` int(11) NOT NULL,
-	`paid` tinyint(1) DEFAULT 0,
+    `employeeID` int(11) DEFAULT NULL,
+	  `paid` tinyint(1) DEFAULT 0,
     `deliveryDate` date NOT NULL,
     `delivered` tinyint(1) DEFAULT 0,
     `totalCost` decimal(19,4),
@@ -63,10 +63,10 @@ CREATE OR REPLACE TABLE `Purchases` (
 CREATE OR REPLACE TABLE `AlcoholPurchases` (
 	`alcoholPurchaseID` int(11) AUTO_INCREMENT,
     `purchaseID` int(11) NOT NULL,
-	`alcoholID` int(11) NOT NULL,
+	  `alcoholID` int(11) NOT NULL,
     `quantityPurchased` int(11) NOT NULL,
     `lineCost` decimal(19,4) NOT NULL,
-    FOREIGN KEY (`alcoholID`) REFERENCES `Alcohols`(`alcoholID`),
+    FOREIGN KEY (`alcoholID`) REFERENCES `Alcohols`(`alcoholID`) ON DELETE CASCADE,
     FOREIGN KEY (`purchaseID`) REFERENCES `Purchases`(`purchaseID`) ON DELETE CASCADE,
     PRIMARY KEY (`alcoholPurchaseID`)
 );
@@ -125,3 +125,5 @@ VALUES (
 
 SET FOREIGN_KEY_CHECKS=1;
 COMMIT;
+
+

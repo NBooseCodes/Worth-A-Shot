@@ -30,7 +30,7 @@
 
         {{!-- For each row, print the id, alcohol name, type, percentage, wholesale price, volume, and inventory count in order --}}
         {{#each data}}
-        <tr>
+        <tr data-value={{this.alcoholID}}>
             <td>{{this.alcoholID}}</td>
             <td>{{this.alcoholName}}</td>
             <td>{{this.alcoholType}}</td>
@@ -103,7 +103,7 @@
 
 <h2>Updating Alcohol Form</h2>
 <p>To update a specific Alcohol's type, select their name from the dropdown on the left.</p>
-<form id="update-alcohol-form">
+<form id="update-alcohol-form-ajax">
 
     <label for="input-alcoholName">Alcohol name: </label>
     <select name="input-alcoholName" id="mySelect">
@@ -117,11 +117,11 @@
     <select name="input-alcohol-type" id="input-alcohol-type-update">
         <option>Select a type of liquor: </option>
         {{#each data}}
-        <option value="{{this.alcoholID}}">{{this.alcoholType}}</option>
+        <option value="{{this.alcoholType}}">{{this.alcoholType}}</option>
         {{/each}}
     </select>
     <input type="submit">
 
 </form>
 
-<script src="./js/update_person.js"></script>
+<script src="/js/update_alcohol.js"></script>

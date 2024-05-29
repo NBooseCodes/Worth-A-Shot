@@ -88,8 +88,6 @@ addRowToTable = (data) => {
     let alcoholVolumeCell = document.createElement("TD");
     let inventoryCell = document.createElement("TD");
 
-    let deleteCell = document.createElement("TD");
-
     // Fill the cells with correct data
     idCell.innerText = newRow.alcoholID;
     alcoholNameCell.innerText = newRow.alcoholName;

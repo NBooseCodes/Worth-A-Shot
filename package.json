@@ -1,10 +1,9 @@
 {
   "name": "project",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon app.js"
   },
   "author": "boosen",
   "license": "ISC",
@@ -12,6 +11,9 @@
     "express": "^4.19.2",
     "express-handlebars": "^7.1.2",
     "forever": "^4.0.3",
-    "mysql": "^2.18.1"
-  }
+    "mysql": "^2.18.1",
+    "node": "^18.20.3",
+    "nodemon": "^3.1.2"
+  },
+  "description": ""
 }
