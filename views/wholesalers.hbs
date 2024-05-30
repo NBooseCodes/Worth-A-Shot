@@ -1,0 +1,80 @@
+<!-- wholesalers.hbs -->
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<!-- Page Title -->
+    <section>
+        <h2>Wholesalers in Database</h2>
+        <article></article>
+    </section>
+
+{{!-- Create a table --}}
+<table id="wholesaler-table" border="1" cellpadding="5">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Contact</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the id, alcohol name, type, percentage, wholesale price, volume, and inventory count in order --}}
+        {{#each data}}
+        <tr>
+            <td>{{this.wholesalerID}}</td>
+            <td>{{this.name}}</td>
+            <td>{{this.address}}</td>
+            <td>{{this.email}}</td>
+            <td>{{this.phone}}</td>
+            <td>{{this.contactName}}</td>
+            <td><button onclick="deleteWholesaler({{this.wholesalerID}})">Delete</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<script src="/js/delete_wholesaler.js"></script>
+
+{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+
+{{!--  When using express.static('public'), you should reference static files in the HTML as if the public folder is the root --}}
+<!-- /views/index.hbs -->
+
+{{!-- Form to add a record to the table  --}}
+<h2>Add a Wholesaler</h2>
+<p>Input data for new wholesaler here.</p>
+<form id="add-wholesaler-form" method="POST" action="/add-wholesaler-form">
+    <p>
+        <label for="name">Wholesaler Name: </label>
+        <input type="text" name="name" id="name">
+    </p>
+    <p>
+        <label for="address">Address: </label>
+        <input type="text" name="address" id="address">
+    </p>
+    <p>
+        <label for="email">Email: </label>
+        <input type="text" name="email" id="email">
+    </p>
+    <p>
+        <label for="phone">Phone Number: </label>
+        <input type="text" name="phone" id="phone">
+    </p>
+    <p>
+        <label for="contactName">Contact Name: </label>
+        <input type="text" name="contactName" id="contactName">
+    </p>
+    <input type="submit">
+</form>
+

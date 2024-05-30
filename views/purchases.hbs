@@ -1,0 +1,94 @@
+<!-- Purchases.hbs -->
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<!-- Page Title -->
+    <section>
+        <h2>Purchases in Database</h2>
+        <article></article>
+    </section>
+
+{{!-- Create a table --}}
+<table id="purchases-table" border="1" cellpadding="5">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            <th>ID</th>
+            <th>Wholesaler</th>
+            <th>Employee</th>
+            <th>Was it paid?</th>
+            <th>Delivery Date</th>
+            <th>Was it delivered?</th>
+            <th>Total Cost</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the id, alcohol name, type, percentage, wholesale price, volume, and inventory count in order --}}
+        {{#each data}}
+        <tr>
+            <td>{{this.purchaseID}}</td>
+            <td>{{this.wholesalerID}}</td>
+            <td>{{this.employeeID}}</td>
+            <td>{{this.paid}}</td>
+            <td>{{this.deliveryDate}}</td>
+            <td>{{this.delivered}}</td>
+            <td>{{this.totalCost}}</td>
+            <td><button onclick="deletePurchase({{this.purchaseID}})">Delete</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<script src="/js/delete_purchase.js"></script>
+
+{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+
+{{!--  When using express.static('public'), you should reference static files in the HTML as if the public folder is the root --}}
+<!-- /views/index.hbs -->
+
+{{!-- Form to add a record to the table  --}}
+<h2>Add a Purchase</h2>
+<p>Input data for new purchase here.</p>
+<form id="add-purchase-form" method="POST" action="/add-purchase-form">
+    <p>
+        <label for="wholesalerID">Wholesaler: </label>
+        <select name="wholesalerID" id="mySelect">
+        <option value="test">Select</option>
+        {{#each data}}
+        <option value="{{this.wholesalerID}}">{{this.wholesalerName}}</option>
+        {{/each}}
+        </select>
+    </p>
+    <p>
+        <label for="employeeID">Employee: </label>
+        <select name="employeeID" id="mySelect">
+        <option value="test">Select</option>
+        {{#each data}}
+        <option value="{{this.employeeID}}">{{this.employeeName}}</option>
+        {{/each}}
+        </select>
+    </p>
+    <p>
+        <label class="switch" for="paid">Paid: </label>
+        <input type="checkbox" name="paid" id="paid">
+        <span class="slider round"></span>
+    </p>
+    <p>
+        <label for="deliveryDate">Delivery Date: </label>
+        <input type="date" name="delveryDate" id="delveryDate">
+    </p>
+    <p>
+        <label class="switch" for="delivered">Delivered: </label>
+        <input type="checkbox" name="delivered" id="delivered">
+        <span class="slider round"></span>
+    </p>
+    <input type="submit">
+</form>
+
