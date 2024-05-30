@@ -2,12 +2,9 @@
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
+<div>
 <!-- Page Title -->
-    <section>
         <h2>Alcohols in Database</h2>
-        <article></article>
-    </section>
-
 {{!-- Create a table --}}
 <table id="alcohol-table" border="1" cellpadding="5">
 
@@ -44,6 +41,7 @@
     </tbody>
 </table>
 <script src="/js/delete_alcohol.js"></script>
+</div>
 
 {{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
 
@@ -51,6 +49,7 @@
 <!-- /views/index.hbs -->
 
 {{!-- Form to add a record to the table  --}}
+<div>
 <h2>Add an Alcohol</h2>
 <p>Input data for your desired alcohol here.</p>
 <form id="add-alcohol-form">
@@ -88,7 +87,9 @@
 
     <input type="submit" value="Submit">
 </form>
+</div>
 
+<div>
 <h2>Search Using an HTML Form</h2>
 <p>Search for an alcohol by name using the search bar below!</p>
 <form id="search-alcohol" method='GET' action='/'>
@@ -98,9 +99,10 @@
     <input type="submit">
     <a href='/'><button>Reset</button></a>
 </form>
+</div>
 
 <script src="/js/add_alcohol.js"></script> 
-
+<div>
 <h2>Updating Alcohol Form</h2>
 <p>To update a specific Alcohol's type, select their name from the dropdown on the left.</p>
 <form id="update-alcohol-form-ajax">
@@ -123,5 +125,6 @@
     <input type="submit">
 
 </form>
+</div>
 
 <script src="/js/update_alcohol.js"></script>
