@@ -5,7 +5,7 @@
 */
 var express = require('express');   // We are using the express library for the web server
 var app = express();            // We need to instantiate an express object to interact with the server in our code
-const PORT = 29094;
+const PORT = 29092;
 
 const { engine } = require('express-handlebars');
 var exphbs = require('express-handlebars');     // Import express-handlebars
@@ -106,8 +106,11 @@ app.post('/add-alcohol-ajax', function (req, res) {
 
 // ALCOHOL DELETION 
 app.delete('/delete-alcohol-ajax/', function(req,res,next){
+
+    console.log("hit route")
     let data = req.body;
     let alcoholID = parseInt(data.id)
+    console.log(alcoholID);
     let delete_Alcohol = 'DELETE FROM Alcohols WHERE alcoholId = ?' ;
     // run query
     db.pool.query(delete_Alcohol, [alcoholID], function(error, rows, fields) {

@@ -1,0 +1,36 @@
+body {
+    
+    font-size: 25px;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 500;
+}
+
+table, th, td { 
+    border: 3px solid;
+    font-size: 20px;
+    background: local;
+    border-color: black;
+    text-align: center;
+}
+td, th {
+    background-color: rgb(223, 240, 177);
+}
+
+div {
+    background-color: rgb(223, 240, 177);
+    width: 70%;
+    border: 3px solid black;
+    padding: 10px;
+    margin-top: 50px;
+}
+
+select{
+    height: 30px;
+    width: 200px;
+    text-align: center;
+    font-size: medium;
+}
+button {
+    width: 100px;
+    font-family: sans-serif;
+}

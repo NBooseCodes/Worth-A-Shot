@@ -1,9 +1,11 @@
 // code for deletePerson function using jQuery
 function deleteAlcohol(alcoholID) {
+  console.log("Hit deleteAlcohol in file")
     let link = '/delete-alcohol-ajax/';
     let data = {
       id: alcoholID
     };
+    console.log(data)
   
     $.ajax({
       url: link,

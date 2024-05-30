@@ -9,7 +9,7 @@
     </section>
 
 {{!-- Create a table --}}
-<table id="alcohol-table" border="1" cellpadding="5">
+<table id="alcohol-table" border="1" cellpadding="20", width="100%">
 
     {{!-- Header section --}}
     <thead>
@@ -50,6 +50,7 @@
 {{!--  When using express.static('public'), you should reference static files in the HTML as if the public folder is the root --}}
 <!-- /views/index.hbs -->
 
+<div>
 {{!-- Form to add a record to the table  --}}
 <h2>Add an Alcohol</h2>
 <p>Input data for your desired alcohol here.</p>
@@ -66,6 +67,10 @@
             <option value="Tequila">Tequila</option>
             <option value="Vodka">Vodka</option>
             <option value="Whisk(e)y">Whisk(e)y</option>
+            <option value="Gin">Gin</option>
+            <option value="Liqueur">Liqueur</option>
+            <option value="Wine">Wine</option>
+            <option value="Beer">Beer</option>
             <option value="Other">Other</option>
         </select>
     </p>
@@ -88,7 +93,9 @@
 
     <input type="submit" value="Submit">
 </form>
+</div>
 
+<div>
 <h2>Search Using an HTML Form</h2>
 <p>Search for an alcohol by name using the search bar below!</p>
 <form id="search-alcohol" method='GET' action='/'>
@@ -98,9 +105,10 @@
     <input type="submit">
     <a href='/'><button>Reset</button></a>
 </form>
-
+</div>
 <script src="/js/add_alcohol.js"></script> 
 
+<div>
 <h2>Updating Alcohol Form</h2>
 <p>To update a specific Alcohol's type, select their name from the dropdown on the left.</p>
 <form id="update-alcohol-form-ajax">
@@ -123,5 +131,5 @@
     <input type="submit">
 
 </form>
-
+</div>
 <script src="/js/update_alcohol.js"></script>

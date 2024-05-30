@@ -9,7 +9,7 @@ updateAlcoholForm.addEventListener("submit", function(e) {
     let inputAlcoholName = document.getElementById("mySelect");
     let inputAlcoholType = document.getElementById("input-alcohol-type-update");
 
-    let alcoholNameValue = inputAlcoholName.value;
+    let alcoholNameValue = inputAlcoholName.value; // this is alcoholID assoc w/alcoholName
     let alcoholTypeValue = inputAlcoholType.value;
     console.log(alcoholNameValue);
     console.log(alcoholTypeValue);
@@ -17,6 +17,7 @@ updateAlcoholForm.addEventListener("submit", function(e) {
         alcoholName: alcoholNameValue,
         alcoholType: alcoholTypeValue
     }
+    console.log(data);
 
     // ajax request
     var xhttp = new XMLHttpRequest();
@@ -38,7 +39,8 @@ updateAlcoholForm.addEventListener("submit", function(e) {
 function updateRow(data, alcoholID) {
     let parsedData = JSON.parse(data);
     let table = document.getElementById("alcohol-table");
-
+    console.log(data);
+    console.log(parsedData);
     for (let i = 0, row; row = table.rows[i]; i++) {
         if (table.rows[i].getAttribute("data-value") == alcoholID) {
             console.log(table.rows[i].getAttribute("data-value"));
