@@ -1,0 +1,84 @@
+<!-- alcoholPurchases.hbs -->
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<!-- Page Title -->
+    <section>
+        <h2>Alcohol Purchases in Database</h2>
+        <article></article>
+    </section>
+
+{{!-- Create a table --}}
+<table id="alcohol-purchases-table" border="1" cellpadding="5">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            <th>ID</th>
+            <th>Purchase</th>
+            <th>Alcohol</th>
+            <th>Quantity Purchased</th>
+            <th>Cost</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the id, alcohol name, type, percentage, wholesale price, volume, and inventory count in order --}}
+        {{#each data}}
+        <tr>
+            <td>{{this.alcoholPurchaseID}}</td>
+            <td>{{this.purchaseID}}</td>
+            <td>{{this.alcoholID}}</td>
+            <td>{{this.quantityPurchased}}</td>
+            <td>{{this.lineCost}}</td>
+            <td><button onclick="deleteAlcoholPurchase({{this.alcoholPurchaseID}})">Delete</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<script src="/js/delete_alcohol_purchase.js"></script>
+
+{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+
+{{!--  When using express.static('public'), you should reference static files in the HTML as if the public folder is the root --}}
+<!-- /views/index.hbs -->
+
+{{!-- Form to add a record to the table  --}}
+<h2>Add new Alcohol Purchase</h2>
+<p>Input data for new alcohol purchase here.</p>
+<form id="add-alcohol-purchase-form" method="POST" action="/add-alcohol-purchase-form">
+    <p>
+        <label for="purchaseID">Purchase: </label>
+        <select name="purchaseID" id="mySelect">
+        <option value="test">Select</option>
+        {{#each data}}
+        <option value="{{this.purchsaeID}}">{{this.purchaseID}}</option>
+        {{/each}}
+        </select>
+    </p>
+    <p>
+        <label for="alcoholID">Alcohol: </label>
+        <select name="alcoholID" id="mySelect">
+        <option value="test">Select</option>
+        {{#each data}}
+        <option value="{{this.alcoholID}}">{{this.alcoholName}}</option>
+        {{/each}}
+        </select>
+    </p>
+    <p>
+        <label for="quantityPurchased">Quantity: </label>
+        <input type="number" name="quantityPurchased" id="quantityPurchased">
+    </p>
+    <p>
+        <label for="lineCost">Cost: </label>
+        <input type="number" step="0.01" name="lineCost" id="lineCost">
+    </p>
+    <input type="submit">
+</form>
+

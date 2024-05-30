@@ -1,0 +1,80 @@
+<!-- employees.hbs -->
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<!-- Page Title -->
+    <section>
+        <h2>Employees in Database</h2>
+        <article></article>
+    </section>
+
+{{!-- Create a table --}}
+<table id="employee-table" border="1" cellpadding="5">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Start Date</th>
+            <th>Role</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the id, alcohol name, type, percentage, wholesale price, volume, and inventory count in order --}}
+        {{#each data}}
+        <tr>
+            <td>{{this.employeeID}}</td>
+            <td>{{this.firstName}}</td>
+            <td>{{this.lastName}}</td>
+            <td>{{this.startDate}}</td>
+            <td>{{this.employeeRole}}</td>
+            <td><button onclick="deleteEmployee({{this.employeeID}})">Delete</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<script src="/js/delete_employee.js"></script>
+
+{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+
+{{!--  When using express.static('public'), you should reference static files in the HTML as if the public folder is the root --}}
+<!-- /views/index.hbs -->
+
+{{!-- Form to add a record to the table  --}}
+<h2>Add an Employee</h2>
+<p>Input data for your new employee here.</p>
+<form id="add-employee-form" method="POST" action="/add-employee-form">
+    <p>
+        <label for="firstName">First Name: </label>
+        <input type="text" name="firstName" id="firstName">
+    </p>
+    <p>
+        <label for="lastName">Last Name: </label>
+        <input type="text" name="lastName" id="lastName">
+    </p>
+    <p>
+        <label for="startDate">Start Date: </label>
+        <input type="date" name="startDate" id="startDate">
+    </p>
+    <p>
+        <label for="employeeRole">Position: </label>
+        <select name="employeeRole" id="employeeRole">
+            <option>Select Role</option>
+            <option value="Clerk">Clerk</option>
+            <option value="Department Manager">Department Manager</option>
+            <option value="Store Manager">Store Manager</option>
+            <option value="Other">Other</option>
+        </select>
+    </p>
+    <input type="submit">
+</form>
+
