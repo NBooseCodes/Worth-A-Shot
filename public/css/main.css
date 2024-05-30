@@ -1,0 +1,232 @@
+/*  ===== MOBILE styles (reside at the top and are inherited by all devices) ===== */
+/*  ===== See tablet, desktop, and print @media queries at the bottom. */
+
+
+/*   ----- Imports  -----  */
+  /* @import 'node_modules/modern-normalize/modern-normalize.css';  npm install modern-normalize  Resets elements for browser consistency.  https://www.npmjs.com/package/modern-normalize */         
+  /* @import "component1.css";   Component-specific stylesheets, if any.   */
+  /* @import url(//fonts.googleapis.com/css?family=Font+Name); Add fonts from a hosted services like Google Fonts.   */
+  
+  @import url('https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Montserrat:ital,wght@0,400;1,400&display=swap');
+  @import "component1.css";
+  @import 'normalize.css';
+
+/*   ----- Variables  -----  */
+  :root {
+    --navy: #2E4057;
+    --salmon: #DD614A;
+    --army-green: #75704E;
+    --sky-blue:#A9D3EF;
+    --mint: #F4F9E9;
+    --cool-grey: #EEF0EB;
+  }
+  
+  /*  ----- Viewport ----- elements inherited by all remaining elements ----- */
+  body {       /* Can alternatively define in html {}. */
+  background-color: var(--navy);
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: top left;
+  background-repeat: no-repeat;
+  color:var(--navy);
+  align-content: center;
+  margin: 2%;
+  padding: 0;
+  }
+  
+  /*  ----- Page layout blocks -----  */
+  main, footer {
+    padding: 2%;
+    margin: 2%;
+    border-radius: 25px;
+  }
+  header {
+    text-align: center;
+    padding: 2%;
+  }
+  header img {
+    height: 25px;
+    vertical-align: middle;
+    line-height: 1;
+  }
+  div {
+    background-color: var(--sky-blue);
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 2%;
+    margin: 2%;
+    border-radius: 25px;
+    align-content: center;
+  }
+
+  main {
+    background-color: var(--army-green);
+    text-align: left;
+  }
+  section {
+    background-color: var(--mint);
+    border-radius: 5px;
+    padding: 1% 3%;
+  }
+  article {
+    border-top: 2px dotted var(--navy);
+    margin: 2%;
+    padding: 2%;
+    background-color: var(--mint);
+    border-radius: 5px;
+  }
+  footer {
+    background-color: var(--mint);
+    color: var(--charcoal);
+    text-align: center;
+    height: 50px;
+    border: 1.5px solid var(--salmon);
+  }
+  
+  
+  /* ----- Anchors ----- Text links */
+  a {
+    color: var(--mint);
+    font-family: "Montserrat", sans-serif;
+    text-decoration: none;
+  }
+  a:link {}
+  a:hover {}
+  a:active {}
+  a:visited {}
+  
+  /*  ----- Navigation ----- Override text links for navigation only.  */
+  nav {
+    background-color: var(--sky-blue);
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    align-items: stretch;
+    flex-wrap: wrap;
+    padding: 2%;
+    margin: 2%;
+    border-radius: 25px;
+    border: 1.5px solid var(--army-green);
+  }
+  nav a {
+    color: var(--navy);
+    border-right: 0px solid transparent;
+    border-top: 0px solid var(--salmon);
+    border-radius: 25px;
+    background-color: var(--mint);
+    margin: 1%;
+    padding: 1%;
+    line-height: 1;
+    text-align: center;
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    border: 1.5px solid var(--salmon);
+  }
+  nav a:hover {
+    background-color: var(--sky-blue);
+  }
+  
+  /*  -----  Typography  ----- */
+  p {
+    font-family: "Cardo", serif;
+  }
+  br {}
+  ol, ul, dl {}
+  li {}
+  dt {}
+  dd {}
+  h1 {
+    color: var(--mint);
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+  }
+  h2, h3, h4, h5, h6 {
+    color: var(--navy);
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+  } 
+  
+  abbr {}
+  acronym {}
+  address {}
+  blockquote {}
+  q {}
+  cite {}
+  em {}
+  hr {}
+  mark {}
+  s {}
+  span {}
+  strong {}
+  sub {}
+  sup {}
+  time {}
+  
+  /*  ----- Coding or instructional typography ----- */
+  pre {}
+  code {}
+  kbd {}
+  samp {}
+  var {}
+  del {} 
+  ins {}
+  
+  /*  ----- Table ----- */
+  table {
+    background-color: var(--mint);
+    column-rule-color: var(--army-green);
+    display: center;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 1%;
+    margin: 1%;
+    border-radius: 25px;
+  }
+  caption {}
+  thead {}
+  tbody {}
+  tfoot {}
+  tr {}
+  tr:nth-child(even) {}
+  th {}
+  td {}
+  td:nth-child(1) {}
+  colgroup {}
+  data {}
+  datalist {}
+  
+  
+  /*  ----- Form ----- */
+  form {}
+  fieldset {}
+  legend {}
+  label {}
+  button {}
+  input {}
+  select {}
+  optgroup {}
+  option {}
+  textarea {}
+  output {}
+  meter {}
+  progress {}
+  
+  
+  /*  ----- Classes for alignment, positioning, widths, grids, embellishments, and animation -----  */
+  
+  @keyframes App-logo {}
+  
+  /*   ===== TABLET  media query overrides mobile styles ===== */
+  @media all and (min-width: 769px) {}
+  
+ 
+  /*   ===== DESKTOP  media query overrides mobile and tablet styles ===== */
+  @media all and (min-width: 1080px) {}
+  
+  /*   ===== PRINT  media query overrides previous styles =====  */
+  @media print {}
