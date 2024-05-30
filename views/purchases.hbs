@@ -3,10 +3,8 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 <!-- Page Title -->
-    <section>
+<div>
         <h2>Purchases in Database</h2>
-        <article></article>
-    </section>
 
 {{!-- Create a table --}}
 <table id="purchases-table" border="1" cellpadding="5">
@@ -47,6 +45,7 @@
     </tbody>
 </table>
 <script src="/js/delete_purchase.js"></script>
+</div>
 
 {{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
 
@@ -54,6 +53,7 @@
 <!-- /views/index.hbs -->
 
 {{!-- Form to add a record to the table  --}}
+<div>
 <h2>Add a Purchase</h2>
 <p>Input data for new purchase here.</p>
 <form id="add-purchase-form" method="POST" action="/add-purchase-form">
@@ -91,4 +91,5 @@
     </p>
     <input type="submit">
 </form>
+</div>
 
