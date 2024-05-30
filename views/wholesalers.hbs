@@ -2,11 +2,9 @@
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
+<div>
 <!-- Page Title -->
-    <section>
-        <h2>Wholesalers in Database</h2>
-        <article></article>
-    </section>
+    <h2>Wholesalers in Database</h2>
 
 {{!-- Create a table --}}
 <table id="wholesaler-table" border="1" cellpadding="5">
@@ -45,12 +43,13 @@
     </tbody>
 </table>
 <script src="/js/delete_wholesaler.js"></script>
+</div>
 
 {{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
 
 {{!--  When using express.static('public'), you should reference static files in the HTML as if the public folder is the root --}}
 <!-- /views/index.hbs -->
-
+<div>
 {{!-- Form to add a record to the table  --}}
 <h2>Add a Wholesaler</h2>
 <p>Input data for new wholesaler here.</p>
@@ -77,7 +76,8 @@
     </p>
     <input type="submit">
 </form>
-
+</div>
+<div>
 <h2>Update Wholesaler</h2>
 <p>To update a specific Wholesaler's information, select their name from the dropdown on the left.</p>
 <form id="update-wholesaler-form">
@@ -107,4 +107,5 @@
     </p>
     <input type="submit">
 </form>
+</div>
 <script src="/js/update_wholesaler.js"></script>
