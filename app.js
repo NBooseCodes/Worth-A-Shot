@@ -394,7 +394,7 @@ app.post('/add-alcohol-purchase-form', function(req, res) {
 app.delete('/delete-alcohol-purchase/:alcoholPurchaseID', function(req,res,next){
     let data = req.body;
     console.log(req.params.alcoholPurchaseID);
-    let deleteAlcoholPurchase = `DELETE FROM Wholesalers WHERE alcoholPurchaseID = ?`;
+    let deleteAlcoholPurchase = `DELETE FROM AlcoholPurchases WHERE alcoholPurchaseID = ?`;
 
           db.pool.query(deleteAlcoholPurchase, [req.params.alcoholPurchaseID], function(error, rows, fields){
             if (error) {
