@@ -1,3 +1,26 @@
+a {
+    border: 3px solid black;
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+    text-decoration: none;
+    margin-top: 20px;
+    margin-left: 20%;
+    margin-right: 5%;
+    background-color: rgb(223, 240, 177);
+    color: black;
+}
+
+h1 {
+    text-align: center;
+}
+
+label {
+    display: block;
+    font-size: medium;
+}
+
 body {
     
     font-size: 25px;
@@ -12,16 +35,21 @@ table, th, td {
     border-color: black;
     text-align: center;
 }
+table {
+    width: 100%;
+}
 td, th {
     background-color: rgb(223, 240, 177);
 }
 
 div {
     background-color: rgb(223, 240, 177);
-    width: 70%;
+    width: 100;
+    height: min-content;
     border: 3px solid black;
     padding: 10px;
     margin-top: 50px;
+    margin-bottom: 10%;
 }
 
 select{
@@ -30,7 +58,16 @@ select{
     text-align: center;
     font-size: medium;
 }
+
 button {
     width: 100px;
     font-family: sans-serif;
+}
+
+footer {
+    position:fixed;
+    left: 0px;
+    bottom: 5%;
+    height: 30px;
+    width: 100%;
 }
