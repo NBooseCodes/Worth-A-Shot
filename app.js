@@ -200,22 +200,6 @@ app.post('/add-employee-form', function(req, res) {
     // Capture the incoming data and parse it back to a JS object
     let data = req.body;
 
-    // Capture NULL values
-/*
-    let startDate = parseInt(data['input-startDate']);
-    if (isNaN(startDate))
-    {
-        startDate = 'NULL'
-    }
-    
-    
-    let employeeRole = parseInt(data['input-employeeRole']);
-    if (isNaN(employeeRole))
-    {
-        employeeRole = 'NULL'
-    } */
-
-
     // Create the query and run it on the database
     let query1 = `INSERT INTO Employees (firstName, lastName, startDate, employeeRole) VALUES (?, ?, ?, ?)`;
     db.pool.query(query1, [data.firstName, data.lastName, data.startDate, data.employeeRole], function(error, rows, fields){
@@ -243,6 +227,32 @@ app.delete('/delete-employee/:employeeID', function(req,res,next){
             }
     })
 });
+// UPDATE EMPLOYEE
+app.put('/update-employee-form', function(req,res,next){                                   
+    let data = req.body;
+  
+    let employeeRole = data.empolyeeRole;
+    let employeeID = data.employeeID;
+  
+    queryUpdateEmployee = `UPDATE Employees SET employeeRole = ? WHERE Employees.employeeID = ?`;
+  
+          // Run the 1st query
+          db.pool.query(queryUpdateEmployee, [employeeRole, employeeID], function(error, rows, fields){
+              if (error) {
+  
+              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+              console.log(error);
+              console.log("unable to update employee");
+              res.sendStatus(400);
+              }
+              // If there was no error, we run our second query and return that data so we can use it to update the people's
+              // table on the front-end
+              else
+              {
+                res.send(rows);
+                
+              }
+  })});
 /*
     WHOLESALER ROUTES
 */
@@ -298,6 +308,39 @@ app.delete('/delete-wholesaler/:wholesalerID', function(req,res,next){
             }
     })
 });
+
+// UPDATES WHOLESALER
+app.put('/update-wholesaler-form', function(req,res,next){
+    console.log("you're closer");
+    let data = req.body;
+
+    let wholesalerID = data.wholesalerID;
+    let address = data.address;
+    let email = data.email;
+    let phone = data.phone;
+    let contactName = data.contactName
+
+    let queryUpdateWholesaler = `UPDATE Wholesalers SET address = ?, email = ?, phone = ?, contactName = ? WHERE Wholesalers.wholesalerID = ?`;
+
+          db.pool.query(queryUpdateWholesaler, [address, email, phone, contactName, wholesalerID], function(error, rows, fields){
+              if (error) {
+              console.log(error);
+              res.sendStatus(400);
+              }
+              else
+              {
+                let selectQuery = 'SELECT * FROM Wholesalers WHERE wholesalerID = ?'
+                db.pool.query(selectQuery, [wholesalerID], function(error, rows, fields) {
+
+                      if (error) {
+                          console.log(error);
+                          res.sendStatus(400);
+                      } else {
+                          res.send(rows);
+                      }
+                  })
+              }
+  })});
 /*
    PURCHASES ROUTES
 */
@@ -394,7 +437,7 @@ app.post('/add-alcohol-purchase-form', function(req, res) {
 app.delete('/delete-alcohol-purchase/:alcoholPurchaseID', function(req,res,next){
     let data = req.body;
     console.log(req.params.alcoholPurchaseID);
-    let deleteAlcoholPurchase = `DELETE FROM Wholesalers WHERE alcoholPurchaseID = ?`;
+    let deleteAlcoholPurchase = `DELETE FROM AlcoholPurchases WHERE alcoholPurchaseID = ?`;
 
           db.pool.query(deleteAlcoholPurchase, [req.params.alcoholPurchaseID], function(error, rows, fields){
             if (error) {
