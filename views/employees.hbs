@@ -1,15 +1,12 @@
 <!-- employees.hbs -->
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
+<div>
 <!-- Page Title -->
-    <section>
-        <h2>Employees in Database</h2>
-        <article></article>
-    </section>
+    <h2>Employees in Database</h2>
 
 {{!-- Create a table --}}
-<table id="employee-table" border="1" cellpadding="5">
+<table id="employee-table"border="1" cellpadding="5">
 
     {{!-- Header section --}}
     <thead>
@@ -43,6 +40,7 @@
     </tbody>
 </table>
 <script src="/js/delete_employee.js"></script>
+</div>
 
 {{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
 
@@ -50,22 +48,16 @@
 <!-- /views/index.hbs -->
 
 {{!-- Form to add a record to the table  --}}
+<div>
 <h2>Add an Employee</h2>
 <p>Input data for your new employee here.</p>
 <form id="add-employee-form" method="POST" action="/add-employee-form">
-    <p>
         <label for="firstName">First Name: </label>
         <input type="text" name="firstName" id="firstName">
-    </p>
-    <p>
         <label for="lastName">Last Name: </label>
         <input type="text" name="lastName" id="lastName">
-    </p>
-    <p>
         <label for="startDate">Start Date: </label>
         <input type="date" name="startDate" id="startDate">
-    </p>
-    <p>
         <label for="employeeRole">Position: </label>
         <select name="employeeRole" id="employeeRole">
             <option>Select Role</option>
@@ -74,7 +66,33 @@
             <option value="Store Manager">Store Manager</option>
             <option value="Other">Other</option>
         </select>
-    </p>
     <input type="submit">
 </form>
+</div>
+
+{{!-- Form to update a record to the table  --}}
+<div>
+    <h2>Updating Employee Form</h2>
+    <p>To update an employyes position, select their name from the dropdown.</p>
+    <form id="update-employee-form">
+        <label for="input-employee-id">Employees name: </label>
+        <select name="input-employee-id" id="mySelect">
+            <option>Select an Employee</option>
+            {{#each data}}
+            <option value="{{this.employeeID}}">{{this.firstName}} {{this.lastName}}</option>
+            {{/each}}
+        </select>
+            <label for="employee-role-select">Position: </label>
+            <select name="employee-role-select" id="employee-role">
+                <option>Select Role</option>
+                <option value="Clerk">Clerk</option>
+                <option value="Department Manager">Department Manager</option>
+                <option value="Store Manager">Store Manager</option>
+                <option value="Other">Other</option>
+            </select>
+    <input type="submit">
+</form>
+</div>
+
+<script src="/js/update_employee.js"></script>
 
