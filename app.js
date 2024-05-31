@@ -69,78 +69,33 @@ app.get('/alcohols', function(req, res)
     })
 });
 
-// ALCOHOL ADDITION
-app.post('/add-alcohol-ajax', function (req, res) {
+// ADD ALCOHOL
+app.post('/add-alcohol-form', function(req, res) {
     // Capture the incoming data and parse it back to a JS object
     let data = req.body;
-
-    // Capture NULL values & parse data correctly
-    let alcoholPercentage = parseFloat(data.alcoholPercentage);
-    if (isNaN(alcoholPercentage)) {
-        alcoholPercentage = 'NULL'
-    }
-
-    let wholesalePrice = parseFloat(data.wholesalePrice);
-    if (isNaN(wholesalePrice)) {
-        wholesalePrice = 'NULL'
-    }
-
-    let alcoholVolume = parseFloat(data.alcoholVolume);
-    if (isNaN(alcoholVolume)) {
-        alcoholVolume = 'NULL'
-    }
-
-    let inventory = parseInt(data.inventory);
-    if (isNaN(inventory)) {
-        inventory = 'NULL'
-    }
-
     // Create the query and run it on the database
-    query1 = `INSERT INTO Alcohols (alcoholName, alcoholType, alcoholPercentage, wholesalePrice, alcoholVolume, inventory) VALUES ('${data.alcoholName}', '${data.alcoholType}', ${alcoholPercentage}, ${wholesalePrice}, ${alcoholVolume}, ${inventory})`;
-    db.pool.query(query1, function (error, rows, fields) {
-
-        // Check to see if there was an error
+    let query1 = `INSERT INTO Alcohols (alcoholName, alcoholType, alcoholPercentage, wholesalePrice, alcoholVolume, inventory) VALUES (?, ?, ?, ?, ?, ?)`;
+    db.pool.query(query1, [data.alcoholName, data.alcoholType, data.alcoholPercentage, data.wholesalePrice, data.alcoholVolume, data.inventory], function(error, rows, fields){
         if (error) {
-
-            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-            console.log(error)
+            console.log('Could not add alcohol');
             res.sendStatus(400);
+        } else {
+            res.redirect('/alcohols');
         }
-        else {
-            // If there was no error, perform a SELECT * on bsg_people
-            query2 = `SELECT * FROM Alcohols;`;
-            db.pool.query(query2, function (error, rows, fields) {
-
-                // If there was an error on the second query, send a 400
-                if (error) {
-
-                    // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-                    console.log(error);
-                    res.sendStatus(400);
-                }
-                // If all went well, send the results of the query back.
-                else {
-                    res.send(rows);
-                }
-            })
-        }
-    })
+    });
 });
 
-// ALCOHOL DELETION 
-app.delete('/delete-alcohol-ajax/', function(req,res,next){
-    let data = req.body;
-    let alcoholID = parseInt(data.id)
-    let delete_Alcohol = 'DELETE FROM Alcohols WHERE alcoholId = ?' ;
-    // run query
-    db.pool.query(delete_Alcohol, [alcoholID], function(error, rows, fields) {
-        if (error) {
-            console.log(error);
-            res.sendStatus(400);
-        }
-        else {
-            res.sendStatus(204);
-        }
+// ALCOHOL DELETION
+app.delete('/delete-alcohol/:alcoholID', function(req,res,next){
+    let deleteAlcohol = `DELETE FROM Alcohols WHERE alcoholID = ?`;
+          db.pool.query(deleteAlcohol, [req.params.alcoholID], function(error, rows, fields){
+            if (error) {
+                console.log(error);
+                res.sendStatus(400);
+            }
+            else {
+                res.sendStatus(204);
+            }
     })
 });
 
@@ -213,8 +168,6 @@ app.post('/add-employee-form', function(req, res) {
 });
 // DELETE EMPLOYEE
 app.delete('/delete-employee/:employeeID', function(req,res,next){
-    let data = req.body;
-    console.log(req.params.employeeID);
     let deleteEmployee = `DELETE FROM Employees WHERE employeeID = ?`;
 
           db.pool.query(deleteEmployee, [req.params.employeeID], function(error, rows, fields){
@@ -294,8 +247,6 @@ app.post('/add-wholesaler-form', function(req, res) {
 });
 // DELETE WHOLESALER
 app.delete('/delete-wholesaler/:wholesalerID', function(req,res,next){
-    let data = req.body;
-    console.log(req.params.wholesalerID);
     let deleteWholesaler = `DELETE FROM Wholesalers WHERE wholesalerID = ?`;
 
           db.pool.query(deleteWholesaler, [req.params.wholesalerID], function(error, rows, fields){
@@ -329,7 +280,7 @@ app.put('/update-wholesaler-form', function(req,res,next){
               }
               else
               {
-                let selectQuery = 'SELECT * FROM Wholesalers WHERE wholesalerID = ?'
+                let selectQuery = `SELECT * FROM Wholesalers WHERE wholesalerID = ?`;
                 db.pool.query(selectQuery, [wholesalerID], function(error, rows, fields) {
 
                       if (error) {
@@ -347,7 +298,7 @@ app.put('/update-wholesaler-form', function(req,res,next){
 // DISPLAY PURCHASES PAGE
 app.get('/purchases', function(req, res)
 {
-    let query1 = "SELECT * FROM Purchases;";
+    let query1 = `SELECT * FROM Purchases;`;
     db.pool.query(query1, function(error, results){
         if (error) {
         res.status(500).send('Database error: ' + error.message);
@@ -361,28 +312,21 @@ app.post('/add-purchase-form', function(req, res) {
     // Capture the incoming data and parse it back to a JS object
     let data = req.body;
 
-    // Create the query and run it on the database
-    let query1 = `INSERT INTO Purchases (wholesalerID, employeeID, paid, deliveryDate, delivered) VALUES (?, ?, ?, ?, ?)`;
-    db.pool.query(query1, [data.wholesalerID, data.employeeID, data.paid, data.deliveryDate, data.delivered], function(error, rows, fields){
+    let wholesalerID = parseInt(data.wholesalerID);
+    let employeeID = parseInt(data.employeeID);
 
+    addPurchaseQuery = `INSERT INTO Purchases (wholesalerID, employeeID, paid, deliveryDate, delivered) VALUES (?, ?, ?, ?, ?)`;
+    db.pool.query(addPurchaseQuery, [wholesalerID, employeeID, data.paid, data.deliveryDate, data.delivered], function(error, rows, fields){
         if (error) {
-
             console.log('Could not add purchase');
             res.sendStatus(400);
-
         } else {
-
             res.redirect('/purchases');
-
         }
-
     });
-
 });
 // DELETE PURCHASE
 app.delete('/delete-purchase/:purchaseID', function(req,res,next){
-    let data = req.body;
-    console.log(req.params.purchaseID);
     let deletePurchase = `DELETE FROM Purchases WHERE purchaseID = ?`;
 
           db.pool.query(deletePurchase, [req.params.purchaseID], function(error, rows, fields){
@@ -435,8 +379,6 @@ app.post('/add-alcohol-purchase-form', function(req, res) {
 });
 // DELETE ALCOHOL PURCHASE
 app.delete('/delete-alcohol-purchase/:alcoholPurchaseID', function(req,res,next){
-    let data = req.body;
-    console.log(req.params.alcoholPurchaseID);
     let deleteAlcoholPurchase = `DELETE FROM AlcoholPurchases WHERE alcoholPurchaseID = ?`;
 
           db.pool.query(deleteAlcoholPurchase, [req.params.alcoholPurchaseID], function(error, rows, fields){
