@@ -4,47 +4,10 @@
 
 <!-- Page Title -->
 <div>
-        <h2>Welcome</h2>
-    
-
-{{!-- Create a table --}}
-
-    <table id="alcohol-table" border="1" cellpadding="5">
-
-    {{!-- Header section --}}
-    <thead>
-
-        {{!-- For just the first row, we print each key of the row object as a header cell so we
-        know what each column means when the page renders --}}
-        <tr>
-            {{#each data.[0]}}
-            <th>
-                {{@key}}
-            </th>
-            {{/each}}
-        </tr>
-    </thead>
-
-    {{!-- Body section --}}
-    <tbody>
-
-        {{!-- For each row, print the id, alcohol name, type, percentage, wholesale price, volume, and inventory count in order --}}
-        {{#each data}}
-        <tr>
-            <td>{{this.alcoholID}}</td>
-            <td>{{this.alcoholName}}</td>
-            <td>{{this.alcoholType}}</td>
-            <td>{{this.alcoholPercentage}}</td>
-            <td>{{this.wholesalePrice}}</td>
-            <td>{{this.alcoholVolume}}</td>
-            <td>{{this.inventory}}</td>
-            <td><button onclick="deleteAlcohol({{this.alcoholID}})">Delete</button></td>
-        </tr>
-        {{/each}}
-    </tbody>
-</table>
+        <h2>Cheers</h2>
+        <article>
+            This is our website!
+        </article>
 </div>
 
 <script src="/js/delete_alcohol.js"></script>
-
-
