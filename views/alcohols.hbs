@@ -14,11 +14,14 @@
         {{!-- For just the first row, we print each key of the row object as a header cell so we
         know what each column means when the page renders --}}
         <tr>
-            {{#each data.[0]}}
-            <th>
-                {{@key}}
-            </th>
-            {{/each}}
+            <th>ID</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Percentge</th>
+            <th>Price</th>
+            <th>Volume</th>
+            <th>Inventory</th>
+            <th></th>
         </tr>
     </thead>
 
@@ -52,14 +55,14 @@
 <div>
 <h2>Add an Alcohol</h2>
 <p>Input data for your desired alcohol here.</p>
-<form id="add-alcohol-form">
+<form id="add-alcohol-form" method="POST" action="/add-alcohol-form">
     <p>
-        <label for="input-alcoholName">Alcohol Name: </label>
-        <input type="text" name="input-alcoholName" id="input-alcoholName">
+        <label for="alcoholName">Alcohol Name: </label>
+        <input type="text" name="alcoholName" id="alcoholName">
     </p>
     <p>
-        <label for="input-alcoholType">Alcohol Type: </label>
-        <select name="input-alcoholType" id="input-alcoholType">
+        <label for="alcoholType">Alcohol Type: </label>
+        <select name="alcoholType" id="alcoholType">
             <option>Select Type</option>
             <option value="Rum">Rum</option>
             <option value="Tequila">Tequila</option>
@@ -69,20 +72,20 @@
         </select>
     </p>
     <p>
-        <label for="input-alcoholPercentage">Alcohol Percentage: </label>
-        <input type="number" step="0.01" name="input-alcoholPercentage" id="input-alcoholPercentage">
+        <label for="alcoholPercentage">Alcohol Percentage: </label>
+        <input type="number" step="0.01" name="alcoholPercentage" id="alcoholPercentage">
     </p>
     <p>
-        <label for="input-wholesalePrice">Wholesale Price: </label>
-        <input type="number" step="0.01" name="input-wholesalePrice" id="input-wholesalePrice">
+        <label for="wholesalePrice">Wholesale Price: </label>
+        <input type="number" step="0.01" name="wholesalePrice" id="wholesalePrice">
     </p>
     <p>
-        <label for="input-alcoholVolume">Alcohol Volume (liters): </label>
-        <input type="number" step="0.01" name="input-alcoholVolume" id="input-alcoholVolume">
+        <label for="alcoholVolume">Alcohol Volume (liters): </label>
+        <input type="number" step="0.01" name="alcoholVolume" id="alcoholVolume">
     </p>
     <p>
-        <label for="input-inventory">Inventory: </label>
-        <input type="number" name="input-inventory" id="input-inventory">
+        <label for="inventory">Inventory: </label>
+        <input type="number" name="inventory" id="inventory">
     </p>
 
     <input type="submit" value="Submit">
@@ -101,7 +104,6 @@
 </form>
 </div>
 
-<script src="/js/add_alcohol.js"></script> 
 <div>
 <h2>Updating Alcohol Form</h2>
 <p>To update a specific Alcohol's type, select their name from the dropdown on the left.</p>
