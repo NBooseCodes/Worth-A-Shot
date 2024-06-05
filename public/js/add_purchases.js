@@ -22,7 +22,7 @@ addPurchaseForm.addEventListener("submit", function (e) {
     let deliveryDateValue = deliveryDate.value;
     let deliveredValue = delivered.value;
     let inventoryValue = inventory.value;
-
+    console.log(paidValue)
     // Put our data we want to send in a javascript object
     let data = {
         wholesalerID: wholesalerIDValue,

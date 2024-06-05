@@ -22,7 +22,6 @@
             <th>Delivery Date</th>
             <th>Was it delivered?</th>
             <th>Total Cost</th>
-            <th></th>
         </tr>
     </thead>
 
@@ -61,7 +60,7 @@
         <label for="wholesalerID">Wholesaler: </label>
         <select name="wholesalerID" id="mySelect">
         <option value="">Select</option>
-        {{#each data}}
+        {{#each wholesalerData}}
         <option value="{{this.wholesalerID}}">{{this.name}}</option>
         {{/each}}
         </select>
@@ -70,8 +69,8 @@
         <label for="employeeID">Employee: </label>
         <select name="employeeID" id="mySelect">
         <option value="">Select</option>
-        {{#each data}}
-        <option value="{{this.employeeID}}">{{this.employeeName}}</option>
+        {{#each employeeData}}
+        <option value="{{this.employeeID}}">{{this.firstName}} {{this.lastName}}</option>
         {{/each}}
         </select>
     </p>

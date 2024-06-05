@@ -300,12 +300,32 @@ app.put('/update-wholesaler-form', function(req,res,next){
 // DISPLAY PURCHASES PAGE
 app.get('/purchases', function(req, res)
 {
-    let query1 = `SELECT * FROM Purchases;`;
-    db.pool.query(query1, function(error, results){
+    let displayPurchasesQuery = `SELECT * FROM Purchases`;
+    let getWholesaleInfoQuery = `SELECT * FROM Wholesalers`;
+    let getEmployeeInfoQuery = `SELECT * FROM Employees`;
+
+    db.pool.query(displayPurchasesQuery, function(error, results){
         if (error) {
         res.status(500).send('Database error: ' + error.message);
         } else {
-        res.render('purchases', { data: results });
+            //Run second query
+            db.pool.query(getWholesaleInfoQuery, function(error, wholesalerResults){
+                if (error) {
+                    res.status(500).send('Error with wholesaler query');
+                } else {
+                    db.pool.query(getEmployeeInfoQuery, function(error, employeeResults){
+                        if (error) {
+                            res.status(500).send('Error with employee query');
+                        } else {
+                            return res.render('purchases', {
+                                data: results,
+                                wholesalerData: wholesalerResults,
+                                employeeData: employeeResults 
+                            });
+                        }
+                    })
+                }
+            })
         }
     });
 });
@@ -317,9 +337,24 @@ app.post('/add-purchase-form', function(req, res) {
 
     let wholesalerID = parseInt(data.wholesalerID);
     let employeeID = parseInt(data.employeeID);
+    let inventory = parseInt(data.inventory);
+    let paidValue = 0;
+    let deliveredValue = 0;
+    if (data.paid = 'on') {
+        paidValue = 1;
+    }
 
-    addPurchaseQuery = `INSERT INTO Purchases (wholesalerID, employeeID, paid, deliveryDate, delivered) VALUES (?, ?, ?, ?, ?)`;
-    db.pool.query(addPurchaseQuery, [wholesalerID, employeeID, data.paid, data.deliveryDate, data.delivered], function(error, rows, fields){
+    if (data.delivered='on'){
+        deliveredValue=1;
+    }
+
+    console.log(data)
+    console.log(deliveredValue);
+    console.log(paidValue);
+
+    addPurchaseQuery = `INSERT INTO Purchases (wholesalerID, employeeID, paid, deliveryDate, delivered, inventory) VALUES (?, ?, ?, ?, ?, ?)`;
+    
+    db.pool.query(addPurchaseQuery, [wholesalerID, employeeID, paidValue, data.deliveryDate, deliveredValue, inventory], function(error, rows, fields){
         if (error) {
             console.log('Could not add purchase');
             res.sendStatus(400);
@@ -328,6 +363,7 @@ app.post('/add-purchase-form', function(req, res) {
         }
     });
 });
+
 // DELETE PURCHASE
 app.delete('/delete-purchase/:purchaseID', function(req,res,next){
     let deletePurchase = `DELETE FROM Purchases WHERE purchaseID = ?`;
