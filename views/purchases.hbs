@@ -61,8 +61,8 @@
         <label for="wholesalerID">Wholesaler: </label>
         <select name="wholesalerID" id="mySelect">
         <option value="">Select</option>
-        {{#each wholesalers}}
-        <option value="{{this.wholesalerID}}">{{this.wholesalerName}}</option>
+        {{#each data}}
+        <option value="{{this.wholesalerID}}">{{this.name}}</option>
         {{/each}}
         </select>
     </p>
@@ -70,7 +70,7 @@
         <label for="employeeID">Employee: </label>
         <select name="employeeID" id="mySelect">
         <option value="">Select</option>
-        {{#each employees}}
+        {{#each data}}
         <option value="{{this.employeeID}}">{{this.employeeName}}</option>
         {{/each}}
         </select>
@@ -82,12 +82,16 @@
     </p>
     <p>
         <label for="deliveryDate">Delivery Date: </label>
-        <input type="date" name="delveryDate" id="delveryDate">
+        <input type="date" name="delveryDate" id="deliveryDate">
     </p>
     <p>
         <label class="switch" for="delivered">Delivered: </label>
         <input type="checkbox" name="delivered" id="delivered">
         <span class="slider round"></span>
+    </p>
+    <p>
+        <label for="inventory">Inventory: </label>
+        <input type="number" name="inventory" id="delivered">
     </p>
     <input type="submit">
 </form>

@@ -5,7 +5,7 @@
 */
 var express = require('express');   // We are using the express library for the web server
 var app = express();            // We need to instantiate an express object to interact with the server in our code
-const PORT = 28997;
+const PORT = 3000;
 
 const { engine } = require('express-handlebars');
 var exphbs = require('express-handlebars');     // Import express-handlebars
@@ -292,6 +292,8 @@ app.put('/update-wholesaler-form', function(req,res,next){
                   })
               }
   })});
+
+
 /*
    PURCHASES ROUTES
 */
@@ -307,6 +309,7 @@ app.get('/purchases', function(req, res)
         }
     });
 });
+
 // ADD PURCHASE
 app.post('/add-purchase-form', function(req, res) {
     // Capture the incoming data and parse it back to a JS object
