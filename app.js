@@ -304,11 +304,17 @@ app.get('/purchases', function(req, res)
     let getWholesaleInfoQuery = `SELECT * FROM Wholesalers`;
     let getEmployeeInfoQuery = `SELECT * FROM Employees`;
 
-    db.pool.query(displayPurchasesQuery, function(error, results){
+    let getAllInfoJoined = `SELECT * FROM Purchases 
+    INNER JOIN Wholesalers ON Purchases.wholesalerID = Wholesalers.wholesalerID 
+    INNER JOIN Employees ON Purchases.employeeID = Employees.employeeID`;
+    
+    
+    //Below does multiple queries instead of a big join. Not sure if this makes the most sense or not!
+    db.pool.query(getAllInfoJoined, function(error, results){
         if (error) {
         res.status(500).send('Database error: ' + error.message);
         } else {
-            //Run second query
+            //Get individualized data for wholesalers and employees
             db.pool.query(getWholesaleInfoQuery, function(error, wholesalerResults){
                 if (error) {
                     res.status(500).send('Error with wholesaler query');
@@ -347,18 +353,11 @@ app.post('/add-purchase-form', function(req, res) {
     if (data.delivered='on'){
         deliveredValue=1;
     }
-    console.log(date);
-    console.log(data.deliveryDate)
-    console.log(data)
-    console.log(deliveredValue);
-    console.log(paidValue);
-
     addPurchaseQuery = `INSERT INTO Purchases (Purchases.wholesalerID, Purchases.employeeID, paid, deliveryDate, delivered) VALUES (?, ?, ?, ?, ?)`;
 
     db.pool.query(addPurchaseQuery, [wholesalerID, employeeID, paidValue, date, deliveredValue], function(error, rows, fields){
         if (error) {
             console.log('Could not add purchase');
-            console.log(error);
             res.sendStatus(400);
         } else {
             res.redirect('/purchases');
