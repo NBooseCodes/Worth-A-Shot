@@ -337,7 +337,7 @@ app.post('/add-purchase-form', function(req, res) {
 
     let wholesalerID = parseInt(data.wholesalerID);
     let employeeID = parseInt(data.employeeID);
-    let inventory = parseInt(data.inventory);
+    let date = new Date(data.deliveryDate);
     let paidValue = 0;
     let deliveredValue = 0;
     if (data.paid = 'on') {
@@ -347,16 +347,18 @@ app.post('/add-purchase-form', function(req, res) {
     if (data.delivered='on'){
         deliveredValue=1;
     }
-
+    console.log(date);
+    console.log(data.deliveryDate)
     console.log(data)
     console.log(deliveredValue);
     console.log(paidValue);
 
-    addPurchaseQuery = `INSERT INTO Purchases (wholesalerID, employeeID, paid, deliveryDate, delivered, inventory) VALUES (?, ?, ?, ?, ?, ?)`;
-    
-    db.pool.query(addPurchaseQuery, [wholesalerID, employeeID, paidValue, data.deliveryDate, deliveredValue, inventory], function(error, rows, fields){
+    addPurchaseQuery = `INSERT INTO Purchases (Purchases.wholesalerID, Purchases.employeeID, paid, deliveryDate, delivered) VALUES (?, ?, ?, ?, ?)`;
+
+    db.pool.query(addPurchaseQuery, [wholesalerID, employeeID, paidValue, date, deliveredValue], function(error, rows, fields){
         if (error) {
             console.log('Could not add purchase');
+            console.log(error);
             res.sendStatus(400);
         } else {
             res.redirect('/purchases');

@@ -58,7 +58,7 @@
 <form id="add-purchase-form" method="POST" action="/add-purchase-form">
     <p>
         <label for="wholesalerID">Wholesaler: </label>
-        <select name="wholesalerID" id="mySelect">
+        <select name="wholesalerID" id="wholesalerSelect">
         <option value="">Select</option>
         {{#each wholesalerData}}
         <option value="{{this.wholesalerID}}">{{this.name}}</option>
@@ -67,7 +67,7 @@
     </p>
     <p>
         <label for="employeeID">Employee: </label>
-        <select name="employeeID" id="mySelect">
+        <select name="employeeID" id="employeeSelect">
         <option value="">Select</option>
         {{#each employeeData}}
         <option value="{{this.employeeID}}">{{this.firstName}} {{this.lastName}}</option>
@@ -81,16 +81,12 @@
     </p>
     <p>
         <label for="deliveryDate">Delivery Date: </label>
-        <input type="date" name="delveryDate" id="deliveryDate">
+        <input type="date" name="deliveryDate" id="deliveryDate">
     </p>
     <p>
         <label class="switch" for="delivered">Delivered: </label>
         <input type="checkbox" name="delivered" id="delivered">
         <span class="slider round"></span>
-    </p>
-    <p>
-        <label for="inventory">Inventory: </label>
-        <input type="number" name="inventory" id="delivered">
     </p>
     <input type="submit">
 </form>
