@@ -30,8 +30,8 @@
         {{#each data}}
         <tr>
             <td>{{this.alcoholPurchaseID}}</td>
-            <td>{{this.purchaseID}}</td
-            <td>{{this.alcoholName}}</td>
+            <td>{{this.purchaseID}}</td>
+            <td> {{this.alcoholName}}</td>
             <td>{{this.quantityPurchased}}</td>
             <td>{{this.lineCost}}</td>
             <td><button onclick="deleteAlcoholPurchase({{this.alcoholPurchaseID}})">Delete</button></td>
@@ -72,10 +72,6 @@
     <p>
         <label for="quantityPurchased">Quantity: </label>
         <input type="number" name="quantityPurchased" id="quantityPurchased">
-    </p>
-    <p>
-        <label for="lineCost">Cost: </label>
-        <input type="number" step="0.01" name="lineCost" id="lineCost">
     </p>
     <input type="submit">
 </form>
