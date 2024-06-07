@@ -17,7 +17,7 @@
             <th>ID</th>
             <th>Name</th>
             <th>Type</th>
-            <th>Percentge</th>
+            <th>ABV</th>
             <th>Price</th>
             <th>Volume</th>
             <th>Inventory</th>
@@ -27,15 +27,14 @@
 
     {{!-- Body section --}}
     <tbody>
-
-        {{!-- For each row, print the id, alcohol name, type, percentage, wholesale price, volume, and inventory count in order --}}
+        {{!-- TABLE: For each row, print the id, alcohol name, type, percentage, wholesale price, volume, and inventory count in order --}}
         {{#each data}}
         <tr>
             <td>{{this.alcoholID}}</td>
             <td>{{this.alcoholName}}</td>
             <td>{{this.alcoholType}}</td>
-            <td>{{this.alcoholPercentage}}</td>
-            <td>{{this.wholesalePrice}}</td>
+            <td>{{this.alcoholPercentage}}%</td>
+            <td>${{this.wholesalePrice}}</td>
             <td>{{this.alcoholVolume}}</td>
             <td>{{this.inventory}}</td>
             <td><button onclick="deleteAlcohol({{this.alcoholID}})">Delete</button></td>
@@ -46,12 +45,7 @@
 <script src="/js/delete_alcohol.js"></script>
 </div>
 
-{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
-
-{{!--  When using express.static('public'), you should reference static files in the HTML as if the public folder is the root --}}
-<!-- /views/index.hbs -->
-
-{{!-- Form to add a record to the table  --}}
+{{!-- Form to add an alcohol to the above table  --}}
 <div>
 <h2>Add an Alcohol</h2>
 <p>Input data for your desired alcohol here.</p>
@@ -72,8 +66,8 @@
     <p></p>
         <label for="wholesalePrice">Wholesale Price: </label>
         <input type="number" step="0.01" name="wholesalePrice" id="wholesalePrice">
-        <label for="alcoholVolume">Alcohol Volume (liters): </label>
-        <input type="number" step="0.01" name="alcoholVolume" id="alcoholVolume">
+        <label for="alcoholVolume">Alcohol by Volume (liters): </label>
+        <input type="number" name="alcoholVolume" id="alcoholVolume">
         <label for="inventory">Inventory: </label>
         <input type="number" name="inventory" id="inventory">
     <p></p>
@@ -82,6 +76,7 @@
 </form>
 </div>
 
+{{!-- Form to search for an alcohol  --}}
 <div>
 <h2>Search Using an HTML Form</h2>
 <p>Search for an alcohol by name using the search bar below!</p>
@@ -94,6 +89,7 @@
 </form>
 </div>
 
+{{!-- Form to update an alcohol int the table above --}}
 <div>
 <h2>Updating Alcohol Form</h2>
 <p>To update a specific Alcohol's type, select their name from the dropdown on the left.</p>

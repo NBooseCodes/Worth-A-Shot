@@ -27,7 +27,7 @@ CREATE OR REPLACE TABLE `Alcohols` (
     `alcoholID` int(11) AUTO_INCREMENT,
 	`alcoholName` varchar(255) NOT NULL,
     `alcoholType` varchar(255) NOT NULL,
-    `alcoholPercentage` decimal(19,4) NOT NULL,
+    `alcoholPercentage` varchar(3) NOT NULL,
     `wholesalePrice` decimal(19,4) NOT NULL,
     `alcoholVolume` decimal(19,4) NOT NULL,
     `inventory` int(11),
@@ -79,21 +79,24 @@ CREATE OR REPLACE TABLE `AlcoholPurchases` (
 INSERT INTO `Wholesalers` (`name`, `address`, `email`, `phone`, `contactName`)
 VALUES ('Diageo', '1111 NW 11th St New York, NY 10001', 'diageo@alcohols.com', '111-111-1111', 'Diego Montoya'),
 ('Pernod Ricard', '14 West Ln Salt Lake City, UT 84106', 'pricard@alcohols.com', '206-206-2066', 'Richard Pernod'),
-('Beam Suntory', '700 Big Cat Rd Las Vegas, NV 89107', 'beamyboy@notalcohols.com', '800-244-8482', 'Jim Beam');
+('Beam Suntory', '700 Big Cat Rd Las Vegas, NV 89107', 'beamyboy@notalcohols.com', '800-244-8482', 'Jim Beam'),
+('Allied Beverage Group, LLC ', '700 Kapkowski Road Elizabeth, NJ 07201', 'maggie@alliedbevs.com', '908-929-5000', 'Maggie Maxwell');
 
 -- Insertion of Alcohols
 INSERT INTO `Alcohols` (`alcoholName`, `alcoholType`, `alcoholPercentage`, `wholesalePrice`, `alcoholVolume`, `inventory`)
-VALUES ('Captain Morgan', 'Rum', '0.35', '12.80', '0.750', '200'),
-('Don Julio', 'Tequila', '0.40', '43.50', '0.750', '143'),
-('Malibu', 'Rum', '0.21', '19.20', '1.750', '70'),
-('Jameson', 'Whiskey', '0.40', '11.65', '0.350', '52'),
-('Jim Beam', 'Whiskey', '0.40', '16.00', '1.75', '104');
+VALUES ('Captain Morgan', 'Rum', '35', '12.80', '0.75', '200'),
+('Don Julio', 'Tequila', '40', '43.50', '0.75', '143'),
+('Malibu', 'Rum', '21', '19.20', '1.750', '70'),
+('Jameson', 'Whiskey', '40', '11.65', '0.35', '52'),
+('Jim Beam', 'Whiskey', '40', '16.00', '1.75', '104'),
+('Big House', 'Wine', '13.5', '12.20', '0.75', '33');
 
 -- Insertion of Employees
 INSERT INTO `Employees` (`firstName`, `lastName`, `startDate`, `employeeRole`)
-VALUES ('Taquito', 'Sanders', '2021-01-01', 'Manager'),
-('Tom', 'Sizemore', '1993-07-04', 'Sales Clerk'),
-('Pierogi', "O'Hoolihan", '2024-02-24', 'Sales Clerk');
+VALUES ('Taquito', 'Sanders', '2021-01-01', 'Store Manager'),
+('Tom', 'Sizemore', '1993-07-04', 'Clerk'),
+('Pierogi', "O'Hoolihan", '2024-02-24', 'Clerk'),
+('Christopher', 'McDonald', '2019-08-08', 'Department Manager');
 
 -- Insertion of Purchases
 INSERT INTO `Purchases` (`wholesalerID`, `employeeID`, `paid`, `deliveryDate`, `delivered`, `totalCost`)
