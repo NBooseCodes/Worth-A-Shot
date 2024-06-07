@@ -56,11 +56,8 @@
 <h2>Add an Alcohol</h2>
 <p>Input data for your desired alcohol here.</p>
 <form id="add-alcohol-form" method="POST" action="/add-alcohol-form">
-    <p>
         <label for="alcoholName">Alcohol Name: </label>
         <input type="text" name="alcoholName" id="alcoholName">
-    </p>
-    <p>
         <label for="alcoholType">Alcohol Type: </label>
         <select name="alcoholType" id="alcoholType">
             <option>Select Type</option>
@@ -70,23 +67,16 @@
             <option value="Whisk(e)y">Whisk(e)y</option>
             <option value="Other">Other</option>
         </select>
-    </p>
-    <p>
         <label for="alcoholPercentage">Alcohol Percentage: </label>
         <input type="number" step="0.01" name="alcoholPercentage" id="alcoholPercentage">
-    </p>
-    <p>
+    <p></p>
         <label for="wholesalePrice">Wholesale Price: </label>
         <input type="number" step="0.01" name="wholesalePrice" id="wholesalePrice">
-    </p>
-    <p>
         <label for="alcoholVolume">Alcohol Volume (liters): </label>
         <input type="number" step="0.01" name="alcoholVolume" id="alcoholVolume">
-    </p>
-    <p>
         <label for="inventory">Inventory: </label>
         <input type="number" name="inventory" id="inventory">
-    </p>
+    <p></p>
 
     <input type="submit" value="Submit">
 </form>
