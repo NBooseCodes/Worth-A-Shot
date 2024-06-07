@@ -23,12 +23,11 @@
   
   /*  ----- Viewport ----- elements inherited by all remaining elements ----- */
   body {       /* Can alternatively define in html {}. */
-  background-color: var(--navy);
-  background-size: cover;
+  background-image: url(/images/beer_drawing.jpeg);
+  background-size: 25%;
   background-attachment: fixed;
   background-position: top left;
-  background-repeat: no-repeat;
-  color:var(--navy);
+  background-repeat: repeat;
   align-content: center;
   margin: 2%;
   padding: 0;
@@ -50,11 +49,15 @@
     line-height: 1;
   }
   div {
+    text-align: center;
+    width: 75%;
     background-color: var(--sky-blue);
     justify-content: space-between;
     flex-wrap: wrap;
     padding: 2%;
-    margin: 2%;
+    margin-top: 1%;
+    margin-left: auto;
+    margin-right: auto;
     border-radius: 25px;
     align-content: center;
   }
@@ -81,7 +84,11 @@
     text-align: center;
     height: 50px;
     border: 1.5px solid var(--salmon);
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
   }
+  
   
   
   /* ----- Anchors ----- Text links */
@@ -97,21 +104,19 @@
   
   /*  ----- Navigation ----- Override text links for navigation only.  */
   nav {
-    background-color: var(--sky-blue);
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    border-color: var(--navy);
     display: flex;
     flex-flow: row;
     justify-content: space-between;
     align-items: stretch;
     flex-wrap: wrap;
-    padding: 2%;
-    margin: 2%;
     border-radius: 25px;
-    border: 1.5px solid var(--army-green);
   }
   nav a {
     color: var(--navy);
-    border-right: 0px solid transparent;
-    border-top: 0px solid var(--salmon);
     border-radius: 25px;
     background-color: var(--mint);
     margin: 1%;
@@ -122,7 +127,6 @@
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
-    border: 1.5px solid var(--salmon);
   }
   nav a:hover {
     background-color: var(--sky-blue);
@@ -132,15 +136,15 @@
   p {
     font-family: "Cardo", serif;
   }
-  br {}
-  ol, ul, dl {}
-  li {}
-  dt {}
-  dd {}
   h1 {
-    color: var(--mint);
+    color: var(--navy);
     font-family: "Montserrat", sans-serif;
-    font-weight: 400;
+    font-weight: 700;
+    background-color: var(--mint);
+    width: 45%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius:25px;
   }
   h2, h3, h4, h5, h6 {
     color: var(--navy);
@@ -150,71 +154,93 @@
     font-style: normal;
   } 
   
-  abbr {}
-  acronym {}
-  address {}
-  blockquote {}
-  q {}
-  cite {}
-  em {}
-  hr {}
-  mark {}
-  s {}
-  span {}
-  strong {}
-  sub {}
-  sup {}
-  time {}
-  
-  /*  ----- Coding or instructional typography ----- */
-  pre {}
-  code {}
-  kbd {}
-  samp {}
-  var {}
-  del {} 
-  ins {}
-  
   /*  ----- Table ----- */
-  table {
-    background-color: var(--mint);
-    column-rule-color: var(--army-green);
-    display: center;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    padding: 1%;
-    margin: 1%;
-    border-radius: 25px;
-  }
-  caption {}
-  thead {}
-  tbody {}
-  tfoot {}
-  tr {}
-  tr:nth-child(even) {}
-  th {}
-  td {}
-  td:nth-child(1) {}
-  colgroup {}
-  data {}
-  datalist {}
+  table { 
+    border-spacing: 1; 
+    border-collapse: collapse; 
+    background: whitesmoke;
+    border-radius:25px;
+    overflow:hidden;
+    max-width:800px; 
+    width:100%;
+    margin:0 auto;
+    position:relative;
+    
+    td,th { 
+      padding-left:8px
+    }
   
+    thead tr        { 
+      height:60px;
+      background:var(--cool-grey);
+      font-size:18px;
+      border-bottom:3px solid var(--navy);
+    }
+    
+    tbody tr { 
+      height:48px; 
+      border-bottom:1px solid var(--navy);
+    }
+    
+     td,th { 
+      text-align:left;
+      &.l { text-align:right }
+      &.c { text-align:center }
+      &.r { text-align:center }
+    }
+  }
+
   
   /*  ----- Form ----- */
-  form {}
-  fieldset {}
-  legend {}
-  label {}
-  button {}
-  input {}
-  select {}
-  optgroup {}
-  option {}
-  textarea {}
-  output {}
-  meter {}
-  progress {}
+  form input,
+  form select {
+    background-color: var(--mint);
+    border-radius: 25px;
+    border-style: none;
+    color: var(--navy);
+    display: inline-block;
+    font-family: "Cardo", serif;
+    height: 30px;
+    line-height: 10px;
+    list-style: none;
+    margin: 1%;
+    outline: none;
+    padding: 2px 8px;
+    position: relative;
+    text-align: center;
+    vertical-align: baseline;
+    user-select: none;
+    touch-action: manipulation;
+  }
+  form input:hover {
+  background-color: var(--cool-grey);
+  }
+  button {
+    background-color: var(--cool-grey);
+    border-radius: 20px;
+    border-style: none;
+    box-sizing: border-box;
+    color: var(--navy);
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Cardo", serif;
+    height: 30px;
+    line-height: 10px;
+    list-style: none;
+    margin: 0;
+    outline: none;
+    padding: 2px 8px;
+    position: relative;
+    text-align: center;
+    vertical-align: baseline;
+    user-select: none;
+    touch-action: manipulation;
+}
+
+button:hover,
+button:focus {
+  background-color: grey;
+}
   
   
   /*  ----- Classes for alignment, positioning, widths, grids, embellishments, and animation -----  */

@@ -103,7 +103,7 @@ app.delete('/delete-alcohol/:alcoholID', function(req,res,next){
 app.put('/put-alcohol-ajax', function(req,res,next){  
     console.log("Hit the route");                                 
     let data = req.body;
-  
+    console.log("APP DATA = " + JSON.stringify(data));
     let alcoholType = data.alcoholType;
     let alcoholName = data.alcoholName;
   
@@ -119,12 +119,12 @@ app.put('/put-alcohol-ajax', function(req,res,next){
               res.sendStatus(400);
               }
   
-              // If there was no error, we run our second query and return that data so we can use it to update the people's
+              // If there was no error, we run our second query and return that data so we can use it to update the alcohol's
               // table on the front-end
               else
               {
                   // Run the second query
-                  db.pool.query(selectAlcohol, [alcoholType], function(error, rows, fields) {
+                  db.pool.query(selectAlcohol, [alcoholName], function(error, rows, fields) {
           
                       if (error) {
                           console.log(error);
@@ -292,21 +292,50 @@ app.put('/update-wholesaler-form', function(req,res,next){
                   })
               }
   })});
+
+
 /*
    PURCHASES ROUTES
 */
 // DISPLAY PURCHASES PAGE
 app.get('/purchases', function(req, res)
 {
-    let query1 = `SELECT * FROM Purchases;`;
-    db.pool.query(query1, function(error, results){
+    let displayPurchasesQuery = `SELECT * FROM Purchases`;
+    let getWholesaleInfoQuery = `SELECT * FROM Wholesalers`;
+    let getEmployeeInfoQuery = `SELECT * FROM Employees`;
+
+    let getAllInfoJoined = `SELECT * FROM Purchases 
+    INNER JOIN Wholesalers ON Purchases.wholesalerID = Wholesalers.wholesalerID 
+    INNER JOIN Employees ON Purchases.employeeID = Employees.employeeID`;
+    
+    
+    //Below does multiple queries instead of a big join. Not sure if this makes the most sense or not!
+    db.pool.query(getAllInfoJoined, function(error, results){
         if (error) {
         res.status(500).send('Database error: ' + error.message);
         } else {
-        res.render('purchases', { data: results });
+            //Get individualized data for wholesaler
+            db.pool.query(getWholesaleInfoQuery, function(error, wholesalerResults){
+                if (error) {
+                    res.status(500).send('Error with wholesaler query');
+                } else {
+                    db.pool.query(getEmployeeInfoQuery, function(error, employeeResults){
+                        if (error) {
+                            res.status(500).send('Error with employee query');
+                        } else {
+                            return res.render('purchases', {
+                                data: results,
+                                wholesalerData: wholesalerResults,
+                                employeeData: employeeResults 
+                            });
+                        }
+                    })
+                }
+            })
         }
     });
 });
+
 // ADD PURCHASE
 app.post('/add-purchase-form', function(req, res) {
     // Capture the incoming data and parse it back to a JS object
@@ -314,9 +343,19 @@ app.post('/add-purchase-form', function(req, res) {
 
     let wholesalerID = parseInt(data.wholesalerID);
     let employeeID = parseInt(data.employeeID);
+    let date = new Date(data.deliveryDate);
+    let paidValue = 0;
+    let deliveredValue = 0;
+    if (data.paid = 'on') {
+        paidValue = 1;
+    }
 
-    addPurchaseQuery = `INSERT INTO Purchases (wholesalerID, employeeID, paid, deliveryDate, delivered) VALUES (?, ?, ?, ?, ?)`;
-    db.pool.query(addPurchaseQuery, [wholesalerID, employeeID, data.paid, data.deliveryDate, data.delivered], function(error, rows, fields){
+    if (data.delivered='on'){
+        deliveredValue=1;
+    }
+    addPurchaseQuery = `INSERT INTO Purchases (Purchases.wholesalerID, Purchases.employeeID, paid, deliveryDate, delivered) VALUES (?, ?, ?, ?, ?)`;
+
+    db.pool.query(addPurchaseQuery, [wholesalerID, employeeID, paidValue, date, deliveredValue], function(error, rows, fields){
         if (error) {
             console.log('Could not add purchase');
             res.sendStatus(400);
@@ -325,6 +364,7 @@ app.post('/add-purchase-form', function(req, res) {
         }
     });
 });
+
 // DELETE PURCHASE
 app.delete('/delete-purchase/:purchaseID', function(req,res,next){
     let deletePurchase = `DELETE FROM Purchases WHERE purchaseID = ?`;
@@ -339,18 +379,53 @@ app.delete('/delete-purchase/:purchaseID', function(req,res,next){
             }
     })
 });
+app.put('/put-purchase-ajax', function(req, res, next){
+    let data = req.body;
+    console.log(data);
+    let purchaseID = data.purchaseID;
+    let wholesalerID = data.wholesalerID;
+     
+
+})
 /*
     ALCOHOL PURCHASES ROUTES
 */
 // DISPLAY ALCOHOL PURCHASES PAGE
 app.get('/alcohol-purchases', function(req, res)
 {
-    let query1 = "SELECT * FROM AlcoholPurchases;";
-    db.pool.query(query1, function(error, results){
+    console.log("Hit alcoholPurchases display route")
+    let getAlcoholInfoQuery = `SELECT * FROM Alcohols`;
+    let getPurchaseInfoQuery = `SELECT * FROM Purchases`;
+
+    let getAllInfoJoined = `SELECT * FROM AlcoholPurchases 
+    INNER JOIN Purchases ON AlcoholPurchases.purchaseID = Purchases.purchaseID 
+    INNER JOIN Alcohols ON AlcoholPurchases.alcoholID = Alcohols.alcoholID`;
+    
+    console.log(getAllInfoJoined);
+    
+    //Below does a big join and then two smaller queries to isolate data from non-parent tables
+    db.pool.query(getAllInfoJoined, function(error, results){
         if (error) {
         res.status(500).send('Database error: ' + error.message);
         } else {
-        res.render('alcohol-purchases', { data: results });
+            //Get individualized data for wholesalers and employees
+            db.pool.query(getAlcoholInfoQuery, function(error, alcoholResults){
+                if (error) {
+                    res.status(500).send('Error with alcohols query');
+                } else {
+                    db.pool.query(getPurchaseInfoQuery, function(error, purchaseResults){
+                        if (error) {
+                            res.status(500).send('Error with purchases query');
+                        } else {
+                            return res.render('alcohol-purchases', {
+                                data: results,
+                                alcoholData: alcoholResults,
+                                purchaseData: purchaseResults 
+                            });
+                        }
+                    })
+                }
+            })
         }
     });
 });
