@@ -350,8 +350,8 @@ app.post('/add-purchase-form', function(req, res) {
         paidValue = 1;
     }
 
-    if (data.delivered='on'){
-        deliveredValue=1;
+    if (data.delivered = 'on'){
+        deliveredValue = 1;
     }
     addPurchaseQuery = `INSERT INTO Purchases (Purchases.wholesalerID, Purchases.employeeID, paid, deliveryDate, delivered) VALUES (?, ?, ?, ?, ?)`;
 
