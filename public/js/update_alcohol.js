@@ -26,7 +26,12 @@ updateAlcoholForm.addEventListener("submit", function(e) {
     // resolution
     xhttp.onreadystatechange = () => {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
-            updateRow(xhttp.response, alcoholNameValue);
+            console.log("Hit On readyaa")
+            console.log(xhttp);
+            console.log('xhttp');
+            console.log("alcohol name val")
+            console.log(alcoholNameValue)
+            updateRowAlcohol(xhttp.response, alcoholNameValue);
         }
         else if (xhttp.readyState == 4 && xhttp.status != 200) {
             console.log("There was an error with the input.")
@@ -36,18 +41,20 @@ updateAlcoholForm.addEventListener("submit", function(e) {
     xhttp.send(JSON.stringify(data));
 })
 
-function updateRow(data, alcoholID) {
+function updateRowAlcohol(data, alcoholID) {
     let parsedData = JSON.parse(data);
     let table = document.getElementById("alcohol-table");
+    console.log("Not parsing data")
     console.log(data);
+    console.log("Parsing data")
     console.log(parsedData);
     for (let i = 0, row; row = table.rows[i]; i++) {
         if (table.rows[i].getAttribute("data-value") == alcoholID) {
-            console.log(table.rows[i].getAttribute("data-value"));
+            console.log("Updating table data")
             let updateRowIndex = table.getElementsByTagName("tr")[i];
             let td = updateRowIndex.getElementsByTagName("td")[2];
-
-            td.innerHTML = parsedData[0].alcoholName;
+            td.innerHTML = parsedData[0].alcoholType;
+            
         }
     }
 }

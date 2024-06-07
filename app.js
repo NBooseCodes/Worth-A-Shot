@@ -103,7 +103,7 @@ app.delete('/delete-alcohol/:alcoholID', function(req,res,next){
 app.put('/put-alcohol-ajax', function(req,res,next){  
     console.log("Hit the route");                                 
     let data = req.body;
-  
+    console.log("APP DATA = " + JSON.stringify(data));
     let alcoholType = data.alcoholType;
     let alcoholName = data.alcoholName;
   
@@ -119,12 +119,12 @@ app.put('/put-alcohol-ajax', function(req,res,next){
               res.sendStatus(400);
               }
   
-              // If there was no error, we run our second query and return that data so we can use it to update the people's
+              // If there was no error, we run our second query and return that data so we can use it to update the alcohol's
               // table on the front-end
               else
               {
                   // Run the second query
-                  db.pool.query(selectAlcohol, [alcoholType], function(error, rows, fields) {
+                  db.pool.query(selectAlcohol, [alcoholName], function(error, rows, fields) {
           
                       if (error) {
                           console.log(error);
@@ -314,7 +314,7 @@ app.get('/purchases', function(req, res)
         if (error) {
         res.status(500).send('Database error: ' + error.message);
         } else {
-            //Get individualized data for wholesalers and employees
+            //Get individualized data for wholesaler
             db.pool.query(getWholesaleInfoQuery, function(error, wholesalerResults){
                 if (error) {
                     res.status(500).send('Error with wholesaler query');
@@ -379,6 +379,14 @@ app.delete('/delete-purchase/:purchaseID', function(req,res,next){
             }
     })
 });
+app.put('/put-purchase-ajax', function(req, res, next){
+    let data = req.body;
+    console.log(data);
+    let purchaseID = data.purchaseID;
+    let wholesalerID = data.wholesalerID;
+     
+
+})
 /*
     ALCOHOL PURCHASES ROUTES
 */

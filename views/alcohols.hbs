@@ -30,7 +30,7 @@
 
         {{!-- For each row, print the id, alcohol name, type, percentage, wholesale price, volume, and inventory count in order --}}
         {{#each data}}
-        <tr>
+        <tr data-value={{this.alcoholID}}>
             <td>{{this.alcoholID}}</td>
             <td>{{this.alcoholName}}</td>
             <td>{{this.alcoholType}}</td>
@@ -43,6 +43,7 @@
         {{/each}}
     </tbody>
 </table>
+
 <script src="/js/delete_alcohol.js"></script>
 </div>
 
@@ -55,7 +56,7 @@
 <div>
 <h2>Add an Alcohol</h2>
 <p>Input data for your desired alcohol here.</p>
-<form id="add-alcohol-form" method="POST" action="/add-alcohol-form">
+<form id="add-alcohol-form">
     <p>
         <label for="alcoholName">Alcohol Name: </label>
         <input type="text" name="alcoholName" id="alcoholName">
@@ -91,6 +92,7 @@
     <input type="submit" value="Submit">
 </form>
 </div>
+<script src="/js/add_alcohol.js"></script>
 
 <div>
 <h2>Search Using an HTML Form</h2>
