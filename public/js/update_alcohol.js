@@ -48,7 +48,7 @@ function updateRowAlcohol(data, alcoholID) {
     console.log(data);
     console.log("Parsing data")
     console.log(parsedData);
-    for (let i = 0, row; row = table.rows[i]; i++) {
+    for (let i = 0; row = table.rows[i]; i++) {
         if (table.rows[i].getAttribute("data-value") == alcoholID) {
             console.log("Updating table data")
             let updateRowIndex = table.getElementsByTagName("tr")[i];

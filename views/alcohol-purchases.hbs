@@ -30,8 +30,8 @@
         {{#each data}}
         <tr>
             <td>{{this.alcoholPurchaseID}}</td>
-            <td>{{this.purchaseID}}</td>
-            <td>{{this.alcoholID}}</td>
+            <td>{{this.purchaseID}}</td
+            <td>{{this.alcoholName}}</td>
             <td>{{this.quantityPurchased}}</td>
             <td>{{this.lineCost}}</td>
             <td><button onclick="deleteAlcoholPurchase({{this.alcoholPurchaseID}})">Delete</button></td>
@@ -55,7 +55,7 @@
         <label for="purchaseID">Purchase: </label>
         <select name="purchaseID" id="mySelect">
         <option value="">Select</option>
-        {{#each purchases}}
+        {{#each purchaseData}}
         <option value="{{this.purchaseID}}">{{this.purchaseID}}</option>
         {{/each}}
         </select>
@@ -64,7 +64,7 @@
         <label for="alcoholID">Alcohol: </label>
         <select name="alcoholID" id="mySelect">
         <option value="">Select</option>
-        {{#each alcohols}}
+        {{#each alcoholData}}
         <option value="{{this.alcoholID}}">{{this.alcoholName}}</option>
         {{/each}}
         </select>

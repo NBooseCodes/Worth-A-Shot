@@ -393,12 +393,39 @@ app.put('/put-purchase-ajax', function(req, res, next){
 // DISPLAY ALCOHOL PURCHASES PAGE
 app.get('/alcohol-purchases', function(req, res)
 {
-    let query1 = "SELECT * FROM AlcoholPurchases;";
-    db.pool.query(query1, function(error, results){
+    console.log("Hit alcoholPurchases display route")
+    let getAlcoholInfoQuery = `SELECT * FROM Alcohols`;
+    let getPurchaseInfoQuery = `SELECT * FROM Purchases`;
+
+    let getAllInfoJoined = `SELECT * FROM AlcoholPurchases 
+    INNER JOIN Purchases ON AlcoholPurchases.purchaseID = Purchases.purchaseID 
+    INNER JOIN Alcohols ON AlcoholPurchases.alcoholID = Alcohols.alcoholID`;
+    
+    console.log(getAllInfoJoined);
+    
+    //Below does a big join and then two smaller queries to isolate data from non-parent tables
+    db.pool.query(getAllInfoJoined, function(error, results){
         if (error) {
         res.status(500).send('Database error: ' + error.message);
         } else {
-        res.render('alcohol-purchases', { data: results });
+            //Get individualized data for wholesalers and employees
+            db.pool.query(getAlcoholInfoQuery, function(error, alcoholResults){
+                if (error) {
+                    res.status(500).send('Error with alcohols query');
+                } else {
+                    db.pool.query(getPurchaseInfoQuery, function(error, purchaseResults){
+                        if (error) {
+                            res.status(500).send('Error with purchases query');
+                        } else {
+                            return res.render('alcohol-purchases', {
+                                data: results,
+                                alcoholData: alcoholResults,
+                                purchaseData: purchaseResults 
+                            });
+                        }
+                    })
+                }
+            })
         }
     });
 });
