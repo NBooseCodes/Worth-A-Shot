@@ -1,7 +1,6 @@
 let updatePurchaseForm = document.getElementById('update-purchase-form');
 
 updatePurchaseForm.addEventListener("submit", function(e) {
-    console.log("Hello")
     e.preventDefault();
     let inputPurchaseID = document.getElementById("purchaseIDSelect");
     let inputWholesaler = document.getElementById("wholesalerUpdateSelect");
@@ -45,9 +44,9 @@ updatePurchaseForm.addEventListener("submit", function(e) {
 
 function updatePurchaseRow(data, purchaseID) {
     let parsedData = JSON.parse(data);
-    console.log(data);
+    
     let table = document.getElementById("purchases-table");
-    console.log(table.rows);
+    
     for (let i = 0, row; row = table.rows[i]; i++) {
         if (table.rows[i].getAttribute("data-value") == purchaseID) {
             let updateRowIndex = table.getElementsByTagName("tr")[i];
@@ -63,7 +62,7 @@ function updatePurchaseRow(data, purchaseID) {
             paidTD.innerHTML = parsedData[0].paid;
             deliveryTD.innerHTML = parsedData[0].deliveryDate;
             deliveredTD.innerHTML = parsedData[0].delivered;
-
+            location.reload();
         }
     }
 }

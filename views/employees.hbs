@@ -28,7 +28,7 @@
 
         {{!-- For each row, print the id, alcohol name, type, percentage, wholesale price, volume, and inventory count in order --}}
         {{#each data}}
-        <tr>
+        <tr data-value={{this.employeeID}}>
             <td>{{this.employeeID}}</td>
             <td>{{this.firstName}}</td>
             <td>{{this.lastName}}</td>
@@ -76,8 +76,8 @@
     <p>To update an employyes position, select their name from the dropdown.</p>
     <form id="update-employee-form">
         <label for="input-employee-id">Employees name: </label>
-        <select name="input-employee-id" id="mySelect">
-            <option>Select an Employee</option>
+        <select name="input-employee-id" id="employeeMySelect">
+            <option value="">Select an Employee</option>
             {{#each data}}
             <option value="{{this.employeeID}}">{{this.firstName}} {{this.lastName}}</option>
             {{/each}}

@@ -217,11 +217,11 @@ app.delete('/delete-employee/:employeeID', function(req,res,next){
 app.put('/update-employee-form', function(req,res,next){                                   
     let data = req.body;
   
-    let employeeRole = data.empolyeeRole;
+    let employeeRole = data.employeeRole;
     let employeeID = data.employeeID;
-  
+    console.log("employee role = " + employeeRole);
     queryUpdateEmployee = `UPDATE Employees SET employeeRole = ? WHERE Employees.employeeID = ?`;
-  
+    let selectQueryEmployees = `SELECT * FROM Employees WHERE employeeID = ?`;
           // Run the 1st query
           db.pool.query(queryUpdateEmployee, [employeeRole, employeeID], function(error, rows, fields){
               if (error) {
@@ -235,7 +235,14 @@ app.put('/update-employee-form', function(req,res,next){
               // table on the front-end
               else
               {
-                res.send(rows);
+                db.pool.query(selectQueryEmployees, data.employeeID, function(error, rows, fields) {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        res.send(rows);
+                    }
+
+                })
                 
               }
   })});
@@ -484,7 +491,7 @@ app.put('/update-purchase-form', function(req,res,next){
     }   
 
         let purchaseUpdateQuery = buildUpdateQuery(data);
-        console.log(purchaseUpdateQuery);
+
           db.pool.query(purchaseUpdateQuery.queryString, purchaseUpdateQuery.queryVariableArray, function(error, rows, fields){
               if (error) {
               console.log(error);
@@ -492,7 +499,7 @@ app.put('/update-purchase-form', function(req,res,next){
               }
               else
               {
-                let selectQuery = `SELECT * FROM Purchases WHERE purchaseID = ?`;
+                let selectQuery = `SELECT * FROM Purchases`;
                 db.pool.query(selectQuery, purchaseID, function(error, rows, fields) {
 
                       if (error) {

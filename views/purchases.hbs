@@ -108,7 +108,7 @@
 
     <label for="input-wholesaler">Wholesaler</label>
     <select name="input-wholesaler" id="wholesalerUpdateSelect">
-        <option>Select Wholesaler</option>
+        <option value="">Select Wholesaler</option>
         {{#each wholesalerData}}
         <option value="{{this.wholesalerID}}">{{this.name}}</option>
         {{/each}}
@@ -116,7 +116,7 @@
 
     <label for="input-employee">Employee</label>
     <select name="input-employee" id="employeeUpdateSelect">
-        <option>Select Employee</option>
+        <option value="">Select Employee</option>
         {{#each employeeData}}
         <option value="{{this.employeeID}}">{{this.lastName}}, {{this.firstName}}</option>
         {{/each}}
@@ -125,6 +125,7 @@
 
     <label for="input-paid">Paid</label>
     <select name="input-paid" id="paidUpdateSelect">
+        <option value="">Paid?</option>
         <option value="0">No</option>
         <option value="1">Yes</option>
     </select>
@@ -133,6 +134,7 @@
 
     <label for="input-delivered">Delivered?</label>
     <select name="input-delivered" id="deliveredUpdateSelect">
+        <option value="">Delivered?</option>
         <option value="0">No</option>
         <option value="1">Yes</option>
     </select>
