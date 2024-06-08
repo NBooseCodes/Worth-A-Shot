@@ -516,7 +516,8 @@ app.get('/alcohol-purchases', function(req, res)
 
     let getAllInfoJoined = `SELECT * FROM AlcoholPurchases 
     INNER JOIN Purchases ON AlcoholPurchases.purchaseID = Purchases.purchaseID 
-    INNER JOIN Alcohols ON AlcoholPurchases.alcoholID = Alcohols.alcoholID`;
+    INNER JOIN Alcohols ON AlcoholPurchases.alcoholID = Alcohols.alcoholID
+    ORDER BY AlcoholPurchases.alcoholPurchaseID ASC`;
     
     console.log(getAllInfoJoined);
     
@@ -551,24 +552,31 @@ app.post('/add-alcohol-purchase-form', function(req, res) {
     // Capture the incoming data and parse it back to a JS object
     let data = req.body;
 
-    // Create the query and run it on the database
+    console.log(data)
+    
+    let unitCostQuery = `SELECT wholesalePrice FROM Alcohols WHERE Alcohols.alcoholID = ?`;
     let query1 = `INSERT INTO AlcoholPurchases (purchaseID, alcoholID, quantityPurchased, lineCost) VALUES (?, ?, ?, ?)`;
-    db.pool.query(query1, [data.purchaseID, data.alcoholID, data.quantityPurchased, data.lineCost], function(error, rows, fields){
-
-        if (error) {
-
-            console.log('Could not add purchase');
-            res.sendStatus(400);
-
+    db.pool.query(unitCostQuery, data.alcoholID, function(error, unitCost){
+        if (error){
+            console.log(error);
         } else {
+            let sum = parseInt(unitCost[0].wholesalePrice) * parseInt(data.quantityPurchased);
+            db.pool.query(query1, [parseInt(data.purchaseID), parseInt(data.alcoholID), parseInt(data.quantityPurchased), sum], function(error, rows, fields){
+        
+                if (error) {
+        
+                    console.log('Could not add purchase');
+                    res.sendStatus(400);
+        
+                } else {
+        
+                    res.redirect('/alcohol-purchases');
+        
+                }
+        })
+    }
+})})
 
-            res.redirect('/alcohol-purchases');
-
-        }
-
-    });
-
-});
 // DELETE ALCOHOL PURCHASE
 app.delete('/delete-alcohol-purchase/:alcoholPurchaseID', function(req,res,next){
     let deleteAlcoholPurchase = `DELETE FROM AlcoholPurchases WHERE alcoholPurchaseID = ?`;
