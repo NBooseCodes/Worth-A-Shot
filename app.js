@@ -559,6 +559,7 @@ app.post('/add-alcohol-purchase-form', function(req, res) {
     db.pool.query(unitCostQuery, data.alcoholID, function(error, unitCost){
         if (error){
             console.log(error);
+            res.sendStatus(400);
         } else {
             let sum = parseInt(unitCost[0].wholesalePrice) * parseInt(data.quantityPurchased);
             db.pool.query(query1, [parseInt(data.purchaseID), parseInt(data.alcoholID), parseInt(data.quantityPurchased), sum], function(error, rows, fields){
