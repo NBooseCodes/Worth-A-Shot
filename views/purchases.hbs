@@ -1,10 +1,9 @@
-<!-- Purchases.hbs -->
+<!-- purchases.hbs -->
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
-<!-- Page Title -->
 <div>
-        <h2>Purchases in Database</h2>
+<!-- Page Title -->
+    <h2>Purchases in Database</h2>
 
 {{!-- Create a table --}}
 <table id="purchases-table" border="1" cellpadding="5">
@@ -17,10 +16,10 @@
         <tr>
             <th>ID</th>
             <th>Wholesaler</th>
-            <th>Employee</th>
-            <th>Was it paid?</th>
+            <th>Empoyee</th>
+            <th>Was the invoice paid?</th>
             <th>Delivery Date</th>
-            <th>Was it delivered?</th>
+            <th>Shipment Delivered?</th>
             <th>Total Cost</th>
             <th></th>
         </tr>
@@ -39,7 +38,10 @@
             <td>{{this.deliveryDate}}</td>
             <td>{{this.delivered}}</td>
             <td>{{this.totalCost}}</td>
-            <td><button onclick="deletePurchase({{this.purchaseID}})">Delete</button></td>
+            <td>
+                <button>Edit</button>
+                <button onclick="deletePurchase({{this.purchaseID}})">Delete</button>
+            </td>
         </tr>
         {{/each}}
     </tbody>
@@ -47,17 +49,12 @@
 <script src="/js/delete_purchase.js"></script>
 </div>
 
-{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
-
-{{!--  When using express.static('public'), you should reference static files in the HTML as if the public folder is the root --}}
-<!-- /views/index.hbs -->
-
 {{!-- Form to add a record to the table  --}}
 <div>
-<h2>Add a Purchase</h2>
+<h2>Add new Purchase</h2>
 <p>Input data for new purchase here.</p>
 <form id="add-purchase-form" method="POST" action="/add-purchase-form">
-    <p>
+        <p>
         <label for="wholesalerID">Wholesaler: </label>
         <select name="wholesalerID" id="mySelect">
         <option value="">Select</option>
@@ -65,30 +62,32 @@
         <option value="{{this.wholesalerID}}">{{this.wholesalerName}}</option>
         {{/each}}
         </select>
-    </p>
-    <p>
+
         <label for="employeeID">Employee: </label>
         <select name="employeeID" id="mySelect">
         <option value="">Select</option>
         {{#each employees}}
-        <option value="{{this.employeeID}}">{{this.employeeName}}</option>
+        <option value="{{this.employeeID}}">{{this.lastName}}, {{this.firstName}}</option>
         {{/each}}
         </select>
-    </p>
-    <p>
-        <label class="switch" for="paid">Paid: </label>
-        <input type="checkbox" name="paid" id="paid">
-        <span class="slider round"></span>
-    </p>
-    <p>
+
+        </p><p>
+
+        <label>Paid: </label>
+        <label class="switch" for="paid">
+            <input type="checkbox" name="paid" id="paid">
+            <span class="slider round"></span>
+        </label>
+
         <label for="deliveryDate">Delivery Date: </label>
         <input type="date" name="delveryDate" id="delveryDate">
-    </p>
-    <p>
-        <label class="switch" for="delivered">Delivered: </label>
-        <input type="checkbox" name="delivered" id="delivered">
-        <span class="slider round"></span>
-    </p>
+
+        <label>Delivered: </label>
+        <label class="switch" for="delivered">
+            <input type="checkbox" name="delivered" id="delivered">
+            <span class="slider round"></span>
+        </label>
+        </p>
     <input type="submit">
 </form>
 </div>

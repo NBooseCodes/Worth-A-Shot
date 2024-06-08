@@ -300,13 +300,13 @@ app.put('/update-wholesaler-form', function(req,res,next){
 // DISPLAY PURCHASES PAGE
 app.get('/purchases', function(req, res)
 {
-    let displayPurchasesQuery = `SELECT * FROM Purchases`;
     let getWholesaleInfoQuery = `SELECT * FROM Wholesalers`;
     let getEmployeeInfoQuery = `SELECT * FROM Employees`;
 
     let getAllInfoJoined = `SELECT * FROM Purchases 
     INNER JOIN Wholesalers ON Purchases.wholesalerID = Wholesalers.wholesalerID 
-    INNER JOIN Employees ON Purchases.employeeID = Employees.employeeID`;
+    INNER JOIN Employees ON Purchases.employeeID = Employees.employeeID
+    ORDER BY purchaseID ASC`;
     
     
     //Below does multiple queries instead of a big join. Not sure if this makes the most sense or not!
@@ -344,17 +344,20 @@ app.post('/add-purchase-form', function(req, res) {
     let wholesalerID = parseInt(data.wholesalerID);
     let employeeID = parseInt(data.employeeID);
     let date = new Date(data.deliveryDate);
-    let paidValue = 0;
-    let deliveredValue = 0;
-    if (data.paid = 'on') {
+    let paidValue = '0';
+    let deliveredValue = '0';
+    console.log(data)
+    console.log(paidValue);
+    if (data.paid != null) {
         paidValue = 1;
     }
 
-    if (data.delivered = 'on'){
+    console.log(data.delivered);
+    if (data.delivered != null) {
         deliveredValue = 1;
     }
     addPurchaseQuery = `INSERT INTO Purchases (Purchases.wholesalerID, Purchases.employeeID, paid, deliveryDate, delivered) VALUES (?, ?, ?, ?, ?)`;
-
+    console.log(deliveredValue)
     db.pool.query(addPurchaseQuery, [wholesalerID, employeeID, paidValue, date, deliveredValue], function(error, rows, fields){
         if (error) {
             console.log('Could not add purchase');
