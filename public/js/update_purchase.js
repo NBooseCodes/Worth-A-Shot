@@ -25,11 +25,11 @@ updatePurchaseForm.addEventListener("submit", function(e) {
         deliveryDate: deliveryDateValue,
         delivered: deliveredValue
     }
-
+    console.log(data);
     // Send req via AJAX
 
     var xhttp = new XMLHttpRequest();
-    xhttp.open("PUT", "/put-purchase-ajax", true);
+    xhttp.open("PUT", "/update-purchase-form", true);
     xhttp.setRequestHeader("Content-type", "application/json");
 
     xhttp.onreadystatechange = () => {
@@ -43,19 +43,26 @@ updatePurchaseForm.addEventListener("submit", function(e) {
     xhttp.send(JSON.stringify(data));
 })
 
-function updateRow(data, purchaseID) {
+function updatePurchaseRow(data, purchaseID) {
     let parsedData = JSON.parse(data);
-
+    console.log(data);
     let table = document.getElementById("purchases-table");
-    let j = 1;
+    console.log(table.rows);
     for (let i = 0, row; row = table.rows[i]; i++) {
-        if (table.rows[i].getAttribute(data-value) == purchaseID) {
+        if (table.rows[i].getAttribute("data-value") == purchaseID) {
             let updateRowIndex = table.getElementsByTagName("tr")[i];
 
             let wholesalerTD = updateRowIndex.getElementsByTagName("td")[1];
             let employeeTD = updateRowIndex.getElementsByTagName("td")[2];
-            wholesalerTD.innerHTML = parsedData[0].wholesaler;
-            employeeTD.innerHTML = parsedData[0].employee;
+            let paidTD = updateRowIndex.getElementsByTagName("td")[3];
+            let deliveryTD = updateRowIndex.getElementsByTagName("td")[4];
+            let deliveredTD = updateRowIndex.getElementsByTagName("td")[5];
+
+            wholesalerTD.innerHTML = parsedData[0].wholesalerID;
+            employeeTD.innerHTML = parsedData[0].employeeID;
+            paidTD.innerHTML = parsedData[0].paid;
+            deliveryTD.innerHTML = parsedData[0].deliveryDate;
+            deliveredTD.innerHTML = parsedData[0].delivered;
 
         }
     }

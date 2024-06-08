@@ -30,7 +30,7 @@
 
         {{!-- For each row, print the id, alcohol name, type, percentage, wholesale price, volume, and inventory count in order --}}
         {{#each data}}
-        <tr>
+        <tr data-value={{this.wholesalerID}}>
             <td>{{this.wholesalerID}}</td>
             <td>{{this.name}}</td>
             <td>{{this.address}}</td>
@@ -83,7 +83,7 @@
 <form id="update-wholesaler-form">
 
     <label for="input-wholesalerID">Wholesaler name: </label>
-    <select name="input-wholesalerID" id="mySelect">
+    <select name="input-wholesalerID" id="wholesalerSelect">
         <option value="test">Select a Wholesaler</option>
         {{#each data}}
         <option value="{{this.wholesalerID}}">{{this.name}}</option>

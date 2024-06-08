@@ -8,7 +8,7 @@ updateWholesalerForm.addEventListener("submit", function (e) {
     e.preventDefault();
 
     // Get form fields we need to get data from
-    let inputWholesalerID = document.getElementById("mySelect");
+    let inputWholesalerID = document.getElementById("wholesalerSelect");
     let inputAddress = document.getElementById("input-address");
     let inputEmail = document.getElementById("input-email");
     let inputPhone = document.getElementById("input-phone");
@@ -54,9 +54,15 @@ function updateRow(data, wholesalerID){
     for (let i = 0, row; row = table.rows[i]; i++) {
        if (table.rows[i].getAttribute("data-value") == wholesalerID) {
             let updateRowIndex = table.getElementsByTagName("tr")[i];
-            let td = updateRowIndex.getElementsByTagName("td")[3];
-            td.innerHTML = parsedData[0].wholesalerID;
-            location.reload()
+            let addressTD = updateRowIndex.getElementsByTagName("td")[2];
+            let emailTD = updateRowIndex.getElementsByTagName("td")[3];
+            let phoneTD = updateRowIndex.getElementsByTagName("td")[4];
+            let contactNameTD = updateRowIndex.getElementsByTagName("td")[5];
+
+            addressTD.innerHTML = parsedData[0].address;
+            emailTD.innerHTML = parsedData[0].email;
+            phoneTD.innerHTML = parsedData[0].phone;
+            contactNameTD.innerHTML = parsedData[0].contactName;
        }
     }
 }

@@ -31,10 +31,10 @@
 
         {{!-- For each row, print the id, alcohol name, type, percentage, wholesale price, volume, and inventory count in order --}}
         {{#each data}}
-        <tr data-value="{{this.purchaseID}}">
+        <tr data-value={{this.purchaseID}}>
             <td>{{this.purchaseID}}</td>
             <td>{{this.name}}</td>
-            <td>{{this.lastName}}, {{this.firstName}}</td> {{!-- Employee's last and first name from the big join --}}
+            <td>{{this.firstName}} {{this.lastName}}</td> 
             <td>{{this.paid}}</td>
             <td>{{this.deliveryDate}}</td>
             <td>{{this.delivered}}</td>

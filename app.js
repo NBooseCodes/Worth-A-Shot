@@ -133,17 +133,10 @@ app.put('/put-alcohol-ajax', function(req,res,next){
             queryVariableArray
         }
     }
-    console.log("Hit the route");                                 
+
     let data = req.body;
     console.log("APP DATA = " + JSON.stringify(data));
     const queryObject = buildUpdateQuery(data);
-    // let alcoholType = data.alcoholType;
-    // let alcoholName = parseInt(data.alcoholName);
-    // let alcoholPercentage = parseFloat(data.alcoholPercentage);
-    // let wholesalePrice = parseFloat(data.wholesalePrice);
-    // let alcoholVolume = parseFloat(data.alcoholVolume);
-    // let inventory = parseInt(data.inventory);
-    //queryUpdateAlcohol = `UPDATE Alcohols SET alcoholType = ?, alcoholPercentage = ?, wholesalePrice = ?, alcoholVolume = ?, inventory = ? WHERE alcoholID = ?`;
     let selectAlcohol = `SELECT * FROM Alcohols WHERE alcoholID = ?`
     
           // Run the 1st query
@@ -173,6 +166,8 @@ app.put('/put-alcohol-ajax', function(req,res,next){
                   })
               }
   })});
+
+
 /*
     EMPLOYEE ROUTES
 */
@@ -302,16 +297,44 @@ app.delete('/delete-wholesaler/:wholesalerID', function(req,res,next){
 app.put('/update-wholesaler-form', function(req,res,next){
     console.log("you're closer");
     let data = req.body;
-
     let wholesalerID = data.wholesalerID;
     let address = data.address;
     let email = data.email;
     let phone = data.phone;
     let contactName = data.contactName
 
-    let queryUpdateWholesaler = `UPDATE Wholesalers SET address = ?, email = ?, phone = ?, contactName = ? WHERE Wholesalers.wholesalerID = ?`;
+    const buildUpdateQuery = (data) => {
+        let queryString = `UPDATE Wholesalers SET`;
+        const queryVariableArray = [];
+        if(data.address) {
+            queryString += ` address = ?,`
+            queryVariableArray.push(data.address)
+        }
+        if(data.email){
+            queryString += ` email = ?,`
+            queryVariableArray.push(data.email)
+        }
+        if(data.phone){
+            queryString += ` phone = ?,`
+            queryVariableArray.push(data.phone)
+        }
+        if(data.contactName){
+            queryString += ` contactName = ?,`
+            queryVariableArray.push(data.contactName)
+        }
+        queryString = queryString.substring(0, queryString.length-1); // removing final comma because otherwise SQL will not run
+        queryString += ` WHERE wholesalerID = ?`
+        queryVariableArray.push(parseInt(data.wholesalerID))
+        return {
+            queryString,
+            queryVariableArray
+        }
+    }   
 
-          db.pool.query(queryUpdateWholesaler, [address, email, phone, contactName, wholesalerID], function(error, rows, fields){
+        let wholesalerUpdateQuery = buildUpdateQuery(data);
+        console.log("wholesale query" + wholesalerUpdateQuery.queryString);
+
+          db.pool.query(wholesalerUpdateQuery.queryString, wholesalerUpdateQuery.queryVariableArray, function(error, rows, fields){
               if (error) {
               console.log(error);
               res.sendStatus(400);
@@ -343,7 +366,7 @@ app.get('/purchases', function(req, res)
 
     let getAllInfoJoined = `SELECT * FROM Purchases 
     INNER JOIN Wholesalers ON Purchases.wholesalerID = Wholesalers.wholesalerID 
-    INNER JOIN Employees ON Purchases.employeeID = Employees.employeeID
+    LEFT JOIN Employees ON Purchases.employeeID = Employees.employeeID
     ORDER BY purchaseID ASC`;
     
     
@@ -420,14 +443,67 @@ app.delete('/delete-purchase/:purchaseID', function(req,res,next){
             }
     })
 });
-app.put('/put-purchase-ajax', function(req, res, next){
+app.put('/update-purchase-form', function(req,res,next){
     let data = req.body;
-    console.log(data);
-    let purchaseID = data.purchaseID;
-    let wholesalerID = data.wholesalerID;
-     
+    let purchaseID = parseInt(data.purchaseID);
 
-})
+    const buildUpdateQuery = (data) => {
+        let queryString = `UPDATE Purchases SET`;
+        const queryVariableArray = [];
+        if(data.wholesaler) {
+            queryString += ` wholesalerID = ?,`
+            queryVariableArray.push(data.wholesaler)
+        }
+        if(data.employee){
+            queryString += ` employeeID = ?,`
+            if (data.employee == "Null"){
+                queryVariableArray.push(null);
+            } else {
+                queryVariableArray.push(parseInt(data.employee));
+            }
+        }
+        if(data.paid){
+            queryString += ` paid = ?,`
+            queryVariableArray.push(data.paid)
+        }
+        if(data.deliveryDate){
+            queryString += ` deliveryDate = ?,`
+            queryVariableArray.push(data.deliveryDate)
+        }
+        if(data.delivered){
+            queryString += ` delivered = ?,`
+            queryVariableArray.push(data.delivered);
+        }
+        queryString = queryString.substring(0, queryString.length-1); // removing final comma because otherwise SQL will not run
+        queryString += ` WHERE purchaseID = ?`
+        queryVariableArray.push(parseInt(data.purchaseID))
+        return {
+            queryString,
+            queryVariableArray
+        }
+    }   
+
+        let purchaseUpdateQuery = buildUpdateQuery(data);
+        console.log(purchaseUpdateQuery);
+          db.pool.query(purchaseUpdateQuery.queryString, purchaseUpdateQuery.queryVariableArray, function(error, rows, fields){
+              if (error) {
+              console.log(error);
+              res.sendStatus(400);
+              }
+              else
+              {
+                let selectQuery = `SELECT * FROM Purchases WHERE purchaseID = ?`;
+                db.pool.query(selectQuery, purchaseID, function(error, rows, fields) {
+
+                      if (error) {
+                          console.log(error);
+                          res.sendStatus(400);
+                      } else {
+                          res.send(rows);
+                      }
+                  })
+              }
+  })});
 /*
     ALCOHOL PURCHASES ROUTES
 */

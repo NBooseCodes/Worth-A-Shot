@@ -19,8 +19,7 @@ updateAlcoholForm.addEventListener("submit", function(e) {
     let alcoholPriceValue = inputAlcoholPrice.value;
     let alcoholVolumeValue = inputAlcoholVolume.value;
     let inventoryValue = inputInventory.value;
-    console.log(alcoholNameValue);
-    console.log(alcoholTypeValue);
+
     let data = {
         alcoholName: alcoholNameValue,
         alcoholType: alcoholTypeValue,
@@ -51,17 +50,24 @@ updateAlcoholForm.addEventListener("submit", function(e) {
 function updateRowAlcohol(data, alcoholID) {
     let parsedData = JSON.parse(data);
     let table = document.getElementById("alcohol-table");
-    console.log("Not parsing data")
-    console.log(data);
-    console.log("Parsing data")
+
     console.log(parsedData);
     for (let i = 0; row = table.rows[i]; i++) {
         if (table.rows[i].getAttribute("data-value") == alcoholID) {
-            console.log("Updating table data")
+            // Get elements of table
             let updateRowIndex = table.getElementsByTagName("tr")[i];
-            let td = updateRowIndex.getElementsByTagName("td")[2];
-            td.innerHTML = parsedData[0].alcoholType;
-            
+            let alcoholTypeTD = updateRowIndex.getElementsByTagName("td")[2];
+            let alcoholPercentageTD = updateRowIndex.getElementsByTagName("td")[3];
+            let wholesalePriceTD = updateRowIndex.getElementsByTagName("td")[4];
+            let alcoholVolumeTD = updateRowIndex.getElementsByTagName("td")[5];
+            let inventoryTD = updateRowIndex.getElementsByTagName("td")[6];
+
+            // Change the elements' HTML display to reflect the values in the database
+            alcoholTypeTD.innerHTML = parsedData[0].alcoholType;
+            alcoholPercentageTD.innerHTML = parsedData[0].alcoholPercentage;
+            wholesalePriceTD.innerHTML = parsedData[0].wholesalePrice;
+            alcoholVolumeTD.innerHTML = parsedData[0].alcoholVolume;
+            inventoryTD.innerHTML = parsedData[0].inventory;
         }
     }
 }
