@@ -73,6 +73,7 @@ app.get('/alcohols', function(req, res)
 app.post('/add-alcohol-form', function(req, res) {
     // Capture the incoming data and parse it back to a JS object
     let data = req.body;
+    console.log("Hit alcohol route")
     // Create the query and run it on the database
     let query1 = `INSERT INTO Alcohols (alcoholName, alcoholType, alcoholPercentage, wholesalePrice, alcoholVolume, inventory) VALUES (?, ?, ?, ?, ?, ?)`;
     db.pool.query(query1, [data.alcoholName, data.alcoholType, data.alcoholPercentage, data.wholesalePrice, data.alcoholVolume, data.inventory], function(error, rows, fields){
@@ -105,13 +106,16 @@ app.put('/put-alcohol-ajax', function(req,res,next){
     let data = req.body;
     console.log("APP DATA = " + JSON.stringify(data));
     let alcoholType = data.alcoholType;
-    let alcoholName = data.alcoholName;
-  
-    queryUpdateAlcohol = `UPDATE Alcohols SET alcoholType = ? WHERE Alcohols.alcoholID = ?`;
-    selectAlcohol = `SELECT * FROM Alcohols WHERE alcoholID = ?`
-  
+    let alcoholName = parseInt(data.alcoholName);
+    let alcoholPercentage = parseFloat(data.alcoholPercentage);
+    let wholesalePrice = parseFloat(data.wholesalePrice);
+    let alcoholVolume = parseFloat(data.alcoholVolume);
+    let inventory = parseInt(data.inventory);
+    let queryUpdateAlcohol = `UPDATE Alcohols SET alcoholType = ?, alcoholPercentage = ?, wholesalePrice = ?, alcoholVolume = ?, inventory = ?, WHERE alcoholID = ?`;
+    let selectAlcohol = `SELECT * FROM Alcohols WHERE alcoholID = ?`
+    
           // Run the 1st query
-          db.pool.query(queryUpdateAlcohol, [alcoholType, alcoholName], function(error, rows, fields){
+          db.pool.query(queryUpdateAlcohol, [alcoholType, alcoholPercentage, wholesalePrice, alcoholVolume, inventory, alcoholName], function(error, rows, fields){
               if (error) {
   
               // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
@@ -141,8 +145,8 @@ app.put('/put-alcohol-ajax', function(req,res,next){
 // DISPLAY EMPLOYEE PAGE
 app.get('/employees', function(req, res)
 {
-        let query1 = "SELECT * FROM Employees;";
-    db.pool.query(query1, function(error, results){
+    let employeeDisplayQuery = "SELECT * FROM Employees ORDER BY employeeID ASC;";
+    db.pool.query(employeeDisplayQuery, function(error, results){
         if (error) {
         res.status(500).send('Database error: ' + error.message);
         } else {
@@ -300,13 +304,13 @@ app.put('/update-wholesaler-form', function(req,res,next){
 // DISPLAY PURCHASES PAGE
 app.get('/purchases', function(req, res)
 {
-    let displayPurchasesQuery = `SELECT * FROM Purchases`;
     let getWholesaleInfoQuery = `SELECT * FROM Wholesalers`;
     let getEmployeeInfoQuery = `SELECT * FROM Employees`;
 
     let getAllInfoJoined = `SELECT * FROM Purchases 
     INNER JOIN Wholesalers ON Purchases.wholesalerID = Wholesalers.wholesalerID 
-    INNER JOIN Employees ON Purchases.employeeID = Employees.employeeID`;
+    INNER JOIN Employees ON Purchases.employeeID = Employees.employeeID
+    ORDER BY purchaseID ASC`;
     
     
     //Below does multiple queries instead of a big join. Not sure if this makes the most sense or not!
@@ -344,17 +348,20 @@ app.post('/add-purchase-form', function(req, res) {
     let wholesalerID = parseInt(data.wholesalerID);
     let employeeID = parseInt(data.employeeID);
     let date = new Date(data.deliveryDate);
-    let paidValue = 0;
-    let deliveredValue = 0;
-    if (data.paid = 'on') {
+    let paidValue = '0';
+    let deliveredValue = '0';
+    console.log(data)
+    console.log(paidValue);
+    if (data.paid != null) {
         paidValue = 1;
     }
 
-    if (data.delivered='on'){
-        deliveredValue=1;
+    console.log(data.delivered);
+    if (data.delivered != null) {
+        deliveredValue = 1;
     }
     addPurchaseQuery = `INSERT INTO Purchases (Purchases.wholesalerID, Purchases.employeeID, paid, deliveryDate, delivered) VALUES (?, ?, ?, ?, ?)`;
-
+    console.log(deliveredValue)
     db.pool.query(addPurchaseQuery, [wholesalerID, employeeID, paidValue, date, deliveredValue], function(error, rows, fields){
         if (error) {
             console.log('Could not add purchase');

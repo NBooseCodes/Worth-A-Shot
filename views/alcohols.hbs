@@ -21,7 +21,7 @@
             <th>Price</th>
             <th>Volume</th>
             <th>Inventory</th>
-            <th></th>
+            <th>Delete</th>
         </tr>
     </thead>
 
@@ -56,7 +56,7 @@
 <div>
 <h2>Add an Alcohol</h2>
 <p>Input data for your desired alcohol here.</p>
-<form id="add-alcohol-form">
+<form id="add-alcohol-form" method="POST" action="/add-alcohol-form">
     <p>
         <label for="alcoholName">Alcohol Name: </label>
         <input type="text" name="alcoholName" id="alcoholName">
@@ -69,6 +69,10 @@
             <option value="Tequila">Tequila</option>
             <option value="Vodka">Vodka</option>
             <option value="Whisk(e)y">Whisk(e)y</option>
+            <option value="Gin">Gin</option>
+            <option value="Beer">Beer</option>
+            <option value="Wine">Wine</option>
+            <option value="Liqueur">Liqueur</option>
             <option value="Other">Other</option>
         </select>
     </p>
@@ -92,7 +96,6 @@
     <input type="submit" value="Submit">
 </form>
 </div>
-<script src="/js/add_alcohol.js"></script>
 
 <div>
 <h2>Search Using an HTML Form</h2>
@@ -122,10 +125,24 @@
     <label for="input-alcohol-type">Type: </label>
     <select name="input-alcohol-type" id="input-alcohol-type-update">
         <option>Select a type of liquor: </option>
-        {{#each data}}
-        <option value="{{this.alcoholType}}">{{this.alcoholType}}</option>
-        {{/each}}
+            <option value="Rum">Rum</option>
+            <option value="Tequila">Tequila</option>
+            <option value="Vodka">Vodka</option>
+            <option value="Whisk(e)y">Whisk(e)y</option>
+            <option value="Gin">Gin</option>
+            <option value="Beer">Beer</option>
+            <option value="Wine">Wine</option>
+            <option value="Liqueur">Liqueur</option>
+            <option value="Other">Other</option>
     </select>
+    <label for="input-alcohol-percentage-update">Percentage: </label>
+    <input type="number" step="0.01" name="input-alcohol-percentage-update" id="input-alcohol-percentage-update">
+    <label for="input-alcohol-price-update">Price: </label>
+    <input type="number" step="0.01" name="input-alcohol-price-update" id="input-alcohol-price-update">
+    <label for="input-alcohol-volume-update">Volume: </label>
+    <input type="number" step="0.1" name="input-alcohol-volume-update" id="input-alcohol-volume-update">
+    <label for="input-inventory-update">Inventory: </label>
+    <input type="number" name="input-inventory-update" id="input-inventory-update">
     <input type="submit">
 
 </form>

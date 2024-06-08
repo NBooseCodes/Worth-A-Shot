@@ -31,7 +31,7 @@
 
         {{!-- For each row, print the id, alcohol name, type, percentage, wholesale price, volume, and inventory count in order --}}
         {{#each data}}
-        <tr>
+        <tr data-value="{{this.purchaseID}}">
             <td>{{this.purchaseID}}</td>
             <td>{{this.name}}</td>
             <td>{{this.lastName}}, {{this.firstName}}</td> {{!-- Employee's last and first name from the big join --}}
@@ -96,7 +96,7 @@
 
 <h2>Update a Purchase</h2>
 <p>To update a specific Purchase, please select the ID and enter the info you would like to change</p>
-<form id="update-purchase-form" onsubmit="setTimeout(function(){window.location.reload();},10>
+<form id="update-purchase-form">
 
     <label for="input-purchaseID">Purchase ID: </label>
     <select name="input-purchaseID" id="purchaseIDSelect">

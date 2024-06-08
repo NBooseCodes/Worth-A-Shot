@@ -11,11 +11,13 @@ updateAlcoholForm.addEventListener("submit", function(e) {
 
     let alcoholNameValue = inputAlcoholName.value; // this is alcoholID assoc w/alcoholName
     let alcoholTypeValue = inputAlcoholType.value;
+    let alcoholPercentageValue = inputAlcoholPercentage
     console.log(alcoholNameValue);
     console.log(alcoholTypeValue);
     let data = {
         alcoholName: alcoholNameValue,
-        alcoholType: alcoholTypeValue
+        alcoholType: alcoholTypeValue,
+        alcoholPercentage: alcoholPercentageValue,
     }
     console.log(data);
 
