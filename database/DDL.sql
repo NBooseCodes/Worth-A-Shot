@@ -89,7 +89,7 @@ VALUES ('Captain Morgan', 'Rum', '35', '12.80', '0.75', '200'),
 ('Malibu', 'Rum', '21', '19.20', '1.750', '70'),
 ('Jameson', 'Whiskey', '40', '11.65', '0.35', '52'),
 ('Jim Beam', 'Whiskey', '40', '16.00', '1.75', '104'),
-('Big House', 'Wine', '13.5', '12.20', '0.75', '33');
+('Big House', 'Wine', '13', '12.20', '0.75', '33');
 
 -- Insertion of Employees
 INSERT INTO `Employees` (`firstName`, `lastName`, `startDate`, `employeeRole`)
