@@ -102,20 +102,54 @@ app.delete('/delete-alcohol/:alcoholID', function(req,res,next){
 
 // ALCOHOL UPDATE
 app.put('/put-alcohol-ajax', function(req,res,next){  
+    const buildUpdateQuery = (data) => {
+        let queryString = `UPDATE Alcohols SET`;
+        const queryVariableArray = [];
+        if(data.alcoholType) {
+            queryString += ` alcoholType = ?,`
+            queryVariableArray.push(data.alcoholType)
+        }
+        if(data.alcoholPercentage){
+            queryString += ` alcoholPercentage = ?,`
+            queryVariableArray.push(parseFloat(data.alcoholPercentage))
+        }
+        if(data.alcoholPrice){
+            queryString += ` wholesalePrice = ?,`
+            queryVariableArray.push(parseFloat(data.alcoholPrice))
+        }
+        if(data.alcoholVolume){
+            queryString += ` alcoholVolume = ?,`
+            queryVariableArray.push(parseFloat(data.alcoholVolume))
+        }
+        if(data.inventory){
+            queryString += ` inventory = ?,`
+            queryVariableArray.push(parseInt(data.inventory))
+        }
+        queryString = queryString.substring(0, queryString.length-1); // removing final comma because otherwise SQL will not run
+        queryString += ` WHERE Alcohols.alcoholID = ?`
+        queryVariableArray.push(parseInt(data.alcoholName))
+        return {
+            queryString,
+            queryVariableArray
+        }
+    }
     console.log("Hit the route");                                 
     let data = req.body;
     console.log("APP DATA = " + JSON.stringify(data));
-    let alcoholType = data.alcoholType;
-    let alcoholName = parseInt(data.alcoholName);
-    let alcoholPercentage = parseFloat(data.alcoholPercentage);
-    let wholesalePrice = parseFloat(data.wholesalePrice);
-    let alcoholVolume = parseFloat(data.alcoholVolume);
-    let inventory = parseInt(data.inventory);
-    let queryUpdateAlcohol = `UPDATE Alcohols SET alcoholType = ?, alcoholPercentage = ?, wholesalePrice = ?, alcoholVolume = ?, inventory = ?, WHERE alcoholID = ?`;
+    const queryObject = buildUpdateQuery(data);
+    // let alcoholType = data.alcoholType;
+    // let alcoholName = parseInt(data.alcoholName);
+    // let alcoholPercentage = parseFloat(data.alcoholPercentage);
+    // let wholesalePrice = parseFloat(data.wholesalePrice);
+    // let alcoholVolume = parseFloat(data.alcoholVolume);
+    // let inventory = parseInt(data.inventory);
+    //queryUpdateAlcohol = `UPDATE Alcohols SET alcoholType = ?, alcoholPercentage = ?, wholesalePrice = ?, alcoholVolume = ?, inventory = ? WHERE alcoholID = ?`;
     let selectAlcohol = `SELECT * FROM Alcohols WHERE alcoholID = ?`
     
           // Run the 1st query
-          db.pool.query(queryUpdateAlcohol, [alcoholType, alcoholPercentage, wholesalePrice, alcoholVolume, inventory, alcoholName], function(error, rows, fields){
+          db.pool.query(queryObject.queryString, queryObject.queryVariableArray, function(error, rows, fields){
+          //db.pool.query(queryUpdateAlcohol, [data.alcoholType, parseFloat(data.alcoholPercentage), parseFloat(data.alcoholPrice), parseFloat(data.alcoholVolume), parseInt(data.inventory), parseInt(data.alcoholName)], function(error, rows, fields){
+
               if (error) {
   
               // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
@@ -128,7 +162,7 @@ app.put('/put-alcohol-ajax', function(req,res,next){
               else
               {
                   // Run the second query
-                  db.pool.query(selectAlcohol, [alcoholName], function(error, rows, fields) {
+                  db.pool.query(selectAlcohol, [data.alcoholName], function(error, rows, fields) {
           
                       if (error) {
                           console.log(error);

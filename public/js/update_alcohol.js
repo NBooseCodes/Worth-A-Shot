@@ -8,16 +8,26 @@ updateAlcoholForm.addEventListener("submit", function(e) {
     // gets fields we need data from
     let inputAlcoholName = document.getElementById("mySelect");
     let inputAlcoholType = document.getElementById("input-alcohol-type-update");
+    let inputAlcoholPercentage = document.getElementById("input-alcohol-percentage-update");
+    let inputAlcoholPrice = document.getElementById("input-alcohol-price-update");
+    let inputAlcoholVolume = document.getElementById("input-alcohol-volume-update");
+    let inputInventory = document.getElementById("input-inventory-update");
 
     let alcoholNameValue = inputAlcoholName.value; // this is alcoholID assoc w/alcoholName
     let alcoholTypeValue = inputAlcoholType.value;
-    let alcoholPercentageValue = inputAlcoholPercentage
+    let alcoholPercentageValue = inputAlcoholPercentage.value;
+    let alcoholPriceValue = inputAlcoholPrice.value;
+    let alcoholVolumeValue = inputAlcoholVolume.value;
+    let inventoryValue = inputInventory.value;
     console.log(alcoholNameValue);
     console.log(alcoholTypeValue);
     let data = {
         alcoholName: alcoholNameValue,
         alcoholType: alcoholTypeValue,
         alcoholPercentage: alcoholPercentageValue,
+        alcoholPrice: alcoholPriceValue,
+        alcoholVolume: alcoholVolumeValue,
+        inventory: inventoryValue
     }
     console.log(data);
 
@@ -28,11 +38,6 @@ updateAlcoholForm.addEventListener("submit", function(e) {
     // resolution
     xhttp.onreadystatechange = () => {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
-            console.log("Hit On readyaa")
-            console.log(xhttp);
-            console.log('xhttp');
-            console.log("alcohol name val")
-            console.log(alcoholNameValue)
             updateRowAlcohol(xhttp.response, alcoholNameValue);
         }
         else if (xhttp.readyState == 4 && xhttp.status != 200) {
