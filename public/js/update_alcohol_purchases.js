@@ -1,38 +1,39 @@
 // get obejcts to modify
-let updateAlcoholPurchaseForm = document.getElementById('update-alcohol-purchasse-form-ajax');
+let updateAlcoholPurchaseForm = document.getElementById('update-alcohol-purchase-form-ajax');
 
 // modify objects
-updateAlcoholForm.addEventListener("submit", function(e) {
+updateAlcoholPurchaseForm.addEventListener("submit", function(e) {
+    console.log("at update alcoholPurchases")
     // stops form from submitting
     e.preventDefault();
     // gets fields we need data from
     let inputAlcoholPurchaseID = document.getElementById("alcohol-purchase-id-select");
-    let inputAlcoholType = document.getElementById("input-alcohol-type-update");
-    let inputAlcoholPercentage = document.getElementById("input-alcohol-percentage-update");
-    let inputAlcoholPrice = document.getElementById("input-alcohol-price-update");
-    let inputAlcoholVolume = document.getElementById("input-alcohol-volume-update");
-    let inputInventory = document.getElementById("input-inventory-update");
+    let inputPurchaseID = document.getElementById("input-purchase-id-update");
+    let inputAlcoholID = document.getElementById("input-alcohol-id-update");
+    let inputQuantity = document.getElementById("input-quantity-purchased-update");
 
     let alcoholPurchaseIDValue = inputAlcoholPurchaseID.value; // this is alcoholID assoc w/alcoholName
-    let alcoholTypeValue = inputAlcoholType.value;
-    let alcoholPercentageValue = inputAlcoholPercentage.value;
-    let alcoholPriceValue = inputAlcoholPrice.value;
-    let alcoholVolumeValue = inputAlcoholVolume.value;
-    let inventoryValue = inputInventory.value;
+    let purchaseIDValue = inputPurchaseID.value;
+    let alcoholIDValue = inputAlcoholID.value;
+    let quantityValue = inputQuantity.value;
+
 
     let data = {
         alcoholPurchaseID: alcoholPurchaseIDValue,
+        purchaseID: purchaseIDValue,
+        alcoholID: alcoholIDValue,
+        quantity: quantityValue
     }
-    console.log(data);
+
 
     // ajax request
     var xhttp = new XMLHttpRequest();
-    xhttp.open("PUT", "/put-alcohol-ajax", true);
+    xhttp.open("PUT", "/update-alcohol-purchase-ajax", true);
     xhttp.setRequestHeader("Content-type", "application/json");
     // resolution
     xhttp.onreadystatechange = () => {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
-            updateRowAlcohol(xhttp.response, alcoholNameValue);
+            updateRowAlcoholPurchase(xhttp.response, alcoholPurchaseIDValue);
         }
         else if (xhttp.readyState == 4 && xhttp.status != 200) {
             console.log("There was an error with the input.")
@@ -42,27 +43,25 @@ updateAlcoholForm.addEventListener("submit", function(e) {
     xhttp.send(JSON.stringify(data));
 })
 
-function updateRowAlcohol(data, alcoholID) {
+function updateRowAlcoholPurchase(data, alcoholPurchaseID) {
     let parsedData = JSON.parse(data);
-    let table = document.getElementById("alcohol-table");
+    let table = document.getElementById("alcohol-purchases-table");
 
     console.log(parsedData);
     for (let i = 0; row = table.rows[i]; i++) {
-        if (table.rows[i].getAttribute("data-value") == alcoholID) {
+        if (table.rows[i].getAttribute("data-value") == alcoholPurchaseID) {
             // Get elements of table
             let updateRowIndex = table.getElementsByTagName("tr")[i];
-            let alcoholTypeTD = updateRowIndex.getElementsByTagName("td")[2];
-            let alcoholPercentageTD = updateRowIndex.getElementsByTagName("td")[3];
-            let wholesalePriceTD = updateRowIndex.getElementsByTagName("td")[4];
-            let alcoholVolumeTD = updateRowIndex.getElementsByTagName("td")[5];
-            let inventoryTD = updateRowIndex.getElementsByTagName("td")[6];
+
+            let purchaseTD = updateRowIndex.getElementsByTagName("td")[1];
+            let alcoholTD = updateRowIndex.getElementsByTagName("td")[2];
+            let quantityTD = updateRowIndex.getElementsByTagName("td")[3];
 
             // Change the elements' HTML display to reflect the values in the database
-            alcoholTypeTD.innerHTML = parsedData[0].alcoholType;
-            alcoholPercentageTD.innerHTML = parsedData[0].alcoholPercentage;
-            wholesalePriceTD.innerHTML = parsedData[0].wholesalePrice;
-            alcoholVolumeTD.innerHTML = parsedData[0].alcoholVolume;
-            inventoryTD.innerHTML = parsedData[0].inventory;
+            purchaseTD.innerHTML = parsedData[0].purchaseID;
+            alcoholTD.innerHTML = parsedData[0].alcoholID;
+            quantityTD.innerHTML = parsedData[0].quantity;
+
         }
     }
 }

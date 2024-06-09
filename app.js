@@ -517,16 +517,14 @@ app.put('/update-purchase-form', function(req,res,next){
 // DISPLAY ALCOHOL PURCHASES PAGE
 app.get('/alcohol-purchases', function(req, res)
 {
-    console.log("Hit alcoholPurchases display route")
     let getAlcoholInfoQuery = `SELECT * FROM Alcohols`;
-    let getPurchaseInfoQuery = `SELECT * FROM Purchases`;
+    let getPurchaseInfoQuery = `SELECT * FROM Purchases JOIN Wholesalers ON Purchases.purchaseID = Wholesalers.wholesalerID`;
 
     let getAllInfoJoined = `SELECT * FROM AlcoholPurchases 
     INNER JOIN Purchases ON AlcoholPurchases.purchaseID = Purchases.purchaseID 
     INNER JOIN Alcohols ON AlcoholPurchases.alcoholID = Alcohols.alcoholID
+    INNER JOIN Wholesalers ON Purchases.purchaseID = Wholesalers.wholesalerID
     ORDER BY AlcoholPurchases.alcoholPurchaseID ASC`;
-    
-    console.log(getAllInfoJoined);
     
     //Below does a big join and then two smaller queries to isolate data from non-parent tables
     db.pool.query(getAllInfoJoined, function(error, results){
@@ -554,12 +552,11 @@ app.get('/alcohol-purchases', function(req, res)
         }
     });
 });
+
 // ADD ALCOHOL PURCHASE
 app.post('/add-alcohol-purchase-form', function(req, res) {
     // Capture the incoming data and parse it back to a JS object
     let data = req.body;
-
-    console.log(data)
     
     let unitCostQuery = `SELECT wholesalePrice FROM Alcohols WHERE Alcohols.alcoholID = ?`;
     let query1 = `INSERT INTO AlcoholPurchases (purchaseID, alcoholID, quantityPurchased, lineCost) VALUES (?, ?, ?, ?)`;
@@ -600,6 +597,61 @@ app.delete('/delete-alcohol-purchase/:alcoholPurchaseID', function(req,res,next)
     })
 });
 
+
+app.put('/update-alcohol-purchase-ajax', function(req,res,next){
+    let data = req.body;
+    let alcoholPurchaseID = parseInt(data.alcoholPurchaseID);
+    let sum = 0;
+
+    unitCostQuery = `SELECT wholesalePrice FROM Alcohols WHERE alcoholID = ?`
+
+    const buildUpdateQuery = (data) => {
+        let queryString = `UPDATE AlcoholPurchases SET`;
+        const queryVariableArray = [];
+        if(data.purchaseID) {
+            queryString += ` purchaseID = ?,`
+            queryVariableArray.push(parseInt(data.purchaseID))
+        }
+        if(data.alcoholID){
+            queryString += ` alcoholID = ?,`
+            queryVariableArray.push(parseInt(data.alcoholID));
+
+        }
+        if(data.quantity){
+            queryString += ` quantityPurchased = ?,`
+            queryVariableArray.push(parseInt(data.quantity));
+        }
+
+        queryString = queryString.substring(0, queryString.length-1); // removing final comma because otherwise SQL will not run
+        queryString += ` WHERE alcoholPurchaseID = ?`
+        queryVariableArray.push(parseInt(alcoholPurchaseID));
+        return {
+            queryString,
+            queryVariableArray
+        }
+    }   
+
+        let alcoholPurchaseUpdateQuery = buildUpdateQuery(data);
+
+          db.pool.query(alcoholPurchaseUpdateQuery.queryString, alcoholPurchaseUpdateQuery.queryVariableArray, function(error, rows, fields){
+              if (error) {
+              console.log(error);
+              res.sendStatus(400);
+              }
+              else
+              {
+                let selectQuery = `SELECT * FROM AlcoholPurchases`;
+                db.pool.query(selectQuery, alcoholPurchaseID, function(error, rows, fields) {
+
+                      if (error) {
+                          console.log(error);
+                          res.sendStatus(400);
+                      } else {
+                          res.send(rows);
+                      }
+                  })
+              }
+  })});
 
 /*
     LISTENER

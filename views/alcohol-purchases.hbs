@@ -28,9 +28,9 @@
 
         {{!-- For each row, print the id, alcohol name, type, percentage, wholesale price, volume, and inventory count in order --}}
         {{#each data}}
-        <tr>
+        <tr data-value={{this.alcoholPurchaseID}}>
             <td>{{this.alcoholPurchaseID}}</td>
-            <td>{{this.purchaseID}}</td>
+            <td>{{this.name}}, {{this.deliveryDate}}</td>
             <td> {{this.alcoholName}}</td>
             <td>{{this.quantityPurchased}}</td>
             <td>{{this.lineCost}}</td>
@@ -49,7 +49,7 @@
 {{!-- Form to add a record to the table  --}}
 <div>
 
-    
+
 <h2>Add new Alcohol Purchase</h2>
 <p>Input data for new alcohol purchase here.</p>
 <form id="add-alcohol-purchase-form" method="POST" action="/add-alcohol-purchase-form">
@@ -58,7 +58,7 @@
         <select name="purchaseID" id="purchasIDSelect">
         <option value="">Select</option>
         {{#each purchaseData}}
-        <option value="{{this.purchaseID}}">{{this.purchaseID}}</option>
+        <option value="{{this.purchaseID}}">{{this.name}}, {{this.deliveryDate}}</option>
         {{/each}}
         </select>
     </p>
@@ -92,15 +92,15 @@
     </select>
 
     <label for="input-purchaseID-update">Type: </label>
-    <select name="input-purchaseID-update" id="input-purchaseID-update">
+    <select name="input-purchaseID-update" id="input-purchase-id-update">
         <option value="">Purchase ID</option>
         {{#each purchaseData}}
-        <option value="{{this.purchaseID}}">{{this.purchaseID}}</option>
+        <option value="{{this.purchaseID}}">{{this.name}}, {{this.deliveryDate}}</option>
         {{/each}}
     </select>
 
     <label for="input-alcoholID-update">Alcohol: </label>
-    <select name="input-alcoholID-update" id="input-purchaseID-update">
+    <select name="input-alcoholID-update" id="input-alcohol-id-update">
         <option value="">Alcohol</option>
         {{#each alcoholData}}
         <option value="{{this.alcoholID}}">{{this.alcoholName}}</option>
@@ -114,4 +114,4 @@
 
 </form>
 </div>
-
+<script src="/js/update_alcohol_purchases.js"></script>
