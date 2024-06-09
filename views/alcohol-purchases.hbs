@@ -91,14 +91,6 @@
         {{/each}}
     </select>
 
-    <label for="input-purchaseID-update">Type: </label>
-    <select name="input-purchaseID-update" id="input-purchase-id-update">
-        <option value="">Purchase ID</option>
-        {{#each purchaseData}}
-        <option value="{{this.purchaseID}}">{{this.name}}, {{this.deliveryDate}}</option>
-        {{/each}}
-    </select>
-
     <label for="input-alcoholID-update">Alcohol: </label>
     <select name="input-alcoholID-update" id="input-alcohol-id-update">
         <option value="">Alcohol</option>
@@ -106,9 +98,6 @@
         <option value="{{this.alcoholID}}">{{this.alcoholName}}</option>
         {{/each}}
     </select>
-
-    <label for="input-quantity-purchased-update">Quantity </label>
-    <input type="number" name="input-quantity-purchased-update" id="input-quantity-purchased-update">
 
     <input type="submit">
 

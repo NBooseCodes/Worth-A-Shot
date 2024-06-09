@@ -8,21 +8,15 @@ updateAlcoholPurchaseForm.addEventListener("submit", function(e) {
     e.preventDefault();
     // gets fields we need data from
     let inputAlcoholPurchaseID = document.getElementById("alcohol-purchase-id-select");
-    let inputPurchaseID = document.getElementById("input-purchase-id-update");
     let inputAlcoholID = document.getElementById("input-alcohol-id-update");
-    let inputQuantity = document.getElementById("input-quantity-purchased-update");
 
     let alcoholPurchaseIDValue = inputAlcoholPurchaseID.value; // this is alcoholID assoc w/alcoholName
-    let purchaseIDValue = inputPurchaseID.value;
     let alcoholIDValue = inputAlcoholID.value;
-    let quantityValue = inputQuantity.value;
 
 
     let data = {
         alcoholPurchaseID: alcoholPurchaseIDValue,
-        purchaseID: purchaseIDValue,
-        alcoholID: alcoholIDValue,
-        quantity: quantityValue
+        alcoholID: alcoholIDValue
     }
 
 
@@ -58,9 +52,9 @@ function updateRowAlcoholPurchase(data, alcoholPurchaseID) {
             let quantityTD = updateRowIndex.getElementsByTagName("td")[3];
 
             // Change the elements' HTML display to reflect the values in the database
-            purchaseTD.innerHTML = parsedData[0].purchaseID;
             alcoholTD.innerHTML = parsedData[0].alcoholID;
             quantityTD.innerHTML = parsedData[0].quantity;
+            location.reload();
 
         }
     }
