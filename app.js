@@ -420,12 +420,11 @@ app.post('/add-purchase-form', function(req, res) {
         paidValue = 1;
     }
 
-    console.log(data.delivered);
     if (data.delivered != null) {
         deliveredValue = 1;
     }
     addPurchaseQuery = `INSERT INTO Purchases (Purchases.wholesalerID, Purchases.employeeID, paid, deliveryDate, delivered) VALUES (?, ?, ?, ?, ?)`;
-    console.log(deliveredValue)
+
     db.pool.query(addPurchaseQuery, [wholesalerID, employeeID, paidValue, date, deliveredValue], function(error, rows, fields){
         if (error) {
             console.log('Could not add purchase');
@@ -606,15 +605,47 @@ app.post('/add-alcohol-purchase-form', function(req, res) {
 
 // DELETE ALCOHOL PURCHASE
 app.delete('/delete-alcohol-purchase/:alcoholPurchaseID', function(req,res,next){
+    let alcoholPurchaseID = parseInt(req.params.alcoholPurchaseID);
+    console.log(alcoholPurchaseID)
     let deleteAlcoholPurchase = `DELETE FROM AlcoholPurchases WHERE alcoholPurchaseID = ?`;
+    let purchaseIDQuery = `SELECT AlcoholPurchases.purchaseID FROM AlcoholPurchases WHERE alcoholPurchaseID = ?`;
+    let sumLineCost = `SELECT SUM(lineCost) FROM AlcoholPurchases WHERE AlcoholPurchases.purchaseID = ?`;
+    let updatePurchases = `UPDATE Purchases SET totalCost = ? WHERE purchaseID = ?`;
 
-          db.pool.query(deleteAlcoholPurchase, [req.params.alcoholPurchaseID], function(error, rows, fields){
+        // Get the purchaseID First
+          db.pool.query(purchaseIDQuery, alcoholPurchaseID, function(error, purchaseIDResult){
             if (error) {
                 console.log(error);
                 res.sendStatus(400);
-            }
-            else {
-                res.sendStatus(204);
+            } else {
+                // Store PurchaseID and delete alcohol purchase line item
+                let purchaseID = purchaseIDResult[0].purchaseID;
+                db.pool.query(deleteAlcoholPurchase, alcoholPurchaseID, function(error){
+
+                    if (error) {
+                        console.log(error);
+                        res.sendStatus(400);
+                    } else {
+                        console.log(purchaseID)
+                        // Get new total cost for purchase from alcoholPurchases
+                        db.pool.query(sumLineCost, purchaseID, function(error, totalCostResult){
+                            if (error) {
+                                console.log(error);
+                                res.sendStatus(400);
+                            } else {
+                                let totalCost = totalCostResult[0]["SUM(lineCost)"];
+                                db.pool.query(updatePurchases, [totalCost, purchaseID], function(error){
+                                    if (error) {
+                                        console.log(error);
+                                        res.sendStatus(400);
+                                    } else {
+                                        res.sendStatus(204);
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
             }
     })
 });
