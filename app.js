@@ -414,8 +414,7 @@ app.post('/add-purchase-form', function(req, res) {
     let date = new Date(data.deliveryDate);
     let paidValue = '0';
     let deliveredValue = '0';
-    console.log(data)
-    console.log(paidValue);
+
     if (data.paid != null) {
         paidValue = 1;
     }
