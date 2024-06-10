@@ -30,7 +30,7 @@
         {{#each data}}
         <tr data-value={{this.alcoholPurchaseID}}>
             <td>{{this.alcoholPurchaseID}}</td>
-            <td>{{this.name}}, {{this.deliveryDate}}</td>
+            <td>{{this.purchaseID}}: {{this.name}} {{this.deliveryDate}}</td>
             <td> {{this.alcoholName}}</td>
             <td>{{this.quantityPurchased}}</td>
             <td>{{this.lineCost}}</td>
@@ -58,7 +58,7 @@
         <select name="purchaseID" id="purchasIDSelect">
         <option value="">Select</option>
         {{#each purchaseData}}
-        <option value="{{this.purchaseID}}">{{this.name}}, {{this.deliveryDate}}</option>
+        <option value="{{this.purchaseID}}">{{this.purchaseID}}: {{this.name}} {{this.deliveryDate}}</option>
         {{/each}}
         </select>
     </p>

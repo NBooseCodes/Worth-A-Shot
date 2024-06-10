@@ -517,7 +517,7 @@ app.put('/update-purchase-form', function(req,res,next){
 app.get('/alcohol-purchases', function(req, res)
 {
     let getAlcoholInfoQuery = `SELECT * FROM Alcohols`;
-    let getPurchaseInfoQuery = `SELECT * FROM Purchases JOIN Wholesalers ON Purchases.purchaseID = Wholesalers.wholesalerID`;
+    let getPurchaseInfoQuery = `SELECT * FROM Purchases JOIN Wholesalers ON Purchases.wholesalerID = Wholesalers.wholesalerID`;
 
     let getAllInfoJoined = `SELECT * FROM AlcoholPurchases 
     INNER JOIN Purchases ON AlcoholPurchases.purchaseID = Purchases.purchaseID 
