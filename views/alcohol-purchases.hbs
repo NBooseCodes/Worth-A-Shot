@@ -30,7 +30,7 @@
         {{#each data}}
         <tr data-value={{this.alcoholPurchaseID}}>
             <td>{{this.alcoholPurchaseID}}</td>
-            <td>{{this.purchaseID}}: {{this.name}}, {{moment this.deliveryDate format="MM/DD/YYYY"}}</td>
+            <td>{{this.name}}, {{moment this.deliveryDate format="MM/DD/YYYY"}}</td>
             <td> {{this.alcoholName}}</td>
             <td>{{this.quantityPurchased}}</td>
             <td>{{this.lineCost}}</td>
