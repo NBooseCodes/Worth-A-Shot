@@ -1,3 +1,10 @@
+// Elsa Luthi and Nicole Boose
+// OSU CS 340 Spring 2024
+
+// Citation for starter code
+// Source URL: https://github.com/osu-cs340-ecampus/nodejs-starter-app
+// Date: 5/24/2024
+
 // App.js
 
 /*
