@@ -23,7 +23,7 @@
         </tr>
     </thead>
 
-    {{!-- Body section --}}
+    {{!-- table body section --}}
     <tbody>
 
         {{!-- For each row, print the id, alcohol name, type, percentage, wholesale price, volume, and inventory count in order --}}
@@ -32,7 +32,7 @@
             <td>{{this.employeeID}}</td>
             <td>{{this.firstName}}</td>
             <td>{{this.lastName}}</td>
-            <td>{{this.startDate}}</td>
+            <td>{{moment [this.startDate,"ddd, DD MMM YYYY HH:mm:ss ZZ"] format="MM/DD/YYYY"}}</td>
             <td>{{this.employeeRole}}</td>
             <td><button onclick="deleteEmployee({{this.employeeID}})">Delete</button></td>
         </tr>
@@ -40,22 +40,24 @@
     </tbody>
 </table>
 <script src="/js/delete_employee.js"></script>
+{{!-- Page Navigation  --}}
+<p></p>
+<button type="reset" onclick="location.href='#add-employee'">Add</button>
+<button type="reset" onclick="location.href='#update-employee'">Update</button>
 </div>
 
-{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
-
-{{!--  When using express.static('public'), you should reference static files in the HTML as if the public folder is the root --}}
-<!-- /views/index.hbs -->
-
 {{!-- Form to add a record to the table  --}}
-<div>
+<div id="add-employee">
 <h2>Add an Employee</h2>
 <p>Input data for your new employee here.</p>
 <form id="add-employee-form" method="POST" action="/add-employee-form">
+    <p>
         <label for="firstName">First Name: </label>
         <input type="text" name="firstName" id="firstName">
         <label for="lastName">Last Name: </label>
         <input type="text" name="lastName" id="lastName">
+    </p>
+    <p>
         <label for="startDate">Start Date: </label>
         <input type="date" name="startDate" id="startDate">
         <label for="employeeRole">Position: </label>
@@ -66,15 +68,17 @@
             <option value="Store Manager">Store Manager</option>
             <option value="Other">Other</option>
         </select>
+    </p>
     <input type="submit">
 </form>
 </div>
 
 {{!-- Form to update a record to the table  --}}
-<div>
-    <h2>Updating Employee Form</h2>
+<div id="update-employee">
+    <h2>Update Employee</h2>
     <p>To update an employyes position, select their name from the dropdown.</p>
     <form id="update-employee-form">
+        <p>
         <label for="input-employee-id">Employees name: </label>
         <select name="input-employee-id" id="employeeMySelect">
             <option value="">Select an Employee</option>
@@ -90,6 +94,7 @@
                 <option value="Store Manager">Store Manager</option>
                 <option value="Other">Other</option>
             </select>
+        </p>
     <input type="submit">
 </form>
 </div>

@@ -12,6 +12,18 @@ var exphbs = require('express-handlebars');     // Import express-handlebars
 app.engine('.hbs', engine({ extname: ".hbs" }));  // Create an instance of the handlebars engine to process templates
 app.set('view engine', '.hbs');                 // Tell express to use the handlebars engine whenever it encounters a *.hbs file.
 
+var Handlebars = require("handlebars");
+var MomentHandler = require("handlebars.moment");
+MomentHandler.registerHelpers(Handlebars); // Import handlebars moment
+
+// create handlebars helper to show bool as yes/no
+Handlebars.registerHelper("ifZero", function(value, options) {
+    if (value !== 0) {
+      return options.fn(this);
+    }
+    return options.inverse(this);
+  });
+
 // Database
 var db = require('./database/db-connector');
 
