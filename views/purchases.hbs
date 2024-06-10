@@ -36,7 +36,7 @@
             <td>{{this.name}}</td>
             <td>{{this.firstName}} {{this.lastName}}</td> 
             <td>{{#ifZero this.paid}}Yes{{else}}No{{/ifZero}}</td>
-            <td>{{moment [this.deliveryDate,"ddd, DD MMM YYYY HH:mm:ss ZZ"] format="MM/DD/YYYY"}}</td>
+            <td>{{moment this.deliveryDate format="MM/DD/YYYY"}}</td>
             <td>{{#ifZero this.delivered}}Yes{{else}}No{{/ifZero}}</td>
             <td>${{this.totalCost}}</td>
             <td>
