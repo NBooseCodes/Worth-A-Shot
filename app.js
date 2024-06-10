@@ -12,7 +12,7 @@
 */
 var express = require('express');   // We are using the express library for the web server
 var app = express();            // We need to instantiate an express object to interact with the server in our code
-const PORT = 3000;
+const PORT = 3002;
 
 const { engine } = require('express-handlebars');
 var exphbs = require('express-handlebars');     // Import express-handlebars
@@ -92,12 +92,11 @@ app.get('/alcohols', function(req, res)
 app.post('/add-alcohol-form', function(req, res) {
     // Capture the incoming data and parse it back to a JS object
     let data = req.body;
-    console.log("Hit alcohol route")
     // Create the query and run it on the database
     let query1 = `INSERT INTO Alcohols (alcoholName, alcoholType, alcoholPercentage, wholesalePrice, alcoholVolume, inventory) VALUES (?, ?, ?, ?, ?, ?)`;
     db.pool.query(query1, [data.alcoholName, data.alcoholType, data.alcoholPercentage, data.wholesalePrice, data.alcoholVolume, data.inventory], function(error, rows, fields){
         if (error) {
-            console.log('Could not add alcohol');
+            console.log(error);
             res.sendStatus(400);
         } else {
             res.redirect('/alcohols');
@@ -154,7 +153,6 @@ app.put('/put-alcohol-ajax', function(req,res,next){
     }
 
     let data = req.body;
-    console.log("APP DATA = " + JSON.stringify(data));
     const queryObject = buildUpdateQuery(data);
     let selectAlcohol = `SELECT * FROM Alcohols WHERE alcoholID = ?`
     
@@ -238,7 +236,6 @@ app.put('/update-employee-form', function(req,res,next){
   
     let employeeRole = data.employeeRole;
     let employeeID = data.employeeID;
-    console.log("employee role = " + employeeRole);
     queryUpdateEmployee = `UPDATE Employees SET employeeRole = ? WHERE Employees.employeeID = ?`;
     let selectQueryEmployees = `SELECT * FROM Employees WHERE employeeID = ?`;
           // Run the 1st query
@@ -247,7 +244,6 @@ app.put('/update-employee-form', function(req,res,next){
   
               // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
               console.log(error);
-              console.log("unable to update employee");
               res.sendStatus(400);
               }
               // If there was no error, we run our second query and return that data so we can use it to update the people's
@@ -292,7 +288,7 @@ app.post('/add-wholesaler-form', function(req, res) {
 
         if (error) {
 
-            console.log('Could not add wholesaler');
+            console.log(error);
             res.sendStatus(400);
 
         } else {
@@ -321,7 +317,7 @@ app.delete('/delete-wholesaler/:wholesalerID', function(req,res,next){
 
 // UPDATES WHOLESALER
 app.put('/update-wholesaler-form', function(req,res,next){
-    console.log("you're closer");
+
     let data = req.body;
     let wholesalerID = data.wholesalerID;
 
@@ -354,7 +350,6 @@ app.put('/update-wholesaler-form', function(req,res,next){
     }   
 
         let wholesalerUpdateQuery = buildUpdateQuery(data);
-        console.log("wholesale query" + wholesalerUpdateQuery.queryString);
 
           db.pool.query(wholesalerUpdateQuery.queryString, wholesalerUpdateQuery.queryVariableArray, function(error, rows, fields){
               if (error) {
@@ -391,7 +386,9 @@ app.get('/purchases', function(req, res)
     LEFT JOIN Employees ON Purchases.employeeID = Employees.employeeID
     ORDER BY purchaseID ASC`;
     
-    
+    let purchaseIDQuery = `SELECT purchaseID FROM Purchases`;
+    let totalCostQuery = `SELECT SUM(lineCost) FROM AlcoholPurchases WHERE purchaseID = ?`
+    let updateLineCost = `UPDATE Purchases SET totalCost = ? WHERE purchaseID = ?`
     //Below does multiple queries instead of a big join. Not sure if this makes the most sense or not!
     db.pool.query(getAllInfoJoined, function(error, results){
         if (error) {
@@ -406,11 +403,36 @@ app.get('/purchases', function(req, res)
                         if (error) {
                             res.status(500).send('Error with employee query');
                         } else {
-                            return res.render('purchases', {
-                                data: results,
-                                wholesalerData: wholesalerResults,
-                                employeeData: employeeResults 
-                            });
+                            db.pool.query(purchaseIDQuery, function(error, purchaseIDRes){
+                                if (error) {
+                                    console.log(error);
+                                    res.sendStatus(400);
+                                } else {
+                                    for (let i = 0; i < purchaseIDRes.length; i++) {
+                                        let purchaseID = parseInt(purchaseIDRes[i].purchaseID);
+                                        db.pool.query(totalCostQuery, purchaseID, function(error, newTotalRes){
+                                            if (error) {
+                                                console.log(error);
+                                                res.sendStatus(400);
+                                            } else {
+                                                let newTotal = newTotalRes[0]["SUM(lineCost)"];
+                                                db.pool.query(updateLineCost, [newTotal, purchaseID], function(error){
+                                                    if (error) {
+                                                        console.log(error);
+                                                        res.sendStatus(400);
+                                                    }
+                                                })
+                                            }
+                                        })
+
+                                    }
+                                    res.render('purchases', {
+                                        data: results,
+                                        wholesalerData: wholesalerResults,
+                                        employeeData: employeeResults
+                                         })
+                                }
+                            })
                         }
                     })
                 }
@@ -429,8 +451,6 @@ app.post('/add-purchase-form', function(req, res) {
     let date = new Date(data.deliveryDate);
     let paidValue = '0';
     let deliveredValue = '0';
-    console.log(data)
-    console.log(paidValue);
     if (data.paid != null) {
         paidValue = 1;
     }
@@ -442,7 +462,7 @@ app.post('/add-purchase-form', function(req, res) {
 
     db.pool.query(addPurchaseQuery, [wholesalerID, employeeID, paidValue, date, deliveredValue], function(error, rows, fields){
         if (error) {
-            console.log('Could not add purchase');
+            console.log(error);
             res.sendStatus(400);
         } else {
             res.redirect('/purchases');
@@ -532,7 +552,7 @@ app.put('/update-purchase-form', function(req,res,next){
 app.get('/alcohol-purchases', function(req, res)
 {
     let getAlcoholInfoQuery = `SELECT * FROM Alcohols`;
-    let getPurchaseInfoQuery = `SELECT * FROM Purchases JOIN Wholesalers ON Purchases.purchaseID = Wholesalers.wholesalerID`;
+    let getPurchaseInfoQuery = `SELECT * FROM Purchases JOIN Wholesalers ON Purchases.wholesalerID = Wholesalers.wholesalerID`;
 
     let getAllInfoJoined = `SELECT * FROM AlcoholPurchases 
     INNER JOIN Purchases ON AlcoholPurchases.purchaseID = Purchases.purchaseID 
@@ -592,7 +612,7 @@ app.post('/add-alcohol-purchase-form', function(req, res) {
         
                 if (error) {
         
-                    console.log('Could not add purchase');
+                    console.log(error);
                     res.sendStatus(400);
         
                 } else {
@@ -622,7 +642,6 @@ app.post('/add-alcohol-purchase-form', function(req, res) {
 // DELETE ALCOHOL PURCHASE
 app.delete('/delete-alcohol-purchase/:alcoholPurchaseID', function(req,res,next){
     let alcoholPurchaseID = parseInt(req.params.alcoholPurchaseID);
-    console.log(alcoholPurchaseID)
     let deleteAlcoholPurchase = `DELETE FROM AlcoholPurchases WHERE alcoholPurchaseID = ?`;
     let purchaseIDQuery = `SELECT AlcoholPurchases.purchaseID FROM AlcoholPurchases WHERE alcoholPurchaseID = ?`;
     let sumLineCost = `SELECT SUM(lineCost) FROM AlcoholPurchases WHERE AlcoholPurchases.purchaseID = ?`;
@@ -642,7 +661,6 @@ app.delete('/delete-alcohol-purchase/:alcoholPurchaseID', function(req,res,next)
                         console.log(error);
                         res.sendStatus(400);
                     } else {
-                        console.log(purchaseID)
                         // Get new total cost for purchase from alcoholPurchases
                         db.pool.query(sumLineCost, purchaseID, function(error, totalCostResult){
                             if (error) {
