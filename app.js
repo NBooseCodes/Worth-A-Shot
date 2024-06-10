@@ -31,7 +31,7 @@ Handlebars.registerHelper("ifZero", function(value, options) {
     return options.inverse(this);
   });
 
-// Database
+// Database connection
 var db = require('./database/db-connector');
 
 const path = require('path');
@@ -47,22 +47,9 @@ app.use(express.static(path.join(__dirname, 'public'))); // The express.static m
     ROUTES
 */
 
+// HOME PAGE ROUTE
 app.get('/', function(req, res) {
-    let query1;
-
-    if (req.query.alcoholName === undefined) {
-        query1 = "SELECT * FROM Alcohols;";
-    }
-
-    else {
-        query1 = `SELECT * FROM Alcohols WHERE alcoholName LIKE "%${req.query.alcoholName}%"`
-    }
-
-    // run query
-    db.pool.query(query1, function(error, rows, fields) {
-        let alcohols = rows;
-        return res.render('index', {data: alcohols});
-    })
+    res.render('index');
 })
 
 /*
@@ -71,6 +58,8 @@ app.get('/', function(req, res) {
 // DISPLAY ALCOHOL PAGE
 app.get('/alcohols', function(req, res)
 {
+    // Declare a query. If the user is using the search functionality, run 1 version of the query, else, just
+    // display each alcohol record as it appears in the database
     let query1;
 
     if (req.query.alcoholName === undefined) {
@@ -90,7 +79,7 @@ app.get('/alcohols', function(req, res)
 
 // ADD ALCOHOL
 app.post('/add-alcohol-form', function(req, res) {
-    // Capture the incoming data and parse it back to a JS object
+    // Capture the incoming data and insert into Alcohols Table
     let data = req.body;
     // Create the query and run it on the database
     let query1 = `INSERT INTO Alcohols (alcoholName, alcoholType, alcoholPercentage, wholesalePrice, alcoholVolume, inventory) VALUES (?, ?, ?, ?, ?, ?)`;
@@ -106,6 +95,7 @@ app.post('/add-alcohol-form', function(req, res) {
 
 // ALCOHOL DELETION
 app.delete('/delete-alcohol/:alcoholID', function(req,res,next){
+    // Deletes an alcohol based on an ID entered from the Alcohols table
     let deleteAlcohol = `DELETE FROM Alcohols WHERE alcoholID = ?`;
           db.pool.query(deleteAlcohol, [req.params.alcoholID], function(error, rows, fields){
             if (error) {
@@ -119,10 +109,16 @@ app.delete('/delete-alcohol/:alcoholID', function(req,res,next){
 });
 
 // ALCOHOL UPDATE
-app.put('/put-alcohol-ajax', function(req,res,next){  
+app.put('/put-alcohol-ajax', function(req,res,next){ 
+    // Updates an alcohol record in the alcohols table
+
     const buildUpdateQuery = (data) => {
+        // This function makes it so that the user need only enter the information they'd like to change in a record.
+        // This is done via building an alcohol update query based on information entered in the Update section of the form
         let queryString = `UPDATE Alcohols SET`;
         const queryVariableArray = [];
+
+        // If an element is entered, add the corresponding query portion to the query string and push var to query array
         if(data.alcoholType) {
             queryString += ` alcoholType = ?,`
             queryVariableArray.push(data.alcoholType)
@@ -143,9 +139,13 @@ app.put('/put-alcohol-ajax', function(req,res,next){
             queryString += ` inventory = ?,`
             queryVariableArray.push(parseInt(data.inventory))
         }
-        queryString = queryString.substring(0, queryString.length-1); // removing final comma because otherwise SQL will not run
+
+        // Removing final comma because otherwise SQL syntax is wrong
+        queryString = queryString.substring(0, queryString.length-1); 
         queryString += ` WHERE Alcohols.alcoholID = ?`
         queryVariableArray.push(parseInt(data.alcoholName))
+
+        // Output is an object that contains query string and the corresponding query variables
         return {
             queryString,
             queryVariableArray
@@ -156,22 +156,21 @@ app.put('/put-alcohol-ajax', function(req,res,next){
     const queryObject = buildUpdateQuery(data);
     let selectAlcohol = `SELECT * FROM Alcohols WHERE alcoholID = ?`
     
-          // Run the 1st query
+          // Run the update query
           db.pool.query(queryObject.queryString, queryObject.queryVariableArray, function(error, rows, fields){
-          //db.pool.query(queryUpdateAlcohol, [data.alcoholType, parseFloat(data.alcoholPercentage), parseFloat(data.alcoholPrice), parseFloat(data.alcoholVolume), parseInt(data.inventory), parseInt(data.alcoholName)], function(error, rows, fields){
+          
 
               if (error) {
   
-              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+              // Log the error to the terminal, if it occurs
               console.log(error);
               res.sendStatus(400);
               }
   
-              // If there was no error, we run our second query and return that data so we can use it to update the alcohol's
-              // table on the front-end
+              // If no error, run select query to display update
               else
               {
-                  // Run the second query
+                  // Run the select query to re-display updated table. Send data to update_alcohol.js
                   db.pool.query(selectAlcohol, [data.alcoholName], function(error, rows, fields) {
           
                       if (error) {
@@ -188,10 +187,13 @@ app.put('/put-alcohol-ajax', function(req,res,next){
 /*
     EMPLOYEE ROUTES
 */
+
 // DISPLAY EMPLOYEE PAGE
 app.get('/employees', function(req, res)
-{
+{   
     let employeeDisplayQuery = "SELECT * FROM Employees ORDER BY employeeID ASC;";
+
+    // Run query to display employees in table
     db.pool.query(employeeDisplayQuery, function(error, results){
         if (error) {
         res.status(500).send('Database error: ' + error.message);
@@ -200,29 +202,33 @@ app.get('/employees', function(req, res)
         }
     });
 });
+
+
 // ADD EMPLOYEE
 app.post('/add-employee-form', function(req, res) {
-    // Capture the incoming data and parse it back to a JS object
-    let data = req.body;
+    
+    let data = req.body;    // Capture incoming data in variable
 
-    // Create the query and run it on the database
-    let query1 = `INSERT INTO Employees (firstName, lastName, startDate, employeeRole) VALUES (?, ?, ?, ?)`;
-    db.pool.query(query1, [data.firstName, data.lastName, data.startDate, data.employeeRole], function(error, rows, fields){
+    // Create the insert query and run 
+    let addEmployeeQuery = `INSERT INTO Employees (firstName, lastName, startDate, employeeRole) VALUES (?, ?, ?, ?)`;
+    db.pool.query(addEmployeeQuery, [data.firstName, data.lastName, data.startDate, data.employeeRole], function(error, rows, fields){
         if (error) {
-            console.log('Could not add employee');
+            console.log(error);
             res.sendStatus(400);
         } else {
             res.redirect('/employees');
         }
     });
 });
+
 // DELETE EMPLOYEE
 app.delete('/delete-employee/:employeeID', function(req,res,next){
-    let deleteEmployee = `DELETE FROM Employees WHERE employeeID = ?`;
 
+    // Create delete query and run
+    let deleteEmployee = `DELETE FROM Employees WHERE employeeID = ?`;
           db.pool.query(deleteEmployee, [req.params.employeeID], function(error, rows, fields){
             if (error) {
-                console.log(error);
+                console.log(error);     // If error occurs, log them and send error status
                 res.sendStatus(400);
             }
             else {
@@ -230,26 +236,24 @@ app.delete('/delete-employee/:employeeID', function(req,res,next){
             }
     })
 });
+
 // UPDATE EMPLOYEE
-app.put('/update-employee-form', function(req,res,next){                                   
-    let data = req.body;
-  
+app.put('/update-employee-form', function(req,res,next){
+
+    // Capture required data as variables
+    let data = req.body; 
     let employeeRole = data.employeeRole;
     let employeeID = data.employeeID;
+
+    // Create update query and run
     queryUpdateEmployee = `UPDATE Employees SET employeeRole = ? WHERE Employees.employeeID = ?`;
     let selectQueryEmployees = `SELECT * FROM Employees WHERE employeeID = ?`;
-          // Run the 1st query
           db.pool.query(queryUpdateEmployee, [employeeRole, employeeID], function(error, rows, fields){
               if (error) {
-  
-              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-              console.log(error);
+              console.log(error);       
               res.sendStatus(400);
               }
-              // If there was no error, we run our second query and return that data so we can use it to update the people's
-              // table on the front-end
-              else
-              {
+              else {
                 db.pool.query(selectQueryEmployees, data.employeeID, function(error, rows, fields) {
                     if (error) {
                         console.log(error);
@@ -261,18 +265,21 @@ app.put('/update-employee-form', function(req,res,next){
                 
               }
   })});
+
 /*
     WHOLESALER ROUTES
 */
+
 // DISPLAY WHOLESALER PAGE
 app.get('/wholesalers', function(req, res)
 {
-        let query1 = "SELECT * FROM Wholesalers;";
-    db.pool.query(query1, function(error, results){
+    // Create and run select query for Wholesalers table. Send results to user
+    let displayWholesalersQuery = "SELECT * FROM Wholesalers;";
+    db.pool.query(displayWholesalersQuery, function(error, results){
         if (error) {
-        res.status(500).send('Database error: ' + error.message);
+            res.status(500).send('Database error: ' + error.message);
         } else {
-        res.render('wholesalers', { data: results });
+            res.render('wholesalers', { data: results });
         }
     });
 });
@@ -281,35 +288,28 @@ app.get('/wholesalers', function(req, res)
 app.post('/add-wholesaler-form', function(req, res) {
     // Capture the incoming data and parse it back to a JS object
     let data = req.body;
-
     // Create the query and run it on the database
-    let query1 = `INSERT INTO Wholesalers (name, address, email, phone, contactName) VALUES (?, ?, ?, ?, ?)`;
-    db.pool.query(query1, [data.name, data.address, data.email, data.phone, data.contactName], function(error, rows, fields){
-
+    let addWholesalerQuery = `INSERT INTO Wholesalers (name, address, email, phone, contactName) VALUES (?, ?, ?, ?, ?)`;
+    db.pool.query(addWholesalerQuery, [data.name, data.address, data.email, data.phone, data.contactName], function(error, rows, fields){
         if (error) {
-
             console.log(error);
             res.sendStatus(400);
-
         } else {
-
             res.redirect('/wholesalers');
-
         }
 
     });
-
 });
+
 // DELETE WHOLESALER
 app.delete('/delete-wholesaler/:wholesalerID', function(req,res,next){
+    // Create and run delete query from Wholesalers table
     let deleteWholesaler = `DELETE FROM Wholesalers WHERE wholesalerID = ?`;
-
           db.pool.query(deleteWholesaler, [req.params.wholesalerID], function(error, rows, fields){
             if (error) {
                 console.log(error);
                 res.sendStatus(400);
-            }
-            else {
+            } else {
                 res.sendStatus(204);
             }
     })
@@ -318,9 +318,11 @@ app.delete('/delete-wholesaler/:wholesalerID', function(req,res,next){
 // UPDATES WHOLESALER
 app.put('/update-wholesaler-form', function(req,res,next){
 
+    // Capture requisite data in variables
     let data = req.body;
     let wholesalerID = data.wholesalerID;
 
+    // Build query string and query variable array
     const buildUpdateQuery = (data) => {
         let queryString = `UPDATE Wholesalers SET`;
         const queryVariableArray = [];
@@ -349,6 +351,7 @@ app.put('/update-wholesaler-form', function(req,res,next){
         }
     }   
 
+        // Run update query
         let wholesalerUpdateQuery = buildUpdateQuery(data);
 
           db.pool.query(wholesalerUpdateQuery.queryString, wholesalerUpdateQuery.queryVariableArray, function(error, rows, fields){
@@ -375,9 +378,11 @@ app.put('/update-wholesaler-form', function(req,res,next){
 /*
    PURCHASES ROUTES
 */
+
 // DISPLAY PURCHASES PAGE
 app.get('/purchases', function(req, res)
 {
+    // Create Necessary queries
     let getWholesaleInfoQuery = `SELECT * FROM Wholesalers`;
     let getEmployeeInfoQuery = `SELECT * FROM Employees`;
 
@@ -386,10 +391,12 @@ app.get('/purchases', function(req, res)
     LEFT JOIN Employees ON Purchases.employeeID = Employees.employeeID
     ORDER BY purchaseID ASC`;
     
+    // Need to calculate total cost from alcoholPurchases (line items) on any given purchase
     let purchaseIDQuery = `SELECT purchaseID FROM Purchases`;
     let totalCostQuery = `SELECT SUM(lineCost) FROM AlcoholPurchases WHERE purchaseID = ?`
     let updateLineCost = `UPDATE Purchases SET totalCost = ? WHERE purchaseID = ?`
-    //Below does multiple queries instead of a big join. Not sure if this makes the most sense or not!
+
+    // Run queries
     db.pool.query(getAllInfoJoined, function(error, results){
         if (error) {
         res.status(500).send('Database error: ' + error.message);
@@ -399,15 +406,18 @@ app.get('/purchases', function(req, res)
                 if (error) {
                     res.status(500).send('Error with wholesaler query');
                 } else {
+                    // Get individualized data for employee
                     db.pool.query(getEmployeeInfoQuery, function(error, employeeResults){
                         if (error) {
                             res.status(500).send('Error with employee query');
                         } else {
+                            // Get each purchaseID present in the Purchases table
                             db.pool.query(purchaseIDQuery, function(error, purchaseIDRes){
                                 if (error) {
                                     console.log(error);
                                     res.sendStatus(400);
                                 } else {
+                                    // For each purchaseID, calculate the total cost of the purchase by summing all line items that appear on that purchase order
                                     for (let i = 0; i < purchaseIDRes.length; i++) {
                                         let purchaseID = parseInt(purchaseIDRes[i].purchaseID);
                                         db.pool.query(totalCostQuery, purchaseID, function(error, newTotalRes){
@@ -415,6 +425,7 @@ app.get('/purchases', function(req, res)
                                                 console.log(error);
                                                 res.sendStatus(400);
                                             } else {
+                                                // Now update the total cost for each purchase
                                                 let newTotal = newTotalRes[0]["SUM(lineCost)"];
                                                 db.pool.query(updateLineCost, [newTotal, purchaseID], function(error){
                                                     if (error) {
@@ -426,6 +437,7 @@ app.get('/purchases', function(req, res)
                                         })
 
                                     }
+                                    // Once finished with for-loop, render page with the results of the first 3 queries
                                     res.render('purchases', {
                                         data: results,
                                         wholesalerData: wholesalerResults,
@@ -441,16 +453,20 @@ app.get('/purchases', function(req, res)
     });
 });
 
+
 // ADD PURCHASE
 app.post('/add-purchase-form', function(req, res) {
-    // Capture the incoming data and parse it back to a JS object
+    // Capture the requisite data in variables
     let data = req.body;
 
     let wholesalerID = parseInt(data.wholesalerID);
     let employeeID = parseInt(data.employeeID);
     let date = new Date(data.deliveryDate);
+    // Bool in SQL is either 0 or 1, default to 0
     let paidValue = '0';
     let deliveredValue = '0';
+    
+    // Convert bool vals to 1 if they are checked by user
     if (data.paid != null) {
         paidValue = 1;
     }
@@ -458,6 +474,7 @@ app.post('/add-purchase-form', function(req, res) {
     if (data.delivered != null) {
         deliveredValue = 1;
     }
+    // Declare and run query to insert Purchase record into Purchases table
     addPurchaseQuery = `INSERT INTO Purchases (Purchases.wholesalerID, Purchases.employeeID, paid, deliveryDate, delivered) VALUES (?, ?, ?, ?, ?)`;
 
     db.pool.query(addPurchaseQuery, [wholesalerID, employeeID, paidValue, date, deliveredValue], function(error, rows, fields){
@@ -484,10 +501,13 @@ app.delete('/delete-purchase/:purchaseID', function(req,res,next){
             }
     })
 });
+
+// UPDATE A PURCHASE
 app.put('/update-purchase-form', function(req,res,next){
     let data = req.body;
     let purchaseID = parseInt(data.purchaseID);
 
+    // Build query string and variable array
     const buildUpdateQuery = (data) => {
         let queryString = `UPDATE Purchases SET`;
         const queryVariableArray = [];
@@ -517,7 +537,7 @@ app.put('/update-purchase-form', function(req,res,next){
         }
         queryString = queryString.substring(0, queryString.length-1); // removing final comma because otherwise SQL will not run
         queryString += ` WHERE purchaseID = ?`
-        queryVariableArray.push(parseInt(data.purchaseID))
+        queryVariableArray.push(purchaseID)
         return {
             queryString,
             queryVariableArray
@@ -526,6 +546,7 @@ app.put('/update-purchase-form', function(req,res,next){
 
         let purchaseUpdateQuery = buildUpdateQuery(data);
 
+        // Run query to update Purchases table
           db.pool.query(purchaseUpdateQuery.queryString, purchaseUpdateQuery.queryVariableArray, function(error, rows, fields){
               if (error) {
               console.log(error);
@@ -545,9 +566,12 @@ app.put('/update-purchase-form', function(req,res,next){
                   })
               }
   })});
+
+
 /*
     ALCOHOL PURCHASES ROUTES
 */
+
 // DISPLAY ALCOHOL PURCHASES PAGE
 app.get('/alcohol-purchases', function(req, res)
 {
@@ -590,23 +614,26 @@ app.get('/alcohol-purchases', function(req, res)
 
 // ADD ALCOHOL PURCHASE
 app.post('/add-alcohol-purchase-form', function(req, res) {
-    // Capture the incoming data and parse it back to a JS object
+    // Capture requisite data and store in variables
     let data = req.body;
     let purchaseID = parseInt(data.purchaseID);
     let alcoholID = parseInt(data.alcoholID);
     let quantityPurchased = parseInt(data.quantityPurchased);
 
-
+    // Declare queries
     let unitCostQuery = `SELECT wholesalePrice FROM Alcohols WHERE Alcohols.alcoholID = ?`;
     let addAlcoholPurchaseQuery = `INSERT INTO AlcoholPurchases (purchaseID, alcoholID, quantityPurchased, lineCost) VALUES (?, ?, ?, ?)`;
     let sumAlcoholPurchasesQuery = `SELECT SUM(lineCost) FROM AlcoholPurchases WHERE AlcoholPurchases.purchaseID = ?`
     let updatePurchasesTotalQuery = `UPDATE Purchases SET totalCost = ? WHERE purchaseID = ?`;
 
+    // Run all queries necessary to add alcohol purchase
     db.pool.query(unitCostQuery, data.alcoholID, function(error, unitCost){
+        // Get alcohol unit cost (wholesalePrice from Alcohols table)
         if (error){
             console.log(error);
             res.sendStatus(400);
         } else {
+            // Calculate line cost and insert into alcoholPurchases along with entered data
             let sum = parseInt(unitCost[0].wholesalePrice) * parseInt(data.quantityPurchased);
             db.pool.query(addAlcoholPurchaseQuery, [purchaseID, alcoholID, quantityPurchased, sum], function(error, rows, fields){
         
@@ -616,6 +643,7 @@ app.post('/add-alcohol-purchase-form', function(req, res) {
                     res.sendStatus(400);
         
                 } else {
+                    // Now, get totalCost of all line items on same purchase, and update Purchases upon addition of new line item
                     db.pool.query(sumAlcoholPurchasesQuery, purchaseID, function(error, lineSum) {
                         if (error) {
                             console.log(error);
@@ -641,7 +669,10 @@ app.post('/add-alcohol-purchase-form', function(req, res) {
 
 // DELETE ALCOHOL PURCHASE
 app.delete('/delete-alcohol-purchase/:alcoholPurchaseID', function(req,res,next){
+    // Capture necessary data in variable
     let alcoholPurchaseID = parseInt(req.params.alcoholPurchaseID);
+
+    // Declare necessary queries
     let deleteAlcoholPurchase = `DELETE FROM AlcoholPurchases WHERE alcoholPurchaseID = ?`;
     let purchaseIDQuery = `SELECT AlcoholPurchases.purchaseID FROM AlcoholPurchases WHERE alcoholPurchaseID = ?`;
     let sumLineCost = `SELECT SUM(lineCost) FROM AlcoholPurchases WHERE AlcoholPurchases.purchaseID = ?`;
@@ -686,9 +717,12 @@ app.delete('/delete-alcohol-purchase/:alcoholPurchaseID', function(req,res,next)
 
 // UPDATE AN ALCOHOL PURCHASE
 app.put('/update-alcohol-purchase-ajax', function(req,res,next){
+    // Capture requisite data in variables
     let data = req.body;
     let alcoholPurchaseID = parseInt(data.alcoholPurchaseID);
     let alcoholID = parseInt(data.alcoholID);
+
+    // Declare queries
     let selectAlcoholPurchasesQuery = `SELECT * FROM AlcoholPurchases`;
     let unitCostQuery = `SELECT wholesalePrice FROM Alcohols WHERE alcoholID = ?`;
     let quantityQuery = `SELECT quantityPurchased FROM AlcoholPurchases WHERE alcoholPurchaseID = ?`;
@@ -697,17 +731,20 @@ app.put('/update-alcohol-purchase-ajax', function(req,res,next){
     let purchaseSumQuery = `SELECT SUM(lineCost) FROM AlcoholPurchases where AlcoholPurchases.purchaseID = ?`
     let updatePurchasesQuery = `UPDATE Purchases SET totalCost = ? WHERE purchaseID = ?`;
 
+    // Get unit cost of alcohol on alcohol-purchase being updated
     db.pool.query(unitCostQuery, alcoholID, function(error, unitCostResults){
         if (error) {
             console.log(error);
             res.sendStatus(400);
         } else {
+            // Get quantity of alcohol units purchased from AlcoholPurchases query
             let unitCost = unitCostResults[0].wholesalePrice;
             db.pool.query(quantityQuery, alcoholPurchaseID, function(error, quantityResults){
                 if (error) {
                     console.log(error);
                     res.sendStatus(400);
                 } else {
+                    // Now, calculate line cost and use in update query for AlcoholPurchases table
                     let quantity = quantityResults[0].quantityPurchased;
                     let lineCost = quantity * unitCost;
                     db.pool.query(updateAlcoholPurchaseQuery, [alcoholID, lineCost, alcoholPurchaseID], function(error){
@@ -715,6 +752,7 @@ app.put('/update-alcohol-purchase-ajax', function(req,res,next){
                             console.log(error);
                             res.sendStatus(400);
                         } else {
+                            // Now, get the purchaseID associated with the updated alcohol-purchase record
                             db.pool.query(selectPurchaseIDQuery, alcoholPurchaseID, function(error, purchaseIDResult){
                                 if (error) {
                                     console.log(error);
@@ -726,12 +764,14 @@ app.put('/update-alcohol-purchase-ajax', function(req,res,next){
                                             console.log(error);
                                             res.sendStatus(400);
                                         } else {
+                                            // Update Purchases table with new totalCost accounting for update of line item (alcohol-purchase record)
                                             let totalCost = sumResult[0]["SUM(lineCost)"];
                                             db.pool.query(updatePurchasesQuery, [totalCost, purchaseID], function(error){
                                                 if (error) {
                                                     console.log(error);
                                                     res.sendStatus(400);
                                                 } else {
+                                                    // Finally, run select query on AlcoholPurchases and display updated table
                                                     db.pool.query(selectAlcoholPurchasesQuery, function(error, rows, fields) {
                                                         if (error) {
                                                             console.log(error);

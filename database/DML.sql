@@ -1,66 +1,81 @@
--- Step 1: Allow client to browse WholeSalers, Purchases, Alcohols, and Employees
+-- SELECT STATEMENTS FOR POPULATING TABLES
 
--- Populate Wholesaler table
-SELECT `wholesalerID` AS 'ID', 
-`name` AS 'Name', 
-`address` AS 'Street Address', 
-`email` AS 'Email Address', 
-`phone` AS 'Phone Number', 
-`contactName` AS 'Point of Contact' FROM Wholesalers;
--- Populate Alcohol table and give titles more appropriate "non-code-y" names
-SELECT `alcoholID` AS 'ID', 
-`alcoholName` AS 'Name',  
-`alcoholType` AS 'Liquor Category', 
-`alcoholPercentage` AS 'ABV', 
-`alcoholVolume` AS 'Volume',
-`inventory` AS 'Inventory' FROM `Alcohols`;
+-- Select all data from Alcohols table
+SELECT * FROM `Alcohols`;
 
--- Populate Employee table and re-title columns with neater looking titles
-SELECT `employeeID` AS 'ID',
-`firstName` AS 'First Name',
-`lastName` AS 'Last Name',
-`startDate` AS 'StartDate',
-`employeeRole` AS 'Role' FROM `Employees`;
+-- Select all data from AlcoholPurchases table and
+-- join AlcoholPurchases with Purchases on purchaseID attribute and
+-- join AlcoholPurchases with Alcohols on alcoholID attribute and
+-- join Wholesalers table on Purchases table at wholesalerID attribute
+SELECT * FROM `AlcoholPurchases`
+INNER JOIN `Purchases` ON `AlcoholPurchases.purchaseID` = `Purchases.purchaseID`
+INNER JOIN `Alcohols` ON `AlcoholPurchases.alcoholID` = `Alcohols.alcoholID`
+INNER JOIN `Wholesalers` ON `Purchases.wholesalerID` = `Wholesalers.wholesalerID`
+ORDER BY `AlcoholPurchases.alcoholPurchaseID` ASC;
 
--- Populate table that shows data within the intersection table AlcoholPurchases
--- No updated titles as this is more of a back-end entity
+-- Select all from Employees table
+SELECT * FROM `Employees`;
 
-SELECT * FROM `AlcoholPurchases`;
+-- Select all from Purchases table and
+-- join Wholesalers with Purchases on wholesalerID attribute and
+-- join Employees with Purchases on employeeID attribute
+SELECT * FROM `Purchases`
+INNER JOIN `Wholesalers` ON `Purchases.wholesalerID` = `Wholesalers.wholesalerID`
+LEFT JOIN `Employees` ON `Purchases.employeeID` = `Employees.employeeID`
+ORDER BY `purchaseID` ASC;
 
--- Populate Data that shows Purchases Info
-SELECT `purchaseID` AS 'ID', 
-`wholesalerID` AS 'Wholesaler ID', 
-`employeeID` AS 'EmployeeID', 
-`paid` AS 'Paid',
-`deliveryDate` AS 'Delivery Date',
-`delivered` AS 'Delivered',
-`totalCost` AS 'Total Cost' FROM `Purchases`;
+SELECT * FROM `Wholesalers`;
 
 
--- The following are for various drop-down search menus
--- Allow client to search for all purchases in a dropdown via purchaseID
-SELECT `purchaseID` FROM `Purchases`;
+-- SELECT STATEMENTS MIMICKING DROPDOWN MENUS
 
--- Get list of alcohols available for dropdown for RUD Ops (Create has its own thing)
+-- Alcohol Update Dropdown
+SELECT `alcoholID`, `alcoholName` FROM  `Alcohols` WHERE `alcoholID` = :alcoholID;
 
-SELECT `alcoholID`, `alcoholName` FROM `Alcohols`;
+-- Alcohol Type Dropdown
+SELECT `alcoholType` FROM `Alcohols`;
 
-SELECT `wholesalerID`, `name` FROM `Wholesalers`;
+-- Employee Select Dropdown
+SELECT `employeeID`, `firstName`, `lastName` FROM `Employees`;
 
--- Get employees for dropdown for RUD Ops (Creation has its own thing)
+-- Employee Role Dropdown
+SELECT `employeeRole` FROM `Employees`;
 
-SELECT `employeeID`, `firstName` and `lastname` FROM `Employees`;
+-- Select Wholesaler Dropdown
+SELECT `wholesalerID`, `wholesalerName` FROM `Wholesalers`
 
--- The following are INSERT STATEMENTS
+-- Select Purchase Dropdown
+SELECT `purchaseID`, `wholesalerName`, `deliveryDate` FROM `Purchases`;
 
--- ADD NEW ALCOHOL TO INVENTORY
+-- Select AlcoholPurchase Dropdown
+SELECT `alcoholPurchaseID`, `wholesalerName`, `alcoholName` FROM `AlcoholPurchases`;
 
+
+-- SELECT STATEMENT FOR ALCOHOL SEARCH
+SELECT * FROM `Alcohols` WHERE `alcoholName` LIKE `%${:alcoholName}%`
+
+
+-- SPECIFIC SELECT STATEMENTS TO CALCULATE LINE COST AND TOTAL PURCHASE COST
+
+-- Select statement to find unit price
+SELECT `wholesalePrice` FROM `Alcohols` WHERE `alcoholID` = :alcoholID;
+
+-- Select statement to find quantity of alcohol purchased in given line item
+SELECT `quantityPurchased` FROM `AlcoholPurchases` WHERE `alcoholPurchaseID` = :alcoholPurchaseID;
+
+-- Calculate Purchases.totalCost using SELECT statement below
+SELECT SUM(`lineCost`) FROM `AlcoholPurchases` WHERE `alcoholPurchaseID` = :alcoholPurchaseID;
+
+
+-- INSERT STATEMENTS
+
+-- Insert into Alcohols table
 INSERT INTO `Alcohols` (`alcoholName`, `alcoholType`, `alcoholPercentage`, `alcoholVolume`, `inventory`)
 VALUES (:alcoholNameInput, :alcoholTypeInput, :alcoholPercentageInput, :alcoholVolumeInput, :inventoryInput);
 
--- Add new Wholesaler to list of wholesalers
-INSERT INTO `Wholesalers` (`name`, `address`, `email`, `phone`, `contactName`)
-VALUES (:nameInput, :addressInput,:emailInput, :phoneInput, :contactNameInput);
+-- Insert into AlcoholPurchases (Line item for Purchase of various Alcohols - Intersection between Alcohols and Purchases)
+INSERT INTO `AlcoholPurchases` (`purchaseID`, `alcoholID`, `quantityPurchased`, `lineCost`)
+VALUES (:purchaseID, :alcoholID, :quantityPurchased, :lineCost);
 
 -- Add new employee to list of employees
 INSERT INTO `Employees` (`employeeName`, `startDate`, `employeeRole`)
@@ -70,39 +85,52 @@ VALUES (:employeeNameInput, :startDateInput, :employeeRoleInput);
 INSERT INTO `Purchases` (`wholesalerID`, `paid`, `deliveryDate`, `delivered`, `totalCost`)
 VALUES (:wholesalerID, :paid, :deliveryDate, :delivered, :totalCost);
 
--- Insert into AlcoholPurchases (Line item for Purchase of various Alcohols - Intersection between Alcohols and Purchases)
-INSERT INTO `AlcoholPurchases` (`purchaseID`, `alcoholID`, `quantityPurchased`, `lineCost`)
-VALUES (:purchaseID, :alcoholID, :quantityPurchased, :lineCost);
+-- Add new wholesaler record into list of wholesalers
+INSERT INTO `Wholesalers` (`name`, `address`, `email`, `phone`, `contactName`)
+VALUES (:nameInput, :addressInput,:emailInput, :phoneInput, :contactNameInput);
 
-SELECT `wholesalerID`, `name`, `address`, `email`, `phone`, `contactName`
-FROM `Wholesalers`
-WHERE `wholesalerID` = :wholesalerID_selected_from_employee_dropdown;
 
-UPDATE `Wholesalers`
-SET `name` = :nameInput, `address` = :addressInput, `email` = :emailInput, `phone` = :phoneInput, `contactName` = :contactNameInput;
+-- UPDATE STATEMENTS FOR EACH PAGE
 
--- Allow user to select a specific employee
-SELECT `employeeID`, `firstName`, `lastName`, `startDate`, `employeeRole` 
-FROM `Employees` 
-WHERE `employeeID` = :employeeID_selected_from_employee_dropdown;
+-- Allow user to update an alcohol's info
+UPDATE `Alcohols`
+SET `alcoholType` = :alcoholType, `alcoholPercentage` = :alcoholPercentage, `wholesalePrice` = :wholesalePrice, `alcoholVolume` = :alcoholVolume, `inventory` = :inventory
+WHERE `alcoholID` = :alcoholID;
 
--- Allow user to update that employee's info
+-- Allow user to update an alcohol purchase
+UPDATE `AlcoholPurchases`
+SET `alcoholID` = :alcoholID, `lineCost` = :lineCost
+WHERE `alcoholPurchaseID` = :alcoholPurchaseID;
+
+-- Allow user to update a purchase
+UPDATE `Purchases`
+SET `wholesalerID` = :wholesalerID, `employeeID` = :employeeID, `paid` = :paid, `deliveryDate` = :deliveryDate, `delivered` = :delivered,  `totalCost` = :totalCost
+WHERE `purchaseID` = :purchaseID;
+
+-- Allow user to update an employee's role
 UPDATE `Employees`
-SET `firstName` = :firstNameInput, lastName = :lastNameInput, startDate = :startDateInput, employeeRole = :employeeRoleInput
+SET  `employeeRole` = :employeeRoleInput
 WHERE `employeeID` = :employee_ID_from_update_form;
 
+-- Allow user to update a wholesaler's info
+UPDATE `Wholesalers`
+SET `name` = :nameInput, `address` = :addressInput, `email` = :emailInput, `phone` = :phoneInput, `contactName` = :contactNameInput
+WHERE `wholesalerID` = :wholesalerID;
+
+
+-- DELETE STATEMENTS
+
 -- Delete an alcohol entry
-
-DELETE FROM `Alcohols` WHERE `alcoholID` = :alcoholID_selected_from_browse_alcohol_page;
-
--- DELETE A WHOLESALER
-DELETE FROM `Wholesalers` WHERE `wholesalerID` = :wholesalerID_selected_from_browse_wholesaler_page;
-
--- DELETE AN EMPLOYEE
-DELETE FROM `Employees` WHERE `employeeID` = :employeeID_selected_from_browse_wholesaler_page;
-
--- DELETE A PURCHASE ORDER
-DELETE FROM `Purchases` WHERE `purchaseID` = :purchaseID_selected_from_browse_purchases_page;
+DELETE FROM `Alcohols` WHERE `alcoholID` = :alcoholID;
 
 -- Delete from AlcoholPurchases
-DELETE FROM `AlcoholPurchases` WHERE `alcoholPurchaseID` = :alcoholPurchaseID_selected_from_browse_purchases_page;
+DELETE FROM `AlcoholPurchases` WHERE `alcoholPurchaseID` = :alcoholPurchaseID;
+
+-- Delete from Employees
+DELETE FROM `Employees` WHERE `employeeID` = :employeeID;
+
+-- Delete from Purchases
+DELETE FROM `Purchases` WHERE `purchaseID` = :purchaseID;
+
+-- Delete from Wholesalers
+DELETE FROM `Wholesalers` WHERE `wholesalerID` = :wholesalerID;
