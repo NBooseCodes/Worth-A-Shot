@@ -6,7 +6,7 @@ updateEmployeeForm.addEventListener("submit", function (e) {
     // Prevent the form from submitting
     e.preventDefault();
     // Get form fields we need to get data from
-    let inputEmployeeID = document.getElementById("mySelect");
+    let inputEmployeeID = document.getElementById("employeeMySelect");
     let inputEmployeeRole = document.getElementById("employee-role");
 
     // Get the values from the form fields
@@ -17,7 +17,7 @@ updateEmployeeForm.addEventListener("submit", function (e) {
     // Put our data we want to send in a javascript object
     let data = {
         employeeID: employeeIDValue,
-        employeeRole: employeeRoleValue,
+        employeeRole: employeeRoleValue
     }
     
     // AJAX request
@@ -28,6 +28,7 @@ updateEmployeeForm.addEventListener("submit", function (e) {
     xhttp.onreadystatechange = () => {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
             // Add the new data to the table
+            console.log("Hit http")
             updateRow(xhttp.response, employeeIDValue);
         }
         else if (xhttp.readyState == 4 && xhttp.status != 200) {
@@ -43,13 +44,12 @@ updateEmployeeForm.addEventListener("submit", function (e) {
 function updateRow(data, employeeID){
     let parsedData = JSON.parse(data);
     let table = document.getElementById("employee-table");
-
+    console.log(data)
     for (let i = 0, row; row = table.rows[i]; i++) {
        if (table.rows[i].getAttribute("data-value") == employeeID) {
             let updateRowIndex = table.getElementsByTagName("tr")[i];
             let td = updateRowIndex.getElementsByTagName("td")[4];
-            td.innerHTML = parsedData[0].employeeID;
-            location.reload()
+            td.innerHTML = parsedData[0].employeeRole;
        }
     }
 }

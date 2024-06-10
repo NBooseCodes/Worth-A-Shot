@@ -19,7 +19,7 @@
             <th>Alcohol</th>
             <th>Quantity Purchased</th>
             <th>Cost</th>
-            <th></th>
+            <th>Delete</th>
         </tr>
     </thead>
 
@@ -28,10 +28,10 @@
 
         {{!-- For each row, print the id, alcohol name, type, percentage, wholesale price, volume, and inventory count in order --}}
         {{#each data}}
-        <tr>
+        <tr data-value={{this.alcoholPurchaseID}}>
             <td>{{this.alcoholPurchaseID}}</td>
-            <td>{{this.purchaseID}}</td>
-            <td>{{this.alcoholID}}</td>
+            <td>{{this.name}}, {{this.deliveryDate}}</td>
+            <td> {{this.alcoholName}}</td>
             <td>{{this.quantityPurchased}}</td>
             <td>{{this.lineCost}}</td>
             <td><button onclick="deleteAlcoholPurchase({{this.alcoholPurchaseID}})">Delete</button></td>
@@ -48,23 +48,25 @@
 
 {{!-- Form to add a record to the table  --}}
 <div>
+
+
 <h2>Add new Alcohol Purchase</h2>
 <p>Input data for new alcohol purchase here.</p>
 <form id="add-alcohol-purchase-form" method="POST" action="/add-alcohol-purchase-form">
     <p>
         <label for="purchaseID">Purchase: </label>
-        <select name="purchaseID" id="mySelect">
+        <select name="purchaseID" id="purchasIDSelect">
         <option value="">Select</option>
-        {{#each purchases}}
-        <option value="{{this.purchaseID}}">{{this.purchaseID}}</option>
+        {{#each purchaseData}}
+        <option value="{{this.purchaseID}}">{{this.name}}, {{this.deliveryDate}}</option>
         {{/each}}
         </select>
     </p>
     <p>
         <label for="alcoholID">Alcohol: </label>
-        <select name="alcoholID" id="mySelect">
+        <select name="alcoholID" id="alcoholIDSelect">
         <option value="">Select</option>
-        {{#each alcohols}}
+        {{#each alcoholData}}
         <option value="{{this.alcoholID}}">{{this.alcoholName}}</option>
         {{/each}}
         </select>
@@ -73,11 +75,32 @@
         <label for="quantityPurchased">Quantity: </label>
         <input type="number" name="quantityPurchased" id="quantityPurchased">
     </p>
-    <p>
-        <label for="lineCost">Cost: </label>
-        <input type="number" step="0.01" name="lineCost" id="lineCost">
-    </p>
     <input type="submit">
 </form>
-</div>
 
+<div>
+<h2>Updating Alcohol Purchase Form</h2>
+<p>To update a specific Alcohol's information, input the following information you would like to change.</p>
+<form id="update-alcohol-purchase-form-ajax">
+
+    <label for="input-alcoholPurchaseID">Select an alcohol purchase to update: </label>
+    <select name="input-alcoholPurchaseID" id="alcohol-purchase-id-select">
+        <option value="">Select an Alcohol Purchase</option>
+        {{#each data}}
+        <option value={{this.alcoholPurchaseID}}>{{this.alcoholPurchaseID}}</option>
+        {{/each}}
+    </select>
+
+    <label for="input-alcoholID-update">Alcohol: </label>
+    <select name="input-alcoholID-update" id="input-alcohol-id-update">
+        <option value="">Alcohol</option>
+        {{#each alcoholData}}
+        <option value="{{this.alcoholID}}">{{this.alcoholName}}</option>
+        {{/each}}
+    </select>
+
+    <input type="submit">
+
+</form>
+</div>
+<script src="/js/update_alcohol_purchases.js"></script>

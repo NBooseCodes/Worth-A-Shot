@@ -54,9 +54,7 @@ CREATE OR REPLACE TABLE `Purchases` (
     `deliveryDate` date NOT NULL,
     `delivered` tinyint(1) DEFAULT 0,
     `totalCost` decimal(19,4),
-    PRIMARY KEY (`purchaseID`),
-    FOREIGN KEY (`wholesalerID`) REFERENCES `Wholesalers`(`wholesalerID`) ON DELETE CASCADE,
-    FOREIGN KEY (`employeeID`) REFERENCES `Employees`(`employeeID`) ON DELETE CASCADE
+    PRIMARY KEY (`purchaseID`)
 );
 
 -- Creates AlcoholPurchases intersection table that stores information on the Purchases of the Alcohols.
