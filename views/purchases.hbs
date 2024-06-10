@@ -18,11 +18,11 @@
             <th>ID</th>
             <th>Wholesaler</th>
             <th>Employee</th>
-            <th>Was it paid? (1 = YES)</th>
+            <th>Was it paid?</th>
             <th>Delivery Date</th>
-            <th>Was it delivered? (1 = YES)</th>
+            <th>Was it delivered?</th>
             <th>Total Cost</th>
-            <th>Delete</th>
+            <th></th>
         </tr>
     </thead>
 
@@ -35,25 +35,28 @@
             <td>{{this.purchaseID}}</td>
             <td>{{this.name}}</td>
             <td>{{this.firstName}} {{this.lastName}}</td> 
-            <td>{{this.paid}}</td>
-            <td>{{this.deliveryDate}}</td>
-            <td>{{this.delivered}}</td>
-            <td>{{this.totalCost}}</td>
-            <td><button onclick="deletePurchase({{this.purchaseID}})">Delete</button></td>
+            <td>{{#ifZero this.paid}}Yes{{else}}No{{/ifZero}}</td>
+            <td>{{moment [this.deliveryDate,"ddd, DD MMM YYYY HH:mm:ss ZZ"] format="MM/DD/YYYY"}}</td>
+            <td>{{#ifZero this.delivered}}Yes{{else}}No{{/ifZero}}</td>
+            <td>${{this.totalCost}}</td>
+            <td>
+                <button value="{{this.purchaseID}}" onclick="location.href='/alcohol-purchases'">Edit</button>
+                <button onclick="deletePurchase({{this.purchaseID}})">Delete</button>
+            </td>
         </tr>
         {{/each}}
     </tbody>
 </table>
 <script src="/js/delete_purchase.js"></script>
+{{!-- Page Navigation  --}}
+<p></p>
+<button onclick="location.href='#add-purchase'">Add</button>
+<button onclick="location.href='#update-purchase'">Update</button>
 </div>
 
-{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
-
-{{!--  When using express.static('public'), you should reference static files in the HTML as if the public folder is the root --}}
-<!-- /views/index.hbs -->
 
 {{!-- Form to add a record to the table  --}}
-<div>
+<div id="add-purchase">
 <h2>Add a Purchase</h2>
 <p>Input data for new purchase here.</p>
 <form id="add-purchase-form" method="POST" action="/add-purchase-form">
@@ -65,8 +68,7 @@
         <option value="{{this.wholesalerID}}">{{this.name}}</option>
         {{/each}}
         </select>
-    </p>
-    <p>
+
         <label for="employeeID">Employee: </label>
         <select name="employeeID" id="employeeSelect">
         <option value="">Select</option>
@@ -76,24 +78,26 @@
         </select>
     </p>
     <p>
-        <label class="switch" for="paid">Paid: </label>
-        <input type="checkbox" name="paid" id="paid">
-        <span class="slider round"></span>
-    </p>
-    <p>
+        <label>Paid: </label>
+        <label class="switch" for="paid">
+            <input type="checkbox" name="paid" id="paid">
+            <span class="slider round"></span>
+        </label>
+    
         <label for="deliveryDate">Delivery Date: </label>
         <input type="date" name="deliveryDate" id="deliveryDate">
-    </p>
-    <p>
-        <label class="switch" for="delivered">Delivered: </label>
-        <input type="checkbox" name="delivered" id="delivered">
-        <span class="slider round"></span>
+    
+        <label>Delivered: </label>
+        <label class="switch" for="delivered">
+            <input type="checkbox" name="delivered" id="delivered">
+            <span class="slider round"></span>
+        </label>
     </p>
     <input type="submit">
 </form>
 </div>
-<div>
 
+<div>
 <h2>Update a Purchase</h2>
 <p>To update a specific Purchase, please select the ID and enter the info you would like to change</p>
 <form id="update-purchase-form">
@@ -116,7 +120,7 @@
 
     <label for="input-employee">Employee</label>
     <select name="input-employee" id="employeeUpdateSelect">
-        <option value="">Select Employee</option>
+        <option value="">Select</option>
         {{#each employeeData}}
         <option value="{{this.employeeID}}">{{this.lastName}}, {{this.firstName}}</option>
         {{/each}}

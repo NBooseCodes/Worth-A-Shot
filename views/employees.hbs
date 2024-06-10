@@ -76,17 +76,17 @@
 {{!-- Form to update a record to the table  --}}
 <div id="update-employee">
     <h2>Update Employee</h2>
-    <p>To update an employyes position, select their name from the dropdown.</p>
+    <p>To update an employyes position, select their name from the dropdown below.</p>
     <form id="update-employee-form">
         <p>
-        <label for="input-employee-id">Employees name: </label>
+        <label for="input-employee-id">Employee: </label>
         <select name="input-employee-id" id="employeeMySelect">
             <option value="">Select an Employee</option>
             {{#each data}}
             <option value="{{this.employeeID}}">{{this.firstName}} {{this.lastName}}</option>
             {{/each}}
         </select>
-            <label for="employee-role-select">Position: </label>
+            <label for="employee-role-select">New Position: </label>
             <select name="employee-role-select" id="employee-role">
                 <option>Select Role</option>
                 <option value="Clerk">Clerk</option>

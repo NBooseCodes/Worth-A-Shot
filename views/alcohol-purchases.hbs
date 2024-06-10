@@ -3,7 +3,7 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <div>
 <!-- Page Title -->
-        <h2>Alcohol Purchases in Database</h2>
+        <h2>Line Items in Database</h2>
 
 {{!-- Create a table --}}
 <table id="alcohol-purchases-table" border="1" cellpadding="5">
@@ -19,7 +19,7 @@
             <th>Alcohol</th>
             <th>Quantity Purchased</th>
             <th>Cost</th>
-            <th>Delete</th>
+            <th></th>
         </tr>
     </thead>
 
@@ -40,21 +40,19 @@
     </tbody>
 </table>
 <script src="/js/delete_alcohol_purchase.js"></script>
+{{!-- Page Navigation  --}}
+<p></p>
+<button onclick="location.href='#add-alc-purchase'">Add</button>
+<button onclick="location.href='#update-alc-purchase'">Update</button>
 </div>
-{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
-
-{{!--  When using express.static('public'), you should reference static files in the HTML as if the public folder is the root --}}
-<!-- /views/index.hbs -->
 
 {{!-- Form to add a record to the table  --}}
-<div>
-
-
-<h2>Add new Alcohol Purchase</h2>
-<p>Input data for new alcohol purchase here.</p>
+<div id="add-alc-purchase">
+<h2>Add new Line Item</h2>
+<p>Input data for new line item here.</p>
 <form id="add-alcohol-purchase-form" method="POST" action="/add-alcohol-purchase-form">
     <p>
-        <label for="purchaseID">Purchase: </label>
+        <label for="purchaseID">Purchase:</label>
         <select name="purchaseID" id="purchasIDSelect">
         <option value="">Select</option>
         {{#each purchaseData}}
@@ -63,7 +61,7 @@
         </select>
     </p>
     <p>
-        <label for="alcoholID">Alcohol: </label>
+        <label for="alcoholID">Alcohol:</label>
         <select name="alcoholID" id="alcoholIDSelect">
         <option value="">Select</option>
         {{#each alcoholData}}
@@ -72,14 +70,16 @@
         </select>
     </p>
     <p>
-        <label for="quantityPurchased">Quantity: </label>
+        <label for="quantityPurchased">Quantity:</label>
         <input type="number" name="quantityPurchased" id="quantityPurchased">
     </p>
     <input type="submit">
 </form>
+</div>
 
-<div>
-<h2>Updating Alcohol Purchase Form</h2>
+{{!-- Form to update an Alcohol Purchase  --}}
+<div id="update-alc-purchase">
+<h2>Update Line Item</h2>
 <p>To update a specific Alcohol's information, input the following information you would like to change.</p>
 <form id="update-alcohol-purchase-form-ajax">
 
