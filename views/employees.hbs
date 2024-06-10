@@ -32,7 +32,7 @@
             <td>{{this.employeeID}}</td>
             <td>{{this.firstName}}</td>
             <td>{{this.lastName}}</td>
-            <td>{{moment [this.startDate,"ddd, DD MMM YYYY HH:mm:ss ZZ"] format="MM/DD/YYYY"}}</td>
+            <td>{{moment this.deliveryDate format="MM/DD/YYYY"}}</td>
             <td>{{this.employeeRole}}</td>
             <td><button onclick="deleteEmployee({{this.employeeID}})">Delete</button></td>
         </tr>

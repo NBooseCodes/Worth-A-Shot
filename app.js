@@ -317,10 +317,6 @@ app.put('/update-wholesaler-form', function(req,res,next){
     console.log("you're closer");
     let data = req.body;
     let wholesalerID = data.wholesalerID;
-    let address = data.address;
-    let email = data.email;
-    let phone = data.phone;
-    let contactName = data.contactName
 
     const buildUpdateQuery = (data) => {
         let queryString = `UPDATE Wholesalers SET`;
@@ -599,6 +595,7 @@ app.post('/add-alcohol-purchase-form', function(req, res) {
                             res.sendStatus(400)
                         } else {
                             let totalCost = lineSum[0]["SUM(lineCost)"];
+
                             db.pool.query(updatePurchasesTotalQuery, [totalCost, purchaseID], function(error, rows, fields) {
                                 if (error) {
                                     console.log(error);

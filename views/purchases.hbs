@@ -36,7 +36,7 @@
             <td>{{this.name}}</td>
             <td>{{this.firstName}} {{this.lastName}}</td> 
             <td>{{#ifZero this.paid}}Yes{{else}}No{{/ifZero}}</td>
-            <td>{{moment [this.deliveryDate,"ddd, DD MMM YYYY HH:mm:ss ZZ"] format="MM/DD/YYYY"}}</td>
+            <td>{{moment this.deliveryDate format="MM/DD/YYYY"}}</td>
             <td>{{#ifZero this.delivered}}Yes{{else}}No{{/ifZero}}</td>
             <td>${{this.totalCost}}</td>
             <td>
@@ -106,7 +106,7 @@
         <select name="input-purchaseID" id="purchaseIDSelect">
             <option value="test">Select Purchase ID</option>
             {{#each data}}
-            <option value="{{this.purchaseID}}">{{this.purchaseID}}</option>
+            <option value="{{this.purchaseID}}">{{this.purchaseID}}: {{this.name}}, {{moment this.deliveryDate format="MM/DD/YYYY"}}</option>
             {{/each}}
         </select>
     </p>
