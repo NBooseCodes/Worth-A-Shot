@@ -534,7 +534,7 @@ app.get('/alcohol-purchases', function(req, res)
     let getAllInfoJoined = `SELECT * FROM AlcoholPurchases 
     INNER JOIN Purchases ON AlcoholPurchases.purchaseID = Purchases.purchaseID 
     INNER JOIN Alcohols ON AlcoholPurchases.alcoholID = Alcohols.alcoholID
-    INNER JOIN Wholesalers ON Purchases.purchaseID = Wholesalers.wholesalerID
+    INNER JOIN Wholesalers ON Purchases.wholesalerID = Wholesalers.wholesalerID
     ORDER BY AlcoholPurchases.alcoholPurchaseID ASC`;
     
     //Below does a big join and then two smaller queries to isolate data from non-parent tables
