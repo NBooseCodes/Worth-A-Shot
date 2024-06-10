@@ -14,6 +14,7 @@
     "handlebars": "^4.7.8",
     "handlebars-helper-moment": "^0.2.0",
     "handlebars.moment": "^1.0.4",
+    "lsof": "^0.1.0",
     "mysql": "^2.18.1",
     "node": "^18.20.3",
     "nodemon": "^3.1.3"

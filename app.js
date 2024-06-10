@@ -5,7 +5,7 @@
 */
 var express = require('express');   // We are using the express library for the web server
 var app = express();            // We need to instantiate an express object to interact with the server in our code
-const PORT = 3000;
+const PORT = 3002;
 
 const { engine } = require('express-handlebars');
 var exphbs = require('express-handlebars');     // Import express-handlebars
@@ -384,7 +384,9 @@ app.get('/purchases', function(req, res)
     LEFT JOIN Employees ON Purchases.employeeID = Employees.employeeID
     ORDER BY purchaseID ASC`;
     
-    
+    let purchaseIDQuery = `SELECT purchaseID FROM Purchases`;
+    let totalCostQuery = `SELECT SUM(lineCost) FROM AlcoholPurchases WHERE purchaseID = ?`
+    let updateLineCost = `UPDATE totalCost SET totalCost = ? WHERE purchaseID = ?`
     //Below does multiple queries instead of a big join. Not sure if this makes the most sense or not!
     db.pool.query(getAllInfoJoined, function(error, results){
         if (error) {
@@ -399,11 +401,39 @@ app.get('/purchases', function(req, res)
                         if (error) {
                             res.status(500).send('Error with employee query');
                         } else {
-                            return res.render('purchases', {
-                                data: results,
-                                wholesalerData: wholesalerResults,
-                                employeeData: employeeResults 
-                            });
+                            db.pool.query(purchaseIDQuery, function(error, purchaseIDRes){
+                                let stringRes = JSON.stringify(purchaseIDRes);
+                                console.log(stringRes);
+                                if (error) {
+                                    console.log(error);
+                                    res.sendStatus(400);
+                                } else {
+                                    for (let i = 0; i < purchaseIDRes.length; i++) {
+                                        let purchaseID = parseInt(purchaseIDRes[i].purchaseID);
+                                        db.pool.query(totalCostQuery, purchaseID, function(error, newTotalRes){
+                                            if (error) {
+                                                console.log(error);
+                                                res.sendStatus(400);
+                                            } else {
+                                                let newTotal = newTotalRes[0]["SUM(lineCost)"];
+                                                db.pool.query(updateLineCost, [newTotal, purchaseID], function(error){
+                                                    if (error) {
+                                                        console.log(error);
+                                                        res.sendStatus(400);
+                                                    } else {
+                                                        res.render('purchases', {
+                                                            data: results,
+                                                            wholesalerData: wholesalerResults,
+                                                            employeeData: employeeResults
+                                                             })
+                                                    }
+                                                })
+                                            }
+                                        })
+
+                                    }
+                                }
+                            })
                         }
                     })
                 }
