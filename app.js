@@ -619,7 +619,7 @@ app.delete('/delete-alcohol-purchase/:alcoholPurchaseID', function(req,res,next)
     })
 });
 
-
+// UPDATE AN ALCOHOL PURCHASE
 app.put('/update-alcohol-purchase-ajax', function(req,res,next){
     let data = req.body;
     let alcoholPurchaseID = parseInt(data.alcoholPurchaseID);
@@ -627,41 +627,69 @@ app.put('/update-alcohol-purchase-ajax', function(req,res,next){
     let selectAlcoholPurchasesQuery = `SELECT * FROM AlcoholPurchases`;
     let unitCostQuery = `SELECT wholesalePrice FROM Alcohols WHERE alcoholID = ?`;
     let quantityQuery = `SELECT quantityPurchased FROM AlcoholPurchases WHERE alcoholPurchaseID = ?`;
-    let updateQuery = `UPDATE AlcoholPurchases SET alcoholID = ?, lineCost = ? WHERE alcoholPurchaseID = ?`;
-    db.pool.query(unitCostQuery, alcoholID, function(error, unitCost){
+    let updateAlcoholPurchaseQuery = `UPDATE AlcoholPurchases SET alcoholID = ?, lineCost = ? WHERE alcoholPurchaseID = ?`;
+    let selectPurchaseIDQuery = `SELECT purchaseID FROM AlcoholPurchases WHERE alcoholPurchaseID = ?`;
+    let purchaseSumQuery = `SELECT SUM(lineCost) FROM AlcoholPurchases where AlcoholPurchases.purchaseID = ?`
+    let updatePurchasesQuery = `UPDATE Purchases SET totalCost = ? WHERE purchaseID = ?`;
+
+    db.pool.query(unitCostQuery, alcoholID, function(error, unitCostResults){
         if (error) {
             console.log(error);
+            res.sendStatus(400);
         } else {
-            db.pool.query(quantityQuery, alcoholPurchaseID, function(error, quantity){
+            let unitCost = unitCostResults[0].wholesalePrice;
+            db.pool.query(quantityQuery, alcoholPurchaseID, function(error, quantityResults){
                 if (error) {
                     console.log(error);
+                    res.sendStatus(400);
                 } else {
-                    let quantityPurchased = parseInt(quantity[0].quantityPurchased);
-                    let unitCostResult = parseFloat(unitCost[0].wholesalePrice);
-                    let sum = quantityPurchased * unitCostResult;
-
-                    db.pool.query(updateQuery, [alcoholID, sum, alcoholPurchaseID], function(error, rows, fiels) {
+                    let quantity = quantityResults[0].quantityPurchased;
+                    let lineCost = quantity * unitCost;
+                    db.pool.query(updateAlcoholPurchaseQuery, [alcoholID, lineCost, alcoholPurchaseID], function(error){
                         if (error) {
-                            console.log(error)
-                            res.sendStatus(400)
+                            console.log(error);
+                            res.sendStatus(400);
                         } else {
-                            db.pool.query(selectAlcoholPurchasesQuery, function(error, rows, fields) {
+                            db.pool.query(selectPurchaseIDQuery, alcoholPurchaseID, function(error, purchaseIDResult){
                                 if (error) {
-                                    console.log(error)
+                                    console.log(error);
                                     res.sendStatus(400);
                                 } else {
-                                    res.send(rows);
+                                    let purchaseID = purchaseIDResult[0].purchaseID;
+                                    db.pool.query(purchaseSumQuery, purchaseID, function(error, sumResult){
+                                        if (error) {
+                                            console.log(error);
+                                            res.sendStatus(400);
+                                        } else {
+                                            let totalCost = sumResult[0]["SUM(lineCost)"];
+                                            db.pool.query(updatePurchasesQuery, [totalCost, purchaseID], function(error){
+                                                if (error) {
+                                                    console.log(error);
+                                                    res.sendStatus(400);
+                                                } else {
+                                                    db.pool.query(selectAlcoholPurchasesQuery, function(error, rows, fields) {
+                                                        if (error) {
+                                                            console.log(error);
+                                                            res.sendStatus(400);
+                                                        } else {
+                                                            res.send(rows);
+                                                        }
+                                                    })
+                                                }
+                                            })
+                                        }
+                                    })
                                 }
                             })
                         }
                     })
                 }
-            }) 
-        } 
-
+            })
+        }
     })
 
-  });
+});
+
 
 /*
     LISTENER
