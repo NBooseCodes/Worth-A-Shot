@@ -53,10 +53,10 @@
 <form id="add-alcohol-purchase-form" method="POST" action="/add-alcohol-purchase-form">
     <p>
         <label for="purchaseID">Purchase:</label>
-        <select name="purchaseID" id="purchasIDSelect">
+        <select name="purchaseID" id="purchaseIDSelect">
         <option value="">Select</option>
         {{#each purchaseData}}
-        <option value="{{this.purchaseID}}">{{this.name}}, {{moment [this.deliveryDate,"ddd, DD MMM YYYY HH:mm:ss ZZ"] format="MM/DD/YYYY"}}</option>
+        <option value="{{this.purchaseID}}">{{this.purchaseID}}: {{this.name}}, {{moment [this.deliveryDate,"ddd, DD MMM YYYY HH:mm:ss ZZ"] format="MM/DD/YYYY"}}</option>
         {{/each}}
         </select>
     

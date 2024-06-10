@@ -62,7 +62,7 @@
         <input type="date" name="startDate" id="startDate">
         <label for="employeeRole">Position: </label>
         <select name="employeeRole" id="employeeRole">
-            <option>Select Role</option>
+            <option>Select</option>
             <option value="Clerk">Clerk</option>
             <option value="Department Manager">Department Manager</option>
             <option value="Store Manager">Store Manager</option>
@@ -81,14 +81,14 @@
         <p>
         <label for="input-employee-id">Employee: </label>
         <select name="input-employee-id" id="employeeMySelect">
-            <option value="">Select an Employee</option>
+            <option value="">Select</option>
             {{#each data}}
             <option value="{{this.employeeID}}">{{this.firstName}} {{this.lastName}}</option>
             {{/each}}
         </select>
             <label for="employee-role-select">New Position: </label>
             <select name="employee-role-select" id="employee-role">
-                <option>Select Role</option>
+                <option>Select</option>
                 <option value="Clerk">Clerk</option>
                 <option value="Department Manager">Department Manager</option>
                 <option value="Store Manager">Store Manager</option>
