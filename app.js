@@ -386,7 +386,7 @@ app.get('/purchases', function(req, res)
     
     let purchaseIDQuery = `SELECT purchaseID FROM Purchases`;
     let totalCostQuery = `SELECT SUM(lineCost) FROM AlcoholPurchases WHERE purchaseID = ?`
-    let updateLineCost = `UPDATE totalCost SET totalCost = ? WHERE purchaseID = ?`
+    let updateLineCost = `UPDATE Purchases SET totalCost = ? WHERE purchaseID = ?`
     //Below does multiple queries instead of a big join. Not sure if this makes the most sense or not!
     db.pool.query(getAllInfoJoined, function(error, results){
         if (error) {
@@ -420,18 +420,17 @@ app.get('/purchases', function(req, res)
                                                     if (error) {
                                                         console.log(error);
                                                         res.sendStatus(400);
-                                                    } else {
-                                                        res.render('purchases', {
-                                                            data: results,
-                                                            wholesalerData: wholesalerResults,
-                                                            employeeData: employeeResults
-                                                             })
                                                     }
                                                 })
                                             }
                                         })
 
                                     }
+                                    res.render('purchases', {
+                                        data: results,
+                                        wholesalerData: wholesalerResults,
+                                        employeeData: employeeResults
+                                         })
                                 }
                             })
                         }
