@@ -23,7 +23,7 @@ var Handlebars = require("handlebars");
 var MomentHandler = require("handlebars.moment");
 MomentHandler.registerHelpers(Handlebars); // Import handlebars moment
 
-// create handlebars helper to show bool as yes/no
+// handlebars helper to show bool as yes/no
 Handlebars.registerHelper("ifZero", function(value, options) {
     if (value !== 0) {
       return options.fn(this);
@@ -458,9 +458,10 @@ app.post('/add-purchase-form', function(req, res) {
     if (data.delivered != null) {
         deliveredValue = 1;
     }
-    addPurchaseQuery = `INSERT INTO Purchases (Purchases.wholesalerID, Purchases.employeeID, paid, deliveryDate, delivered) VALUES (?, ?, ?, ?, ?)`;
+    let totalCost = 0.00
+    addPurchaseQuery = `INSERT INTO Purchases (Purchases.wholesalerID, Purchases.employeeID, paid, deliveryDate, delivered, totalCost) VALUES (?, ?, ?, ?, ?, ?)`;
 
-    db.pool.query(addPurchaseQuery, [wholesalerID, employeeID, paidValue, date, deliveredValue], function(error, rows, fields){
+    db.pool.query(addPurchaseQuery, [wholesalerID, employeeID, paidValue, date, deliveredValue, totalCost], function(error, rows, fields){
         if (error) {
             console.log(error);
             res.sendStatus(400);
