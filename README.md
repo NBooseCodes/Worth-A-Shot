@@ -1,7 +1,7 @@
 # Overview
 
 This project was created as a term long project in OSU CS 340 to display what we have learned. 
-Nicole Boose and Elsa Luthi are the primary contributors. 
+Nicole McCune and Elsa Luthi are the primary contributors. 
 
 ## Runing the Project
 
